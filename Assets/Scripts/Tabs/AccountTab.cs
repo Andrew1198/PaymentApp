@@ -3,6 +3,7 @@ using Data;
 using Items;
 using Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Tabs
 {
@@ -26,8 +27,6 @@ namespace Tabs
             
             foreach (var wallet in PlayerData.Wallets)
                 SetWallet(wallet);
-                
-            
         }
 
         private void SetWallet(Wallet wallet)

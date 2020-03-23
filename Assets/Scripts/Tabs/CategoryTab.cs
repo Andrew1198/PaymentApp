@@ -1,52 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Data;
 using Items;
 using Managers;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 namespace Tabs
 {
     public class CategoryTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
-        [SerializeField] private List<CategoryItem> CategoryItems;
+
+        [SerializeField] private List<CategoryItem> categoryItems = new List<CategoryItem>();
+        
         public override void Init()
         {
             base.Init();
             Date.text = PlayerData.SelectedDate.ToString("MMMM yyyy");
-            SetCategories();
+            foreach (var categoryItem in categoryItems)
+                categoryItem.Init();
+            
         }
-
-        private void SetCategories()
+        
+        [Button]
+        private void UpdateCategoryItemsFromTemplate()
         {
-            var transactions = PlayerData.TransactionsPerMonth;
-            var categoriesTransactions = new Dictionary<Category,List<Transaction>>();
-            foreach (var categoriesTransaction in transactions)
+            var categoryItemTemplate = transform.root.Find("Templates").Find("CategoryItem").gameObject;
+
+            for (var i = 0; i < categoryItems.Count; ++i)
             {
-                if (!categoriesTransactions.ContainsKey(categoriesTransaction.Category))
-                {
-                    categoriesTransactions[categoriesTransaction.Category] = new List<Transaction>();
-                }
-                categoriesTransactions[categoriesTransaction.Category].AddRange(categoriesTransaction.Transactions);
+                var categoryItem = categoryItems[i];
+                var newCategoryItem = Instantiate(categoryItemTemplate, categoryItem.transform.parent);
+                newCategoryItem.name = categoryItemTemplate.name;
+                DestroyImmediate(categoryItem.gameObject);
+                categoryItems[i] = newCategoryItem.GetComponent<CategoryItem>();
             }
             
+            for (var i = 0; i < categoryItems.Count; ++i)
+                categoryItems[i].numberOfPlace = i;
             
-            foreach (var categoryItem in CategoryItems)
-            {
-                if (!categoriesTransactions.ContainsKey(categoryItem.category))
-                {
-                    categoryItem.sum = 0;
-                    continue;
-                }
-
-                var count = 0;
-                foreach (var transaction in categoriesTransactions[categoryItem.category])
-                    count += transaction._count;
-
-                categoryItem.sum = count;
-            }
+            Debug.Log("Success");
         }
     }
 }

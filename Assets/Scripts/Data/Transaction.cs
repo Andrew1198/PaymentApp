@@ -1,25 +1,22 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using UnityEngine;
 
 namespace Data
 {
-    public enum Category
-    {
-        Restaurant,
-        Groceries,
-        Leisure,
-        Transport,
-        Lapka,
-        Health,
-        Shopping,
-        Family
-    }
     [Serializable]
     public class Transaction
     {
         public int _count;
-        private string _comment;
-        public DateTime _time;
-        private WalletType _fromWallet;
-        private Category _category;
+        public string _comment;
+        [SerializeField] private long _time;
+        public DateTime Time
+        {
+            get => DateTime.FromBinary(_time);
+            set => _time = value.ToBinary();
+        }
+        
+        public string wallet;
+        public string _category;
     }
 }

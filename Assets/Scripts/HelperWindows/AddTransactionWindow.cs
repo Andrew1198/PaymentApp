@@ -12,43 +12,46 @@ namespace HelperWindows
     public class AddTransactionWindow : MonoBehaviour
     {
         [SerializeField] private TMP_Dropdown dropdown;
-        [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private TMP_InputField countField;
+        [SerializeField] private TMP_InputField commentField;
 
-        public Category fromCategory;
+        public string fromCategory;
 
-        public void Init()
+        public void Open()
         {
             gameObject.SetActive(true);
-            dropdown.options = PlayerData.Wallets.Where(wallet => wallet._currency == Currency.UAH)
+            dropdown.options = PlayerData.Wallets
                 .Select(wallet => new TMP_Dropdown.OptionData
                 {
                    text = wallet.name
                 }).ToList();
-            inputField.text = null;
+            countField.text = null;
         }
 
 
         public void OnOk()
         {
             var walletName = dropdown.options[dropdown.value].text;
-
+            
+            
             foreach (var wallet in PlayerData.Wallets)
             {
                 if (walletName == wallet.name)
                 {
-                    wallet._count -= int.Parse(inputField.text);
-                    if(!PlayerData.CurrentDayilyTrasactions.Any(transaction => transaction.Category == fromCategory))
-                        PlayerData.CurrentDayilyTrasactions.Add(new CategoriesTransaction
-                        {
-                            Category = fromCategory
-                        });
-
-                    var categoriesTransaction =
-                        PlayerData.CurrentDayilyTrasactions.First(transaction => transaction.Category == fromCategory);
-                    categoriesTransaction.Transactions.Add(new Transaction
+                    wallet.Subtract( int.Parse(countField.text),wallet._currency);
+                    var count = int.Parse(countField.text);
+                    if (wallet._currency == Currency.USD)
+                        count = (int)Math.Round(count * PlayerData.DollarRate, MidpointRounding.AwayFromZero);
+                    
+                    var transaction = new Transaction
                     {
-                        _count = int.Parse(inputField.text)
-                    });
+                        _category = fromCategory,
+                        _count = count,
+                        _comment = commentField.text,
+                        wallet =  walletName,
+                        Time = DateTime.Now
+                    };
+                   PlayerData.CurrentDayilyTrasactions.Add(transaction);
                     TabManager.UpdateTab();
                     break;
                 }
