@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Data;
 using Items;
 using Managers;
@@ -12,7 +14,9 @@ namespace Tabs
         [SerializeField] private Transform walletsContainer;
         [SerializeField] private Transform savingContainer;
         [SerializeField] private GameObject walletPrefab;
-        
+
+        [SerializeField] private RectTransform[] needToRebuild;
+
         public override void Init()
         {
             base.Init();
@@ -27,13 +31,22 @@ namespace Tabs
             
             foreach (var wallet in PlayerData.Wallets)
                 SetWallet(wallet);
+            StartCoroutine(RebuildElements());
         }
-
+        
         private void SetWallet(Wallet wallet)
         {
             var parent = wallet._type == WalletType.Used ? walletsContainer : savingContainer;
             var walletItem = Instantiate(walletPrefab, parent).GetComponent<WalletItem>();
             walletItem.Init(wallet);
+        }
+
+        IEnumerator RebuildElements()
+        {
+            yield return null;
+            foreach (var rectTransform in needToRebuild)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
+            
         }
     }
 }

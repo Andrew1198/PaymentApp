@@ -26,6 +26,7 @@ namespace HelperWindows
                    text = wallet.name
                 }).ToList();
             countField.text = null;
+            commentField.text = null;
         }
 
 

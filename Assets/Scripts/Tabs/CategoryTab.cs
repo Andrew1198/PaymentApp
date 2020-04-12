@@ -11,9 +11,17 @@ using UnityEngine.PlayerLoop;
 
 namespace Tabs
 {
+    [Serializable]
+    class WholeAmount
+    {
+        public TextMeshProUGUI usdText;
+        public TextMeshProUGUI uahText;
+    }
+    
     public class CategoryTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
+        [SerializeField] private WholeAmount wholeAmount;
 
         [SerializeField] private List<CategoryItem> categoryItems = new List<CategoryItem>();
         
@@ -24,7 +32,17 @@ namespace Tabs
             foreach (var categoryItem in categoryItems)
                 categoryItem.Init();
             
+            SetWholeAmount();
         }
+
+        private void SetWholeAmount()
+        {
+            var amountPerMonth = PlayerData.AmountPerMonth;
+            wholeAmount.uahText.text = amountPerMonth.ToString();
+            wholeAmount.usdText.text =
+                ((int) Math.Round(amountPerMonth / PlayerData.DollarRate, MidpointRounding.AwayFromZero)).ToString();
+        }
+        
         
         [Button]
         private void UpdateCategoryItemsFromTemplate()

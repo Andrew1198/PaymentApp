@@ -112,7 +112,6 @@ namespace Managers
                 return result;
             }
         }
-        //todo WeekAvg
         public static int GetWeekNumber(DateTime dt)
         {
             CultureInfo curr= CultureInfo.CurrentCulture;

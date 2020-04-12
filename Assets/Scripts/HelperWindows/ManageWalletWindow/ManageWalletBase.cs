@@ -1,32 +1,42 @@
+using Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HelperWindows.ManageWalletWindow
 {
-    public abstract class ManageWalletBase
+    public abstract class ManageWalletBase : MonoBehaviour
     {
-        [SerializeField] private ManageWalletWindow _manageWalletWindow;
-        [SerializeField] private TextMeshProUGUI _selectedWalletText;
+        [SerializeField] private ManageWalletWindow manageWalletWindow;
+        [SerializeField] protected TextMeshProUGUI selectedWalletText;
+        [SerializeField] protected TMP_InputField countField;
+
+        protected Wallet SelectedWallet => manageWalletWindow.wallet;
+        
 
 
-        protected virtual void Init()
+        public virtual void Init()
+        {
+            selectedWalletText.text = SelectedWallet.name;
+            gameObject.SetActive(true);
+        }
+        
+        public virtual void OnOk()
         {
             
         }
         
-        protected virtual void OnOk()
+        public virtual void OnClose()
         {
-            
+            gameObject.SetActive(false);
+            manageWalletWindow.gameObject.SetActive(false);
+            Reset();
         }
         
-        protected virtual void OnClose()
+        protected virtual void Reset()
         {
-            
-        }
-        
-        protected virtual void OnReset()
-        {
-            
+            selectedWalletText.text = null;
+            countField.text = null;
         }
     }
 }
