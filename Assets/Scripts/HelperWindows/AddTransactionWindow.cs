@@ -32,6 +32,7 @@ namespace HelperWindows
 
         public void OnOk()
         {
+            PlayerData.SelectedDate = DateTime.Now;
             var walletName = dropdown.options[dropdown.value].text;
             
             

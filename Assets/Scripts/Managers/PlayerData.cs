@@ -153,8 +153,13 @@ namespace Managers
         #if !UNITY_EDITOR && UNITY_ANDROID
         private void OnApplicationPause(bool isPaused)
         {
-            if(isPaused) 
+            if (isPaused)
                 Save();
+            else
+            {
+                _selectedDate = DateTime.Now;
+                TabManager.UpdateTab();
+            }
         }
         #endif
         

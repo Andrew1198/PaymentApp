@@ -40,9 +40,17 @@ namespace Items
                     confirmWindow.Open(() =>
                     {
                         var monthlyTransaction = PlayerData.CurrentMonthlyTransaction;
-                        var deleted = monthlyTransaction.Any(dailyTransaction => dailyTransaction._transactions.Remove(_transaction));
-                        if (!deleted)
-                            Debug.LogError("Can't delete transaction");
+                        
+                        var payment = monthlyTransaction.SelectMany(dailyTransaction => dailyTransaction._transactions)
+                            .First(transaction => transaction == _transaction);
+                        
+                        var _wallet = PlayerData.Wallets.First(wall => wall.name == payment.wallet);
+                        _wallet.AddCount(payment._count,Currency.UAH);
+
+                        foreach (var dailyTransaction in monthlyTransaction)
+                          if(dailyTransaction._transactions.Remove(payment))
+                              break;
+                        
                         TabManager.UpdateTab();
                     });
                     Reset();
