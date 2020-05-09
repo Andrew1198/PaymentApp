@@ -1,18 +1,16 @@
+using NaughtyAttributes;
 using UnityEngine;
 
-namespace HelpToDevelop
+public class TestSomeScripts : MonoBehaviour
 {
-    public class TestSomeScripts : MonoBehaviour
+    private void SetAligment()
     {
-        private void SetAligment()
-        {
-            var objects = FindObjectsOfType<TMPro.TextMeshProUGUI>();
+        var objects = FindObjectsOfType<TMPro.TextMeshProUGUI>();
 
-            foreach (var textMeshProUgui in objects)
-            {
-                textMeshProUgui.alignment = TMPro.TextAlignmentOptions.Center;
-            }
+        foreach (var textMeshProUgui in objects)
+        {
+            textMeshProUgui.alignment = TMPro.TextAlignmentOptions.Center;
         }
-        
     }
+    
 }

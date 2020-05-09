@@ -40,13 +40,13 @@ namespace Tabs
                 var daysInMonth = DateTime.DaysInMonth(PlayerData.SelectedDate.Year, PlayerData.SelectedDate.Month);
                 DayAvg.text = "DayAvg \n" +  Math.Round(PlayerData.AmountPerMonth / (float)daysInMonth,MidpointRounding.AwayFromZero);
                 
-                const float oneDayFromWeekPercent = 100 / 7f;
+                const int dayCountPerWeek = 7;
+                const int weekCountPerMonth = 4;
                 const int fourWeeksDaysCount = 28;
                 var restDaysFrom4Weeks = daysInMonth - fourWeeksDaysCount;
-                var divider = 4 + restDaysFrom4Weeks * oneDayFromWeekPercent;
+                var divider = weekCountPerMonth + restDaysFrom4Weeks * (float)restDaysFrom4Weeks/dayCountPerWeek;
                 var weekAwg = Math.Round(PlayerData.AmountPerMonth / (float)divider,MidpointRounding.AwayFromZero);
                 TodayAmountOrWeekAvg.text ="Week Avg \n" + weekAwg;
-                
                 
                 WeekAmountOrMonth.text = "Month\n"+PlayerData.AmountPerMonth;
             }

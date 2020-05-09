@@ -49,6 +49,9 @@ namespace Items
              }
              else
              {
+                 if (DateTime.Now.Month != PlayerData.SelectedDate.Month)
+                     return;
+                 
                  addTransactionWindow.fromCategory = category.text;
                  addTransactionWindow.Open();
              }
