@@ -6,7 +6,7 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+#pragma warning disable 0649
 namespace Items
 {
     public class TransactionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler

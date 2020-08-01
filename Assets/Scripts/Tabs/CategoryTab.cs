@@ -7,8 +7,7 @@ using Managers;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-
+#pragma warning disable 0649
 namespace Tabs
 {
     [Serializable]
@@ -61,7 +60,7 @@ namespace Tabs
             for (var i = 0; i < categoryItems.Count; ++i)
                 categoryItems[i].numberOfPlace = i;
             
-            Debug.Log("Success");
+            Debug.Log("Success!");
         }
     }
 }

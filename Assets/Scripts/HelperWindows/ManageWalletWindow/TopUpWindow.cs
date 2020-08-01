@@ -4,7 +4,7 @@ namespace HelperWindows.ManageWalletWindow
 {
     public class TopUpWindow : ManageWalletBase
     {
-        public void OnOk()
+        public override void OnOk()
         {
             SelectedWallet._count += int.Parse(countField.text);
             TabManager.UpdateTab();

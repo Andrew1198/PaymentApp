@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace Data
 {
     [Serializable]

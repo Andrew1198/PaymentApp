@@ -17,6 +17,8 @@ namespace Data
                 {
                     categories[i] = new CategoryData();
                 }
+
+                dollarRate = 26;
             }
         }
     }

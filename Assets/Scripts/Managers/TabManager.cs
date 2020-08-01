@@ -1,6 +1,6 @@
 ﻿using Tabs;
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace Managers
 {
     public class TabManager : Singleton<TabManager>

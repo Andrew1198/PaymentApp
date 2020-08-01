@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-
+#pragma warning disable 0649
 namespace HelperWindows
 {
     public class ConfirmWindow : MonoBehaviour

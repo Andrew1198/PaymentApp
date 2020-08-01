@@ -2,7 +2,7 @@ using System.Linq;
 using Managers;
 using TMPro;
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace HelperWindows.ManageWalletWindow
 {
     public class TransferWindow : ManageWalletBase

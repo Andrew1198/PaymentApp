@@ -2,7 +2,7 @@ using Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+#pragma warning disable 0649
 namespace HelperWindows.ManageWalletWindow
 {
     public abstract class ManageWalletBase : MonoBehaviour

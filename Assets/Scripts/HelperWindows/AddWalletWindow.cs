@@ -3,7 +3,7 @@ using Data;
 using Managers;
 using TMPro;
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace HelperWindows
 {
     public class AddWalletWindow : MonoBehaviour

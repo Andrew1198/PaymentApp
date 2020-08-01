@@ -6,7 +6,7 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+#pragma warning disable 0649
 namespace Tabs
 {
     public class TransactionTab : Tab
@@ -35,6 +35,8 @@ namespace Tabs
                 var daySeparator = Instantiate(daySeparatorPref, content);
                 var data = daySeparator.transform.Find("Data");
                 data.Find("Number").GetComponent<TextMeshProUGUI>().text = dailyTransaction.day.ToString();
+                data.Find("Month").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.First().Time.ToString("dddd");
+                data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.Sum(payment=>payment._count).ToString();
                 
                 foreach (var transaction in dailyTransaction._transactions)
                     Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(transaction);

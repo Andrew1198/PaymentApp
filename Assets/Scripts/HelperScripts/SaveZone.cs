@@ -1,11 +1,14 @@
+using System;
+using NaughtyAttributes;
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace HelperScripts
 {
     public class SaveZone : MonoBehaviour
     {
         private enum SimDevice { None, iPhoneX }
         [SerializeField] private  SimDevice Sim = SimDevice.None;
+        private Rect _lastSaveArea = new Rect(0f,0f,0f,0f);
         
         Rect[] NSA_iPhoneX =
         {
@@ -18,23 +21,21 @@ namespace HelperScripts
             Refresh ();
         }
 
+#if !UNITY_EDITOR
+       private void Update()
+        {
+            Refresh();
+        } 
+#endif
         private void Refresh()
         {
             var saveArea = GetSaveArea();
+            if (saveArea != _lastSaveArea)
+                ApplySafeArea(saveArea);
             
-            var anchorMin = saveArea.position;
-            var anchorMax = saveArea.position + saveArea.size;
-            anchorMin.x /= Screen.width;
-            anchorMin.y /= Screen.height;
-            anchorMax.x /= Screen.width;
-            anchorMax.y /= Screen.height;
-
-            var rectTransform = (transform as RectTransform);
             
-            rectTransform.anchorMin = anchorMin;
-            rectTransform.anchorMax = anchorMax;
         }
-
+        
         private Rect GetSaveArea()
         {
             var safeArea = Screen.safeArea;
@@ -57,5 +58,23 @@ namespace HelperScripts
 
             return safeArea;
         }
+
+        private void ApplySafeArea(Rect r)
+        {
+            _lastSaveArea = r;
+            
+            var anchorMin = r.position;
+            var anchorMax = r.position + r.size;
+            anchorMin.x /= Screen.width;
+            anchorMin.y /= Screen.height;
+            anchorMax.x /= Screen.width;
+            anchorMax.y /= Screen.height;
+
+            var rectTransform = (transform as RectTransform);
+            
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
+        }
+        
     }
 }

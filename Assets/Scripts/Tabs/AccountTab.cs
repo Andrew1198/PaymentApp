@@ -6,7 +6,7 @@ using Items;
 using Managers;
 using UnityEngine;
 using UnityEngine.UI;
-
+#pragma warning disable 0649
 namespace Tabs
 {
     public class AccountTab : Tab

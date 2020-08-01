@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
-
+#pragma warning disable 0649
 namespace Items
 {
     public class WalletItem : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
