@@ -1,6 +1,9 @@
 {
   "dependencies": {
     "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
+    "com.google.firebase.app": "6.15.2",
+    "com.google.firebase.firestore": "6.15.2",
+    "com.google.firebase.storage": "6.15.2",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ide.rider": "1.1.4",
@@ -42,8 +45,17 @@
   },
   "lock": {
     "com.dbrizov.naughtyattributes": {
-      "revision": "upm",
-      "hash": "b46e9e8fde10448accd59ecabd09fbe296ef62f7"
+      "hash": "b46e9e8fde10448accd59ecabd09fbe296ef62f7",
+      "revision": "upm"
     }
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Game Package Registry by Google",
+      "url": "https://unityregistry-pa.googleapis.com",
+      "scopes": [
+        "com.google"
+      ]
+    }
+  ]
 }

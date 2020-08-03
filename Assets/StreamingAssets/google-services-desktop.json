@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "556445549356",
+    "firebase_url": "https://paypmentapp.firebaseio.com",
+    "project_id": "paypmentapp",
+    "storage_bucket": "paypmentapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556445549356:android:453a92bb0a7b29bdbb2289",
+        "android_client_info": {
+          "package_name": "com.AndrewsCompany.MoneyTracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556445549356-dbsskqun301g8qt9bivhpaoro4t7caab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2Nn95tg1k3n1fQAnMNVy_2WW-WePKJ_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556445549356-dbsskqun301g8qt9bivhpaoro4t7caab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

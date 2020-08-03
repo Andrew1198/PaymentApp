@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Data;
+using GoogleFireBase;
 using HelperWindows;
 using Items;
 using UnityEngine;
@@ -147,7 +148,10 @@ namespace Managers
         {
             var path = Path.Combine(Application.persistentDataPath, SystemInfo.deviceUniqueIdentifier + ".json");
             var json = JsonUtility.ToJson(userData, true);
+            var oldJson = File.ReadAllText(path);
+            if (json == oldJson) return;
             File.WriteAllText(path, json);
+            GoogleFireBaseManager.UpdateUserData();
         }
         
         #if !UNITY_EDITOR && UNITY_ANDROID
