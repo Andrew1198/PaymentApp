@@ -1,4 +1,5 @@
 using Data;
+using DefaultNamespace;
 using Managers;
 using UnityEngine;
 #pragma warning disable 0649
@@ -20,11 +21,11 @@ namespace HelperWindows.ManageWalletWindow
         {
             confirmWindow.Open(() =>
             {
-                var deleted = PlayerData.Wallets.Remove(wallet);
+                var deleted = UserDataManager.Wallets.Remove(wallet);
                 if (!deleted)
                     Debug.LogError("Can't delete wallet");
                 
-                TabManager.UpdateTab();
+                Events.OnUpdateTab?.Invoke();
                 gameObject.SetActive(false);
             });
         }

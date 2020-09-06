@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -22,12 +23,12 @@ namespace HelperWindows
 
         public void OnOk()
         {
-            var category = PlayerData.GetCategories[numberOfPlace];
+            var category = UserDataManager.Categories[numberOfPlace];
             
-            //todo delete all old category transactions
+          
             category.IsEmpty = false;
             category.Name = categoryName.text;
-            TabManager.UpdateTab();
+            Events.OnUpdateTab?.Invoke();
             gameObject.SetActive(false);
             categoryName.text = null;
         }

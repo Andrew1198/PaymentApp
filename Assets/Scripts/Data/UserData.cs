@@ -16,6 +16,7 @@ namespace Data
                 for(int i=0;i<categories.Length;++i)
                 {
                     categories[i] = new CategoryData();
+                    categories[i].NumberOfPlace = i;
                 }
 
                 dollarRate = 26;

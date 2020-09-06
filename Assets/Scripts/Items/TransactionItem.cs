@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Data;
+using DefaultNamespace;
 using HelperWindows;
 using Managers;
 using TMPro;
@@ -39,19 +40,19 @@ namespace Items
                 {
                     confirmWindow.Open(() =>
                     {
-                        var monthlyTransaction = PlayerData.CurrentMonthlyTransaction;
+                        var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
                         
                         var payment = monthlyTransaction.SelectMany(dailyTransaction => dailyTransaction._transactions)
                             .First(transaction => transaction == _transaction);
                         
-                        var _wallet = PlayerData.Wallets.First(wall => wall.name == payment.wallet);
+                        var _wallet = UserDataManager.Wallets.First(wall => wall.name == payment.wallet);
                         _wallet.AddCount(payment._count,Currency.UAH);
 
                         foreach (var dailyTransaction in monthlyTransaction)
                           if(dailyTransaction._transactions.Remove(payment))
                               break;
                         
-                        TabManager.UpdateTab();
+                        Events.OnUpdateTab?.Invoke();
                     });
                     Reset();
                 }

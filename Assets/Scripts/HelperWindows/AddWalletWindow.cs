@@ -30,7 +30,7 @@ namespace HelperWindows
                _currency = currency
             };
             
-            PlayerData.AddWallet(wallet);
+            UserDataManager.AddWallet(wallet);
             gameObject.SetActive(false);
         }
 

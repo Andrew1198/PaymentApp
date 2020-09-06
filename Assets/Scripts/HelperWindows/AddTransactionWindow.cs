@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using DefaultNamespace;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace HelperWindows
         public void Open()
         {
             gameObject.SetActive(true);
-            dropdown.options = PlayerData.Wallets
+            dropdown.options = UserDataManager.Wallets
                 .Select(wallet => new TMP_Dropdown.OptionData
                 {
                    text = wallet.name
@@ -32,18 +33,18 @@ namespace HelperWindows
 
         public void OnOk()
         {
-            PlayerData.SelectedDate = DateTime.Now;
+            UserDataManager.SelectedDate = DateTime.Now;
             var walletName = dropdown.options[dropdown.value].text;
             
             
-            foreach (var wallet in PlayerData.Wallets)
+            foreach (var wallet in UserDataManager.Wallets)
             {
                 if (walletName == wallet.name)
                 {
                     wallet.Subtract( int.Parse(countField.text),wallet._currency);
                     var count = int.Parse(countField.text);
                     if (wallet._currency == Currency.USD)
-                        count = (int)Math.Round(count * PlayerData.DollarRate, MidpointRounding.AwayFromZero);
+                        count = (int)Math.Round(count * UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
                     
                     var transaction = new Transaction
                     {
@@ -53,8 +54,8 @@ namespace HelperWindows
                         wallet =  walletName,
                         Time = DateTime.Now
                     };
-                   PlayerData.CurrentDayilyTrasactions.Add(transaction);
-                    TabManager.UpdateTab();
+                   UserDataManager.CurrentDayilyTrasactions.Add(transaction);
+                   Events.OnUpdateTab?.Invoke();
                     break;
                 }
             }

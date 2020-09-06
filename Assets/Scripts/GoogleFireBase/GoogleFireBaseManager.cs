@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Data;
 using Firebase;
 using Firebase.Extensions;
 using Firebase.Firestore;
@@ -15,7 +17,7 @@ namespace GoogleFireBase
 
         private FirebaseFirestore Db => _db ?? (_db = FirebaseFirestore.DefaultInstance);
 
-        private bool _init;
+        [HideInInspector] public bool init;
 
         public override void Awake()
         {
@@ -29,7 +31,7 @@ namespace GoogleFireBase
                     // where app is a Firebase.FirebaseApp property of your application class.
                     app = FirebaseApp.DefaultInstance;
 
-                    _init = true;
+                    init = true;
                 }
                 else
                 {
@@ -42,18 +44,47 @@ namespace GoogleFireBase
         
         public static void UpdateUserData()
         {
-            if(!Instance._init)
+            if (!Instance.init || Application.internetReachability == NetworkReachability.NotReachable)
+            {
                 Debug.LogError("firebase doesn't init");
-            
+                return;
+            }
+
             var docRef = Instance.Db.Collection("userData").Document("data");
             var docData = new Dictionary<string, object>
             {
-                {"json", JsonUtility.ToJson(PlayerData.Instance.userData)},
+                {"json", JsonUtility.ToJson(UserDataManager.Instance.UserData)},
             };
             docRef.SetAsync(docData).ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted || task.IsCanceled)
                     Debug.LogError("Eror writing Firebase Firestore");
+            });
+        }
+
+        public static void GetData(Action<UserData> onReceived)
+        {
+            if (Application.internetReachability == NetworkReachability.NotReachable)
+            {
+                onReceived(null);
+                return;
+            }
+
+            var docRef = Instance.Db.Collection("userData").Document("data");
+            docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+            {
+                var snapshot = task.Result;
+                if (snapshot.Exists)
+                {
+                    var data = snapshot.ToDictionary();
+                    var userData = JsonUtility.FromJson<UserData>(data["json"].ToString());
+                    onReceived.Invoke(userData);
+                }
+                else
+                {
+                    onReceived.Invoke(null);
+                    Debug.Log($"Document {snapshot.Id} does not exist!");
+                }
             });
         }
     }

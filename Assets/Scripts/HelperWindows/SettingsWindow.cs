@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 using System.Xml;
+using DefaultNamespace;
+using GoogleFireBase;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -25,13 +27,25 @@ namespace HelperWindows
                 return;
             }
             gameObject.SetActive(true);
-            dollarRate.count.text = PlayerData.DollarRate.ToString(CultureInfo.InvariantCulture);
+            dollarRate.count.text = UserDataManager.DollarRate.ToString(CultureInfo.InvariantCulture);
         }
 
         public void OnClose()
         {
-            PlayerData.DollarRate = float.Parse(dollarRate.count.text);
+            UserDataManager.DollarRate = float.Parse(dollarRate.count.text);
             gameObject.SetActive(false);
+        }
+
+        public void LoadDataFromFirebase()
+        {
+            GoogleFireBaseManager.GetData( userData =>
+            {
+                if (userData == null) return;
+                UserDataManager.Init(userData);
+                UserDataManager.Save();
+                Events.OnUpdateTab?.Invoke();
+                Debug.Log("FirebaseData has been loaded");
+            });
         }
     }
 }

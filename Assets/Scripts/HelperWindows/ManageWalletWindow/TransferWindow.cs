@@ -1,4 +1,5 @@
 using System.Linq;
+using DefaultNamespace;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace HelperWindows.ManageWalletWindow
         public override void Init()
         {
             base.Init();
-            var walletsName = PlayerData.Wallets.Where(wallet => wallet.name != SelectedWallet.name)
+            var walletsName = UserDataManager.Wallets.Where(wallet => wallet.name != SelectedWallet.name)
                 .Select(wallet => new TMP_Dropdown.OptionData {text = wallet.name}).ToList();
             walletsDropdown.options = walletsName;
         }
@@ -20,11 +21,11 @@ namespace HelperWindows.ManageWalletWindow
         public override void OnOk()
         {
             var walletName = walletsDropdown.options[walletsDropdown.value].text;
-            var toWallet = PlayerData.Wallets.First(x => x.name == walletName);
+            var toWallet = UserDataManager.Wallets.First(x => x.name == walletName);
             
             toWallet.AddCount(int.Parse(countField.text),SelectedWallet._currency);
             SelectedWallet.Subtract( int.Parse(countField.text),SelectedWallet._currency);
-            TabManager.UpdateTab();
+            Events.OnUpdateTab?.Invoke();
             OnClose();
         }
     }

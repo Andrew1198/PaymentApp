@@ -27,19 +27,20 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            Date.text = PlayerData.SelectedDate.ToString("MMMM yyyy");
-            foreach (var categoryItem in categoryItems)
-                categoryItem.Init();
-            
+            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
+            for (var i = 0; i < categoryItems.Count; i++)
+            {
+                categoryItems[i].Init(UserDataManager.Categories[i]);
+            }
             SetWholeAmount();
         }
 
         private void SetWholeAmount()
         {
-            var amountPerMonth = PlayerData.AmountPerMonth;
+            var amountPerMonth = UserDataManager.AmountPerMonth;
             wholeAmount.uahText.text = amountPerMonth.ToString();
             wholeAmount.usdText.text =
-                ((int) Math.Round(amountPerMonth / PlayerData.DollarRate, MidpointRounding.AwayFromZero)).ToString();
+                ((int) Math.Round(amountPerMonth / UserDataManager.DollarRate, MidpointRounding.AwayFromZero)).ToString();
         }
         
         
@@ -56,9 +57,6 @@ namespace Tabs
                 DestroyImmediate(categoryItem.gameObject);
                 categoryItems[i] = newCategoryItem.GetComponent<CategoryItem>();
             }
-            
-            for (var i = 0; i < categoryItems.Count; ++i)
-                categoryItems[i].numberOfPlace = i;
             
             Debug.Log("Success!");
         }

@@ -29,7 +29,7 @@ namespace Tabs
                 Destroy(wallet.gameObject);
             }
             
-            foreach (var wallet in PlayerData.Wallets)
+            foreach (var wallet in UserDataManager.Wallets)
                 SetWallet(wallet);
             StartCoroutine(RebuildElements());
         }

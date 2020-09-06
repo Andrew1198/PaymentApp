@@ -30,9 +30,9 @@ namespace Data
             if (currency == _currency)
                 _count += count;
             else if (_currency == Currency.UAH)
-                _count += (int)Math.Round(count * PlayerData.DollarRate, MidpointRounding.AwayFromZero);
+                _count += (int)Math.Round(count * UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
             else
-                _count += (int)Math.Round(count / PlayerData.DollarRate, MidpointRounding.AwayFromZero);
+                _count += (int)Math.Round(count / UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
         }
 
         public void Subtract(int count, Currency currency)=> AddCount(count * -1,currency);

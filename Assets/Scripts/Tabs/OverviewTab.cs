@@ -21,7 +21,7 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            Date.text = PlayerData.SelectedDate.ToString("MMMM yyyy");
+            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
             SetAmounts();
             SetCategories();
         }
@@ -29,26 +29,26 @@ namespace Tabs
         private void SetAmounts()
         {
            
-            if (PlayerData.SelectedDate.Month == DateTime.Now.Month)
+            if (UserDataManager.SelectedDate.Month == DateTime.Now.Month)
             {
-                DayAvg.text = "DayAvg \n" + Math.Round(PlayerData.AmountPerMonth / (float)DateTime.Today.Day,MidpointRounding.AwayFromZero);
-                TodayAmountOrWeekAvg.text = "Today \n" + PlayerData.AmountPerDay;
-                WeekAmountOrMonth.text = "Week \n" + PlayerData.AmountPerWeek;
+                DayAvg.text = "DayAvg \n" + Math.Round(UserDataManager.AmountPerMonth / (float)DateTime.Today.Day,MidpointRounding.AwayFromZero);
+                TodayAmountOrWeekAvg.text = "Today \n" + UserDataManager.AmountPerDay;
+                WeekAmountOrMonth.text = "Week \n" + UserDataManager.AmountPerWeek;
             }
             else
             {
-                var daysInMonth = DateTime.DaysInMonth(PlayerData.SelectedDate.Year, PlayerData.SelectedDate.Month);
-                DayAvg.text = "DayAvg \n" +  Math.Round(PlayerData.AmountPerMonth / (float)daysInMonth,MidpointRounding.AwayFromZero);
+                var daysInMonth = DateTime.DaysInMonth(UserDataManager.SelectedDate.Year, UserDataManager.SelectedDate.Month);
+                DayAvg.text = "DayAvg \n" +  Math.Round(UserDataManager.AmountPerMonth / (float)daysInMonth,MidpointRounding.AwayFromZero);
                 
                 const int dayCountPerWeek = 7;
                 const int weekCountPerMonth = 4;
                 const int fourWeeksDaysCount = 28;
                 var restDaysFrom4Weeks = daysInMonth - fourWeeksDaysCount;
                 var divider = weekCountPerMonth + restDaysFrom4Weeks * (float)restDaysFrom4Weeks/dayCountPerWeek;
-                var weekAwg = Math.Round(PlayerData.AmountPerMonth / (float)divider,MidpointRounding.AwayFromZero);
+                var weekAwg = Math.Round(UserDataManager.AmountPerMonth / (float)divider,MidpointRounding.AwayFromZero);
                 TodayAmountOrWeekAvg.text ="Week Avg \n" + weekAwg;
                 
-                WeekAmountOrMonth.text = "Month\n"+PlayerData.AmountPerMonth;
+                WeekAmountOrMonth.text = "Month\n"+UserDataManager.AmountPerMonth;
             }
 
         }
@@ -60,11 +60,17 @@ namespace Tabs
             
             var overviewDataList = new List<OverviewItem.OverviewData>();
 
-            var categoriesName = PlayerData.GetCategoriesName();
-
-            foreach (var category in categoriesName)
+            var categoriesNames = new List<string>();
+            var transactionsPerMonth = UserDataManager.TransactionsPerMonth;
+            foreach (var transaction in transactionsPerMonth)
             {
-                var sum = PlayerData.GetSumByCategory(category);
+                if(categoriesNames.Contains(transaction._category))
+                    continue;
+                categoriesNames.Add(transaction._category);
+            }
+            foreach (var category in categoriesNames)
+            {
+                var sum = CategoryItem.GetSumByCategory(category);
                 var percentageOfAmount = sum == 0 ? sum : GetPercentageOfAmount(sum);
                 var overviewData = new OverviewItem.OverviewData {sum = sum, CategoryName = category, percentageOfAmount = percentageOfAmount};
                 
@@ -84,7 +90,7 @@ namespace Tabs
 
         private int GetPercentageOfAmount(int sum)
         {
-            var amountPerMonth = PlayerData.AmountPerMonth;
+            var amountPerMonth = UserDataManager.AmountPerMonth;
             
             var wholePart = Convert.ToInt32((float)sum / amountPerMonth*100);
             var fraction = (float)sum / amountPerMonth*100 - wholePart;

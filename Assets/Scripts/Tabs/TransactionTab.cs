@@ -18,7 +18,7 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            Date.text = PlayerData.SelectedDate.ToString("MMMM yyyy");
+            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
            Draw();
         }
 
@@ -47,7 +47,7 @@ namespace Tabs
         
         private List<DailyTransaction> GetTransactions()
         {
-            var currentMonthlyTransactions = PlayerData.CurrentMonthlyTransaction;
+            var currentMonthlyTransactions = UserDataManager.CurrentMonthlyTransaction;
             currentMonthlyTransactions = currentMonthlyTransactions.OrderByDescending(transaction => transaction.day).ToList();
             
             foreach (var dayTransaction in currentMonthlyTransactions)
