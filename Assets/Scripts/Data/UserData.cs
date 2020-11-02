@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Managers;
 
 namespace Data
     {
@@ -9,7 +10,7 @@ namespace Data
             public List<Wallet> _wallets = new List<Wallet>();
             public CategoryData[] categories = new CategoryData[14];
             public List<YearlyTransactions> _transactions = new List<YearlyTransactions>();
-            public float dollarRate;
+            public CurrencyInfo[] currenciesRate = {new CurrencyInfo()};
 
             public UserData()
             {
@@ -18,8 +19,6 @@ namespace Data
                     categories[i] = new CategoryData();
                     categories[i].NumberOfPlace = i;
                 }
-
-                dollarRate = 26;
             }
         }
     }

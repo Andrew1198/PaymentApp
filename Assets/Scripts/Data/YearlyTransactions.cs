@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Data
 {
@@ -6,8 +7,6 @@ namespace Data
     public class YearlyTransactions
     {
         public int year;
-        public MonthlyTransaction[] _monthlyTransactions = new MonthlyTransaction[12];
-
-        public MonthlyTransaction this[int index] => _monthlyTransactions[index];
+        public List<MonthlyTransaction> transactions = new List<MonthlyTransaction>();
     }
 }

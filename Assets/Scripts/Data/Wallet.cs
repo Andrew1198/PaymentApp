@@ -27,12 +27,16 @@ namespace Data
 
         public void AddCount(int count, Currency currency)
         {
-            if (currency == _currency)
-                _count += count;
-            else if (_currency == Currency.UAH)
-                _count += (int)Math.Round(count * UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
-            else
-                _count += (int)Math.Round(count / UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
+            UserDataManager.GetDollarRate(dollarRate =>
+            {
+                if (currency == _currency)
+                    _count += count;
+                else if (_currency == Currency.UAH)
+                    _count += (int)Math.Round(count * dollarRate, MidpointRounding.AwayFromZero);
+                else
+                    _count += (int)Math.Round(count / dollarRate, MidpointRounding.AwayFromZero);
+            });
+           
         }
 
         public void Subtract(int count, Currency currency)=> AddCount(count * -1,currency);

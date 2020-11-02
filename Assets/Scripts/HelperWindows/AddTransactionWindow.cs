@@ -35,31 +35,35 @@ namespace HelperWindows
         {
             UserDataManager.SelectedDate = DateTime.Now;
             var walletName = dropdown.options[dropdown.value].text;
-            
-            
-            foreach (var wallet in UserDataManager.Wallets)
+            UserDataManager.GetDollarRate(dollarRate =>
             {
-                if (walletName == wallet.name)
+                foreach (var wallet in UserDataManager.Wallets)
                 {
-                    wallet.Subtract( int.Parse(countField.text),wallet._currency);
-                    var count = int.Parse(countField.text);
-                    if (wallet._currency == Currency.USD)
-                        count = (int)Math.Round(count * UserDataManager.DollarRate, MidpointRounding.AwayFromZero);
-                    
-                    var transaction = new Transaction
+                    if (walletName == wallet.name)
                     {
-                        _category = fromCategory,
-                        _count = count,
-                        _comment = commentField.text,
-                        wallet =  walletName,
-                        Time = DateTime.Now
-                    };
-                   UserDataManager.CurrentDayilyTrasactions.Add(transaction);
-                   Events.OnUpdateTab?.Invoke();
-                    break;
+                        wallet.Subtract( int.Parse(countField.text),wallet._currency);
+                        var count = int.Parse(countField.text);
+                        if (wallet._currency == Currency.USD)
+                            count = (int)Math.Round(count * dollarRate, MidpointRounding.AwayFromZero);
+                    
+                        var transaction = new Transaction
+                        {
+                            _category = fromCategory,
+                            _count = count,
+                            _comment = commentField.text,
+                            wallet =  walletName,
+                            Time = DateTime.Now
+                        };
+                        UserDataManager.CurrentDayilyTrasactions.Add(transaction);
+                        Events.OnUpdateTab?.Invoke();
+                        break;
+                    }
                 }
-            }
-            gameObject.SetActive(false);
+                gameObject.SetActive(false);
+            });
+            
+            
+            
         }
     }
 }

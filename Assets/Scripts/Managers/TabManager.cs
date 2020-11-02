@@ -9,13 +9,9 @@ namespace Managers
 {
     public class TabManager : MonoBehaviour
     {
-        //[SerializeField] private List<GameObject> tabs;
-
+        
         [SerializeField] private Tab _currentTab;
         
-        public Tab CurrentTab => _currentTab;
-
-
         private void Awake()
         {
             Events.OnUpdateTab += UpdateTab;
@@ -36,6 +32,18 @@ namespace Managers
         private void OnDestroy()
         {
             Events.OnUpdateTab -= UpdateTab;
+        }
+
+        public void OnPreviousMonth()
+        {
+            UserDataManager.SelectedDate = UserDataManager.SelectedDate.AddMonths(-1);
+            Events.OnUpdateTab?.Invoke();
+        }
+
+        public void OnNextMonth()
+        {
+            UserDataManager.SelectedDate = UserDataManager.SelectedDate.AddMonths(1);
+            Events.OnUpdateTab?.Invoke();
         }
     }
 }

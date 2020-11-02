@@ -19,9 +19,8 @@ namespace GoogleFireBase
 
         [HideInInspector] public bool init;
 
-        public override void Awake()
+        public void Start()
         {
-            base.Awake();
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
                 var dependencyStatus = task.Result;
@@ -30,7 +29,7 @@ namespace GoogleFireBase
                     // Create and hold a reference to your FirebaseApp,
                     // where app is a Firebase.FirebaseApp property of your application class.
                     app = FirebaseApp.DefaultInstance;
-
+                    Debug.Log("Firebase has been inited");
                     init = true;
                 }
                 else
@@ -59,6 +58,8 @@ namespace GoogleFireBase
             {
                 if (task.IsFaulted || task.IsCanceled)
                     Debug.LogError("Eror writing Firebase Firestore");
+                else
+                    Debug.Log("UpdateGoogleFireBase");
             });
         }
 

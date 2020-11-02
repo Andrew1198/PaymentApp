@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
+using Data;
 using DefaultNamespace;
 using GoogleFireBase;
 using Managers;
@@ -17,8 +19,8 @@ namespace HelperWindows
     }
     public class SettingsWindow : MonoBehaviour
     {
-        [SerializeField] private DollarRate dollarRate;
-        
+        [SerializeField] private TextMeshProUGUI exchangeRates;
+
         public void Init()
         {
             if (gameObject.activeInHierarchy)
@@ -26,13 +28,31 @@ namespace HelperWindows
                 OnClose();
                 return;
             }
+
             gameObject.SetActive(true);
-            dollarRate.count.text = UserDataManager.DollarRate.ToString(CultureInfo.InvariantCulture);
+            UserDataManager.GetCurrenciesRate(currencyInfos =>
+                {
+                    Array.Sort(currencyInfos, delegate(CurrencyInfo user1, CurrencyInfo user2)
+                    {
+                        if (user1.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD)
+                            return -1;
+                        return 1;
+                    }); // доллар выставляем на пе
+                    var result = string.Empty;
+                    foreach (var item in currencyInfos)
+                    {
+                        result += MonoBankManager.GetNameByCurrencyCode(item.currencyCodeA) + " " +
+                                  Math.Round(item.rateBuy, 2, MidpointRounding.AwayFromZero).ToString("0.00") + " / " +
+                                  Math.Round(item.rateSell, 2, MidpointRounding.AwayFromZero).ToString("0.00") + "\n";
+                    }
+                    exchangeRates.text =result ;
+                }
+            );
+            
         }
 
         public void OnClose()
         {
-            UserDataManager.DollarRate = float.Parse(dollarRate.count.text);
             gameObject.SetActive(false);
         }
 

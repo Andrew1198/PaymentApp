@@ -18,8 +18,7 @@ namespace Managers
         private void Awake()
         {
             SetUserDataFromLocal();
-                
-            Instantiate(corePrefab, canvas);
+            
             Events.OnUpdateTab?.Invoke();
             Events.OnLoadedData?.Invoke();
         }
@@ -39,14 +38,16 @@ namespace Managers
         private void OnApplicationPause(bool isPaused)
         {
             Debug.Log($"<color=yellow>OnApplicationPause isPaused = {isPaused}</color>");
-            if (isPaused)
+#if !UNITY_EDITOR
+          if (isPaused)
                 UserDataManager.Save();
             else
             {
                 if (!UserDataManager.Inited) return;
                 UserDataManager.SelectedDate = DateTime.Now;
                 Events.OnUpdateTab?.Invoke();
-            }
+            }  
+#endif
         }
     }
 }

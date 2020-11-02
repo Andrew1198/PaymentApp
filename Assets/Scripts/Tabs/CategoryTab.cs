@@ -39,8 +39,12 @@ namespace Tabs
         {
             var amountPerMonth = UserDataManager.AmountPerMonth;
             wholeAmount.uahText.text = amountPerMonth.ToString();
-            wholeAmount.usdText.text =
-                ((int) Math.Round(amountPerMonth / UserDataManager.DollarRate, MidpointRounding.AwayFromZero)).ToString();
+            UserDataManager.GetDollarRate(dollarRate =>
+            {
+                wholeAmount.usdText.text =
+                    ((int) Math.Round(amountPerMonth / dollarRate, MidpointRounding.AwayFromZero)).ToString();
+            });
+            
         }
         
         

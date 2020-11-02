@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -6,11 +7,12 @@ using System.Linq;
 using Data;
 using DefaultNamespace;
 using GoogleFireBase;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Managers
 {
-    public class UserDataManager 
+    public class UserDataManager
     {
         public static UserDataManager Instance;
         private DateTime _selectedDate;
@@ -36,11 +38,90 @@ namespace Managers
         {
             UserData = data;
         }
-        public static float DollarRate
+
+        public static void GetDollarRate(Action<float> result)
         {
-            get => Instance.UserData.dollarRate;
-            set => Instance.UserData.dollarRate = value;
+            GetCurrenciesRate(infos =>
+            {
+                result((float) Math.Round(infos.First(item =>
+                        item.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD).rateSell, 2,
+                    MidpointRounding.AwayFromZero));
+            });
         }
+
+        public static void GetCurrenciesRate(Action<CurrencyInfo[]> result)
+        {
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
+                MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime >
+                60 * 5)
+            {
+                MonoBankManager.GetExchangeRates(onSuccessful =>
+                {
+                    Instance.UserData.currenciesRate = onSuccessful;
+                    MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
+                        DateTimeOffset.Now.ToUnixTimeSeconds();
+                    result(onSuccessful);
+                },onError:()=>result(Instance.UserData.currenciesRate));
+            }
+            else
+                result(Instance.UserData.currenciesRate);
+        }
+
+        public static void SetNewBankTransactionsInData(Action onFinish)
+        {
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
+                MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime >
+                60)
+            {
+                MonoBankManager.GetTransactions(bankTransactions =>
+                {
+                    if (bankTransactions == null)
+                    {
+                        onFinish();
+                        return;
+                    }
+
+                    foreach (var bankTransaction in bankTransactions)
+                    {
+                        var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
+                        if (!Instance.UserData._transactions.Any(item => item.year == time.Year))
+                        {
+                            Instance.UserData._transactions.Add(new YearlyTransactions
+                            {
+                                year = time.Year
+                            });
+                        }
+
+                        var yearlyTrans = Instance.UserData._transactions.First(item => item.year == time.Year);
+                        if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
+                        {
+                            yearlyTrans.transactions.Add(new MonthlyTransaction
+                            {
+                                month = time.Month
+                            });
+                        }
+
+                        var monthlyTrans = yearlyTrans.transactions.First(item => item.month == time.Month);
+                        if (!monthlyTrans._transactions.Any(item => item.day == time.Day))
+                        {
+                            monthlyTrans._transactions.Add(new DailyTransaction
+                            {
+                                day = time.Day
+                            });
+                        }
+
+                        var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
+                        if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
+                        {
+                            dayTrans.bankTransactions.Add(bankTransaction);
+                        }
+                    }
+
+                    onFinish();
+                });
+            }
+        }
+
         public static YearlyTransactions CurrentYearlyTransactions
         {
             get
@@ -54,16 +135,27 @@ namespace Managers
                         year = Instance._selectedDate.Year
                     });
                     tmp = Instance.UserData._transactions.Last();
-                    for (var i = 0; i < 12; ++i)
-                        tmp._monthlyTransactions[i] = new MonthlyTransaction();
                 }
 
                 return tmp;
             }
         }
 
-        public static List<DailyTransaction> CurrentMonthlyTransaction =>
-            CurrentYearlyTransactions[Instance._selectedDate.Month - 1]._transactions;
+        public static List<DailyTransaction> CurrentMonthlyTransaction
+        {
+            get
+            {
+                if (CurrentYearlyTransactions.transactions.Any(item => item.month == Instance._selectedDate.Month))
+                {
+                    CurrentYearlyTransactions.transactions.Add(new MonthlyTransaction
+                    {
+                        month =  Instance._selectedDate.Month
+                    });
+                }
+                return CurrentYearlyTransactions.transactions.First(item => item.month == Instance._selectedDate.Month)._transactions;
+            }
+        }
+
 
 
 
@@ -132,16 +224,7 @@ namespace Managers
             return week;
         }
         
-        private void Update()
-        {
-            #if UNITY_EDITOR
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
-            {
-               Save();
-                Debug.LogError("Save");
-            }
-            #endif
-        }
+        
         public static void Save()
         {
             if (!Inited)
@@ -172,6 +255,9 @@ namespace Managers
         {
             return Instance.UserData.categories.Where(data => data.IsEmpty == false).Select(data => data.Name);
         }
+
+
+
 
        
     }
