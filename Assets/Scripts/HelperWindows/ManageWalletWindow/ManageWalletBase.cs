@@ -11,13 +11,13 @@ namespace HelperWindows.ManageWalletWindow
         [SerializeField] protected TextMeshProUGUI selectedWalletText;
         [SerializeField] protected TMP_InputField countField;
 
-        protected Wallet SelectedWallet => manageWalletWindow.wallet;
+        protected Saving SelectedSaving => manageWalletWindow.saving;
         
 
 
         public virtual void Init()
         {
-            selectedWalletText.text = SelectedWallet.name;
+            selectedWalletText.text = SelectedSaving.name;
             gameObject.SetActive(true);
         }
         

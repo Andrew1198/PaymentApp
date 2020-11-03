@@ -10,13 +10,13 @@ namespace Data
         public int _count;
         public string _comment;
         [SerializeField] private long _time;
+
         public DateTime Time
         {
             get => DateTime.FromBinary(_time);
             set => _time = value.ToBinary();
         }
-        
-        public string wallet;
+
         public string _category;
     }
 }

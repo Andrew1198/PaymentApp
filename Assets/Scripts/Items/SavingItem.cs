@@ -8,22 +8,22 @@ using Image = UnityEngine.UI.Image;
 #pragma warning disable 0649
 namespace Items
 {
-    public class WalletItem : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
+    public class SavingItem : MonoBehaviour,IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField] private new TextMeshProUGUI name;
         [SerializeField] private Image icon;
-        [SerializeField] private TextMeshProUGUI type;
+        [SerializeField] private TextMeshProUGUI currencyType;
         [SerializeField] private TextMeshProUGUI count;
         [SerializeField] private ManageWalletWindow manageWalletWindow;
 
-        private Wallet _wallet;
+        private Saving _saving;
         
-        public void Init(Wallet wallet)
+        public void Init(Saving saving)
         {
-            name.text = wallet.name;
-            type.text = wallet._currency == Currency.UAH ? "UAH" : "USD";
-            count.text = wallet._count.ToString();
-            _wallet = wallet;
+            name.text = saving.name;
+            currencyType.text = saving.currency == Currency.UAH ? "UAH" : "USD";
+            count.text = saving.count.ToString();
+            _saving = saving;
         }
 
         private bool _pointerDown;
@@ -35,7 +35,7 @@ namespace Items
             {
                 if (Time.time >= _downClickTime + _requireHold)
                 {
-                    manageWalletWindow.Init(_wallet);
+                    manageWalletWindow.Init(_saving);
                     Reset();
                 }
             }

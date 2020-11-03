@@ -12,7 +12,6 @@ namespace Items
 {
     public class TransactionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        [SerializeField] private TextMeshProUGUI wallet;
         [SerializeField] private TextMeshProUGUI category;
         [SerializeField] private TextMeshProUGUI comment;
         [SerializeField] private TextMeshProUGUI count;
@@ -22,7 +21,6 @@ namespace Items
         
         public void Init(Transaction transaction)
         {
-            wallet.text = transaction.wallet;
             category.text = transaction._category;
             comment.text = transaction._comment;
             count.text = transaction._count.ToString();
@@ -45,9 +43,6 @@ namespace Items
                         var payment = monthlyTransaction.SelectMany(dailyTransaction => dailyTransaction._transactions)
                             .First(transaction => transaction == _transaction);
                         
-                        var _wallet = UserDataManager.Wallets.First(wall => wall.name == payment.wallet);
-                        _wallet.AddCount(payment._count,Currency.UAH);
-
                         foreach (var dailyTransaction in monthlyTransaction)
                           if(dailyTransaction._transactions.Remove(payment))
                               break;

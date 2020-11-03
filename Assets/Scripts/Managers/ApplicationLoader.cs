@@ -11,16 +11,11 @@ namespace Managers
 {
     public class ApplicationLoader : MonoBehaviour
     {
-        [SerializeField] private Transform canvas;
-        [SerializeField] private GameObject corePrefab;
-
-        
         private void Awake()
         {
             SetUserDataFromLocal();
             
             Events.OnUpdateTab?.Invoke();
-            Events.OnLoadedData?.Invoke();
         }
 
         private void SetUserDataFromLocal()

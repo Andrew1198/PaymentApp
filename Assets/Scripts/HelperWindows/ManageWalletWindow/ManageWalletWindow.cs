@@ -7,21 +7,21 @@ namespace HelperWindows.ManageWalletWindow
 {
     public class ManageWalletWindow : MonoBehaviour
     {
-        [HideInInspector]public Wallet wallet;
+        [HideInInspector]public Saving saving;
         [SerializeField] private ConfirmWindow confirmWindow;
 
-        public void Init(Wallet wallet)
+        public void Init(Saving saving)
         {
             gameObject.SetActive(true);
-            this.wallet = wallet;
+            this.saving = saving;
         }
 
 
-        public void OnDeleteWalletWindow()
+        public void OnDeleteSaving()
         {
             confirmWindow.Open(() =>
             {
-                var deleted = UserDataManager.Wallets.Remove(wallet);
+                var deleted = UserDataManager.Savings.Remove(saving);
                 if (!deleted)
                     Debug.LogError("Can't delete wallet");
                 

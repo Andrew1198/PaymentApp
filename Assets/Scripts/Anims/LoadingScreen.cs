@@ -10,16 +10,23 @@ namespace DefaultNamespace
         [SerializeField] private TextMeshProUGUI loadingField;
         [SerializeField] private GameObject back;
 
+        private Coroutine _coroutine;
+
         private void Awake()
         {
-            back.SetActive(true);
-            StartCoroutine(Anim());
-            Events.OnLoadedData += OnLoadedData;
+            Events.EnableLoadingScreen += Show;
+            Events.DisableLoadingScreen += Hide;
         }
+
+        private void Show()
+        {
+            back.SetActive(true);
+            _coroutine = StartCoroutine(Anim());
+        } 
 
         private IEnumerator Anim()
         {
-            string[] points = {"",".", "..", "..."};
+            string[] points = {"", ".", "..", "..."};
             var loadingText = "Loading";
             string result;
             for (var i = 0;; i++)
@@ -30,10 +37,13 @@ namespace DefaultNamespace
             }
         }
 
-        private void OnLoadedData()
+        private void Hide()
         {
-            Events.OnLoadedData -= OnLoadedData;
-            Destroy(gameObject);
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
+            back.SetActive(false);
         }
     }
 }

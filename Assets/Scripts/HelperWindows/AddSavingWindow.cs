@@ -6,11 +6,10 @@ using UnityEngine;
 #pragma warning disable 0649
 namespace HelperWindows
 {
-    public class AddWalletWindow : MonoBehaviour
+    public class AddSavingWindow : MonoBehaviour
     {
         
         [SerializeField] private TMP_InputField nameOfWallet;
-        [SerializeField] private TMP_Dropdown typeOfWallet;
         [SerializeField] private TMP_Dropdown typeOfCurrency;
         
         public void OnClose()
@@ -21,23 +20,20 @@ namespace HelperWindows
         public void OnOk()
         {
             var walletName = nameOfWallet.text;
-            var type = (WalletType)typeOfWallet.value;
             var currency = (Currency) typeOfCurrency.value;
-            var wallet = new Wallet
+            var wallet = new Saving
             {
                name = walletName,
-               _type = type,
-               _currency = currency
+               currency = currency
             };
             
-            UserDataManager.AddWallet(wallet);
+            UserDataManager.AddSaving(wallet);
             gameObject.SetActive(false);
         }
 
         private void Undo()
         {
             nameOfWallet.text = null;
-            typeOfWallet.value = 0;
             typeOfCurrency.value = 0;
         }
 

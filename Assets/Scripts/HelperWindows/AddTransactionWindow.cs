@@ -12,58 +12,38 @@ namespace HelperWindows
 {
     public class AddTransactionWindow : MonoBehaviour
     {
-        [SerializeField] private TMP_Dropdown dropdown;
+        [SerializeField] private TextMeshProUGUI categoryName;
         [SerializeField] private TMP_InputField countField;
         [SerializeField] private TMP_InputField commentField;
 
-        public string fromCategory;
+        [HideInInspector] public string fromCategory;
 
         public void Open()
         {
             gameObject.SetActive(true);
-            dropdown.options = UserDataManager.Wallets
-                .Select(wallet => new TMP_Dropdown.OptionData
-                {
-                   text = wallet.name
-                }).ToList();
             countField.text = null;
             commentField.text = null;
+            categoryName.text = fromCategory;
         }
 
 
         public void OnOk()
         {
             UserDataManager.SelectedDate = DateTime.Now;
-            var walletName = dropdown.options[dropdown.value].text;
-            UserDataManager.GetDollarRate(dollarRate =>
+
+            var count = int.Parse(countField.text);
+
+            var transaction = new Transaction
             {
-                foreach (var wallet in UserDataManager.Wallets)
-                {
-                    if (walletName == wallet.name)
-                    {
-                        wallet.Subtract( int.Parse(countField.text),wallet._currency);
-                        var count = int.Parse(countField.text);
-                        if (wallet._currency == Currency.USD)
-                            count = (int)Math.Round(count * dollarRate, MidpointRounding.AwayFromZero);
-                    
-                        var transaction = new Transaction
-                        {
-                            _category = fromCategory,
-                            _count = count,
-                            _comment = commentField.text,
-                            wallet =  walletName,
-                            Time = DateTime.Now
-                        };
-                        UserDataManager.CurrentDayilyTrasactions.Add(transaction);
-                        Events.OnUpdateTab?.Invoke();
-                        break;
-                    }
-                }
-                gameObject.SetActive(false);
-            });
+                _category = fromCategory,
+                _count = count,
+                _comment = commentField.text,
+                Time = DateTime.Now
+            };
+            UserDataManager.CurrentDayilyTrasactions.Add(transaction);
+            Events.OnUpdateTab?.Invoke();
             
-            
-            
+            gameObject.SetActive(false);
         }
     }
 }

@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Data;
+using DefaultNamespace;
 using Items;
 using Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 #pragma warning disable 0649
@@ -11,42 +13,42 @@ namespace Tabs
 {
     public class AccountTab : Tab
     {
-        [SerializeField] private Transform walletsContainer;
         [SerializeField] private Transform savingContainer;
-        [SerializeField] private GameObject walletPrefab;
-
-        [SerializeField] private RectTransform[] needToRebuild;
+        [SerializeField] private GameObject savingPrefab;
+        [SerializeField] private TextMeshProUGUI wholeAmount;
 
         public override void Init()
         {
             base.Init();
-            foreach (Transform wallet in walletsContainer)
-            {
-                Destroy(wallet.gameObject);
-            }
+            Events.EnableLoadingScreen.Invoke();
             foreach (Transform wallet in savingContainer)
             {
                 Destroy(wallet.gameObject);
             }
             
-            foreach (var wallet in UserDataManager.Wallets)
-                SetWallet(wallet);
-            StartCoroutine(RebuildElements());
-        }
-        
-        private void SetWallet(Wallet wallet)
-        {
-            var parent = wallet._type == WalletType.Used ? walletsContainer : savingContainer;
-            var walletItem = Instantiate(walletPrefab, parent).GetComponent<WalletItem>();
-            walletItem.Init(wallet);
+            UserDataManager.GetDollarRate(dollarRate =>
+            {
+                var sumSavingUsd = 0f;
+                foreach (var saving in UserDataManager.Savings)
+                {
+                    SetSaving(saving);
+                    if (saving.currency == Currency.UAH)
+                        sumSavingUsd += saving.count * dollarRate;
+                    else
+                        sumSavingUsd += saving.count;
+                }
+
+                wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
+                Events.DisableLoadingScreen.Invoke();
+            });
+            
         }
 
-        IEnumerator RebuildElements()
+        private void SetSaving(Saving saving)
         {
-            yield return null;
-            foreach (var rectTransform in needToRebuild)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
-            
+            var parent = savingContainer;
+            var walletItem = Instantiate(savingPrefab, parent).GetComponent<SavingItem>();
+            walletItem.Init(saving);
         }
     }
 }

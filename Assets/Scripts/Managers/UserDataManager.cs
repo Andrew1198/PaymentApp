@@ -19,7 +19,7 @@ namespace Managers
         public readonly UserData UserData;
         public static bool Inited;
 
-        public static List<Wallet> Wallets => Instance.UserData._wallets;
+        public static List<Saving> Savings => Instance.UserData.savings;
 
         public static DateTime SelectedDate
         {
@@ -83,6 +83,8 @@ namespace Managers
 
                     foreach (var bankTransaction in bankTransactions)
                     {
+                        if(bankTransaction.amount <= 0)
+                            continue;
                         var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
                         if (!Instance.UserData._transactions.Any(item => item.year == time.Year))
                         {
@@ -145,7 +147,7 @@ namespace Managers
         {
             get
             {
-                if (CurrentYearlyTransactions.transactions.Any(item => item.month == Instance._selectedDate.Month))
+                if (!CurrentYearlyTransactions.transactions.Any(item => item.month == Instance._selectedDate.Month))
                 {
                     CurrentYearlyTransactions.transactions.Add(new MonthlyTransaction
                     {
@@ -245,9 +247,9 @@ namespace Managers
         }
         
         
-        public static void AddWallet(Wallet wallet)
+        public static void AddSaving(Saving saving)
         {
-            Instance.UserData._wallets.Add(wallet);
+            Instance.UserData.savings.Add(saving);
             Events.OnUpdateTab?.Invoke();
         }
 
