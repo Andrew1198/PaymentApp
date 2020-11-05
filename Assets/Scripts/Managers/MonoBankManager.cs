@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Data;
+using DefaultNamespace;
 using Firebase.Firestore;
 using HelperScripts;
 using NaughtyAttributes;
@@ -15,6 +16,7 @@ namespace Managers
 {
     public class MonoBankManager : Singleton<MonoBankManager>
     {
+        public MCC_DataBase mccDataBase;
         private const string token = "uOpR4ZpvpBxHnnCcI0OXXjWD2-qwK_owBS6pC1UCdh7Q";
         private const string ApiEndPoint = "https://api.monobank.ua/";
 
@@ -81,7 +83,7 @@ namespace Managers
                 {
                     if (webRequest.downloadHandler.text.Contains("Too many requests"))
                     {
-                        Utility.Invoke(this,()=>SendRequest(uri,onFinish),.5f);
+                        Utility.Invoke(this,()=>SendRequest(uri,onFinish,onError,header),.5f);
                         Debug.Log("reapet");
                         yield break;
                     }
@@ -97,7 +99,7 @@ namespace Managers
         
        
 
-        public class UpdateMonobankTime
+        public struct UpdateMonobankTime
         {
             public long LastUpdateCurrencyInfoTime;
             public long LastUpdateBankTransactions;

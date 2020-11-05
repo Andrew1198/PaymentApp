@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -7,18 +6,16 @@ using System.Linq;
 using Data;
 using DefaultNamespace;
 using GoogleFireBase;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace Managers
 {
-    public class UserDataManager
+    public class UserDataManager 
     {
         public static UserDataManager Instance;
         private DateTime _selectedDate;
         public readonly UserData UserData;
         public static bool Inited;
-
         public static List<Saving> Savings => Instance.UserData.savings;
 
         public static DateTime SelectedDate
@@ -57,6 +54,8 @@ namespace Managers
             {
                 MonoBankManager.GetExchangeRates(onSuccessful =>
                 {
+                    MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
+                        DateTimeOffset.Now.ToUnixTimeSeconds();
                     Instance.UserData.currenciesRate = onSuccessful;
                     MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
                         DateTimeOffset.Now.ToUnixTimeSeconds();
@@ -75,6 +74,8 @@ namespace Managers
             {
                 MonoBankManager.GetTransactions(bankTransactions =>
                 {
+                    MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions =
+                        DateTimeOffset.Now.ToUnixTimeSeconds();
                     if (bankTransactions == null)
                     {
                         onFinish();
@@ -148,7 +149,7 @@ namespace Managers
             }
         }
 
-        public static List<DailyTransaction> CurrentMonthlyTransaction
+        public static MonthlyTransaction CurrentMonthlyTransaction
         {
             get
             {
@@ -159,24 +160,24 @@ namespace Managers
                         month =  Instance._selectedDate.Month
                     });
                 }
-                return CurrentYearlyTransactions.transactions.First(item => item.month == Instance._selectedDate.Month)._transactions;
+                return CurrentYearlyTransactions.transactions.First(item => item.month == Instance._selectedDate.Month);
             }
         }
 
 
 
 
-        public static List<Transaction> CurrentDayilyTrasactions
+        public static DailyTransaction CurrentDailyTransactions
         {
             get
             {
-                if (!CurrentMonthlyTransaction.Any(transaction => transaction.day == Instance._selectedDate.Day))
-                    CurrentMonthlyTransaction.Add(new DailyTransaction
+                if (!CurrentMonthlyTransaction._transactions.Any(transaction => transaction.day == Instance._selectedDate.Day))
+                    CurrentMonthlyTransaction._transactions.Add(new DailyTransaction
                     {
                         day = Instance._selectedDate.Day
                     });
-                return CurrentMonthlyTransaction.First(transaction => transaction.day == Instance._selectedDate.Day)
-                    ._transactions;
+                return CurrentMonthlyTransaction._transactions.First(transaction =>
+                    transaction.day == Instance._selectedDate.Day);
             }
         }
 
@@ -185,7 +186,7 @@ namespace Managers
             get
             {
                 var result = new List<Transaction>();
-                foreach (var dailyTransaction in CurrentMonthlyTransaction)
+                foreach (var dailyTransaction in CurrentMonthlyTransaction._transactions)
                     result.AddRange(dailyTransaction._transactions);
 
                 return result;
@@ -202,10 +203,10 @@ namespace Managers
             get => Instance.UserData.categories;
         }
 
-        public static int AmountPerMonth => UserDataManager.CurrentMonthlyTransaction
+        public static int AmountPerMonth => UserDataManager.CurrentMonthlyTransaction._transactions
             .SelectMany(dailyTransaction => dailyTransaction._transactions).Sum(transaction => transaction._count);
 
-        public static int AmountPerDay => UserDataManager.CurrentDayilyTrasactions.Sum(transaction => transaction._count);
+        public static int AmountPerDay => UserDataManager.CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
 
         public static int AmountPerWeek
         {
@@ -214,7 +215,7 @@ namespace Managers
                 var currentWeek = GetWeekNumber(DateTime.Now);
 
                 var result = 0; 
-                foreach (var dailyTransaction in CurrentMonthlyTransaction)
+                foreach (var dailyTransaction in CurrentMonthlyTransaction._transactions)
                 foreach (var transaction in dailyTransaction._transactions)
                 {
                     if (GetWeekNumber(transaction.Time) == currentWeek)

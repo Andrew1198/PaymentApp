@@ -31,59 +31,54 @@ namespace Tabs
             Events.EnableLoadingScreen.Invoke();
             UserDataManager.SetNewBankTransactionsInData(()=>
             {
-                var transactions = GetTransactions();
-                foreach (var dailyTransaction in transactions)
+                var monthlyTransaction = GetTransactions();
+                foreach (var dailyTransaction in monthlyTransaction._transactions)
                 {
                     if (dailyTransaction._transactions.Count == 0 && dailyTransaction.bankTransactions.Count == 0)
                         continue;
                     var daySeparator = Instantiate(daySeparatorPref, content);
                     var data = daySeparator.transform.Find("Data");
                     data.Find("Number").GetComponent<TextMeshProUGUI>().text = dailyTransaction.day.ToString();
-                    data.Find("Month").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.First().Time.ToString("dddd");
-                    data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.Sum(payment=>payment._count).ToString();
-                    
-                    
-                 var allTypeTransactions = new List<TransactionItem.TransactionItemData>();
+                    var moneySpended = (dailyTransaction._transactions.Sum(payment => payment._count) +
+                                        dailyTransaction.bankTransactions.Sum(payment => payment.amount));
+                    data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = "<color=yellow>" + moneySpended;
+
+                    var allTypeTransactions = new List<TransactionItem.TransactionItemData>();
                  foreach (var transaction in dailyTransaction._transactions)
                      allTypeTransactions.Add(new TransactionItem.TransactionItemData
                      {
                          Count   =  transaction._count,
                          Category = transaction._category,
                          Comment = transaction._comment,
-                         Time = transaction.Time
+                         Time = transaction.Time,
+                         IsBankTransaction = false
                      });
-                 /*foreach (var transaction in dailyTransaction.bankTransactions)
+                 foreach (var transaction in dailyTransaction.bankTransactions)
                  {
                      allTypeTransactions.Add(new TransactionItem.TransactionItemData
                      {
                          Count   =  transaction.amount,
-                         Category = transaction._category,
-                         Comment = transaction._comment,
-                         Time = DateTimeOffset.FromUnixTimeSeconds(transaction.time).LocalDateTime
+                         Category = MonoBankManager.Instance.mccDataBase.GetDescriptionByMccCode(transaction.mcc),
+                         Comment = transaction.description,
+                         Time = DateTimeOffset.FromUnixTimeSeconds(transaction.time).LocalDateTime,
+                         IsBankTransaction = true
                      });
-                 }*/
-                 
-                 
-                        /*Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(new TransactionItem.TransactionItemData
-                            {
-                                Count   =  transaction._count,
-                                Category = transaction._category,
-                                Comment = transaction._comment,
-                                Time = transaction.Time
-                            }
-                        );*/
-                
+                 }
+
+                 allTypeTransactions = allTypeTransactions.OrderByDescending(u => u.Time).ToList();
+                 foreach (var transaction in allTypeTransactions)
+                     Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(transaction);
                 }
                 LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
+                Events.DisableLoadingScreen.Invoke();
             });
             
         }
         
-        private List<DailyTransaction> GetTransactions()
+        private MonthlyTransaction GetTransactions()
         {
             var currentMonthlyTransactions = UserDataManager.CurrentMonthlyTransaction;
-            currentMonthlyTransactions = currentMonthlyTransactions.OrderByDescending(transaction => transaction.day).ToList();
-            
+            currentMonthlyTransactions._transactions = currentMonthlyTransactions._transactions.OrderByDescending(transaction => transaction.day).ToList();
             
             return currentMonthlyTransactions;
         }

@@ -40,7 +40,7 @@ namespace HelperWindows
                 _comment = commentField.text,
                 Time = DateTime.Now
             };
-            UserDataManager.CurrentDayilyTrasactions.Add(transaction);
+            UserDataManager.CurrentDailyTransactions._transactions.Add(transaction);
             Events.OnUpdateTab?.Invoke();
             
             gameObject.SetActive(false);

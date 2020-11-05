@@ -1,0 +1,253 @@
+4814Fax services
+4815VisaPhone
+4821Telegraph services
+4829Money Orders - Wire Transfer
+4899Cable and other pay television (previously Cable Services)
+4900Electric, Gas, Sanitary and Water Utilities
+5013Motor vehicle supplies and new parts
+5021Office and Commercial Furniture
+5039Construction Materials, Not Elsewhere Classified
+5044Office, Photographic, Photocopy, and Microfilm Equipment
+5045Computers, Computer Peripheral Equipment, Software
+5046Commercial Equipment, Not Elsewhere Classified
+5047Medical, Dental Ophthalmic, Hospital Equipment and Supplies
+5051Metal Service Centers and Offices
+5065Electrical Parts and Equipment
+5072Hardware Equipment and Supplies
+5074Plumbing and Heating Equipment and Supplies
+5085Industrial Supplies, Not Elsewhere Classified
+5094Precious Stones and Metals, Watches and Jewelry
+5099Durable Goods, Not Elsewhere Classified
+5111Stationery, Office Supplies, Printing, and Writing Paper
+5122Drugs, Drug Proprietors, and Druggist�s Sundries
+5131Piece Goods, Notions, and Other Dry Goods
+5137Men�s Women�s and Children�s Uniforms and Commercial Clothing
+5139Commercial Footwear
+5169Chemicals and Allied Products, Not Elsewhere Classified
+5172Petroleum and Petroleum Products
+5192Books, Periodicals, and Newspapers
+5193Florists� Supplies, Nursery Stock and Flowers
+5198Paints, Varnishes, and Supplies
+5199Non-durable Goods, Not Elsewhere Classified
+5200Home Supply Warehouse Stores
+5211Lumber and Building Materials Stores
+5231Wallpaper Stores
+5251Hardware Stores
+5261Nurseries � Lawn and Garden Supply Store
+5271Mobile Home Dealers
+5300Wholesale Clubs
+5309Duty Free Store
+5310Discount Stores
+5311Department Stores
+5331Variety Stores
+5399Misc. General Merchandise
+5411Supermarkets
+5422Freezer and Locker Meat Provisioners
+5441Candy Stores
+5451Dairy Products Stores
+5462Bakeries
+5499Supermarkets
+5511Car and Truck Dealers (New and Used) Sales, Service, Repairs, Parts, and Leasing
+5521Automobile and Truck Dealers (Used Only)
+5531Automobile Supply Stores
+5532Automotive Tire Stores
+5533Automotive Parts, Accessories Stores
+5541Service Stations ( with or without ancillary services)
+5542Automated Fuel Dispensers
+5551Boat Dealers
+5561Recreational and Utility Trailers, Camp Dealers
+5571Motorcycle Dealers
+5592Motor Home Dealers
+5598Snowmobile Dealers
+5611Men�s and Boy�s Clothing and Accessories Stores
+5621Women�s Ready - to - Wear Stores
+5631Women�s Accessory and Specialty Shops
+5641Children�s and Infant�s Wear Stores
+5651Family Clothing Stores
+5655Sports Apparel, Riding Apparel Stores
+5661Shoe Stores
+5681Furriers and Fur Shops
+5691Men�s and Women�s Clothing Stores
+5697Tailors, Seamstress, Mending, and Alterations
+5698Wig and Toupee Stores
+5699Miscellaneous Apparel and Accessory Shops
+5712Furniture, Home Furnishings, and Equipment Stores, Except Appliances
+5713Floor Covering Stores
+5714Drapery, Window Covering and Upholstery Stores
+5718Fireplace, Fireplace Screens, and Accessories Stores
+5719Miscellaneous Home Furnishing Specialty Stores
+5722Household Appliance Stores
+5732Electronic Sales
+5733Music Stores, Musical Instruments, Piano Sheet Music
+5734Computer Software Stores
+5735Record Shops
+5811Caterers
+5812Eating places and Restaurants
+5813Drinking Places (Alcoholic Beverages), Bars, Taverns, Cocktail lounges, Nightclubs and Discotheques
+5814Fast Food Restaurants
+5912Drug Stores and Pharmacies
+5921Package Stores - Beer, Wine, and Liquor
+5931Used Merchandise and Secondhand Stores
+5832Antique Shops - Sales, Repairs, and Restoration Services
+5933Pawn Shops and Salvage Yards
+5935Wrecking and Salvage Yards
+5937Antique Reproductions
+5940Bicycle Shops - Sales and Service
+5941Sporting Goods Stores
+5942Book Stores
+5943Stationery Stores, Office and School Supply Stores
+5944Watch, Clock, Jewelry, and Silverware Stores
+5945Hobby, Toy, and Game Shops
+5946Camera and Photographic Supply Stores
+5947Card Shops, Gift, Novelty, and Souvenir Shops
+5948Leather Foods Stores
+5949Sewing, Needle, Fabric, and Price Goods Stores
+5950Glassware/Crystal Stores
+5960Direct Marketing - Insurance Service
+5961Mail Order Houses Including Catalog Order Stores, Book/Record Clubs (No longer permitted for .S. original presentments)
+5962Direct Marketing - Travel Related Arrangements Services
+5963Door - to - Door Sales
+5964Direct Marketing - Catalog Merchant
+5965Direct Marketing - Catalog and Catalog and Retail Merchant Direct Marketing - Outbound Telemarketing Merchant
+5967Direct Marketing -Inbound Teleservices Merchant
+5968Direct Marketing - Continuity/Subscription Merchant
+5969Direct Marketing - Not Elsewhere Classified
+5970Artist�s Supply and Craft Shops
+5971Art Dealers and Galleries
+5972Stamp and Coin Stores - Philatelic and Numismatic Supplies
+5973Religious Goods Stores
+5975Hearing Aids - Sales, Service, and Supply Stores
+5976Orthopedic Goods Prosthetic Devices
+5977Cosmetic Stores
+5978Typewriter Stores - Sales, Rental, Service
+5983Fuel - Fuel Oil, Wood, Coal, Liquefied Petroleum
+5992Florists
+5993Cigar Stores and Stands
+5994News Dealers and Newsstands
+5995Pet Shops, Pet Foods, and Supplies Stores
+5996Swimming Pools - Sales, Service, and Supplies
+5997Electric Razor Stores - Sales and Service
+5998Tent and Awning Shops
+5999Miscellaneous and Specialty Retail Stores
+6010Financial Institutions - Manual Cash Disbursements
+6011Financial Institutions - Manual Cash Disbursements
+6012Financial Institutions - Merchandise and Services
+6051Non - Financial Institutions - Foreign Currency, Money Orders (not wire transfer) and Travelers Cheques
+6211Security Brokers/Dealers
+6300Insurance Sales, Underwriting, and Premiums
+6381Insurance Premiums, (no longer valid for first presentment work)
+6399Insurance, Not Elsewhere Classified ( no longer valid for first presentment work)
+7011Lodging - Hotels, Motels, Resorts, Central Reservation Services (not elsewhere classified)
+7012Timeshares
+7032Sporting and Recreational Camps
+7033Trailer Parks and Camp Grounds
+7210Laundry, Cleaning, and Garment Services
+7211Laundry - Family and Commercial
+7216Dry Cleaners
+7217Carpet and Upholstery Cleaning
+7221Photographic Studios
+7230Barber and Beauty Shops
+7251Shop Repair Shops and Shoe Shine Parlors, and Hat Cleaning Shops
+7261Funeral Service and Crematories
+7273Dating and Escort Services
+7276Tax Preparation Service
+7277Counseling Service - Debt, Marriage, Personal
+7278Buying/Shopping Services, Clubs
+7296Clothing Rental - Costumes, Formal Wear, Uniforms
+7297Massage Parlors
+7298Health and Beauty Shops
+7299Miscellaneous Personal Services ( not elsewhere classifies)
+7311Advertising Services
+7321Consumer Credit Reporting Agencies
+7332Blueprinting and Photocopying Services
+7333Commercial Photography, Art and Graphics
+7338Quick Copy, Reproduction and Blueprinting Services
+7339Stenographic and Secretarial Support Services
+7342Disinfecting Services
+7349Cleaning and Maintenance, Janitorial Services
+7361Employment Agencies, Temporary Help Services
+7372Computer Programming, Integrated Systems Design and Data Processing Services
+7375Information Retrieval Services
+7379Computer Maintenance and Repair Services, Not Elsewhere Classified
+7392Management, Consulting, and Public Relations Services
+7393Protective and Security Services - Including Armored Cars and Guard Dogs
+7394Equipment Rental and Leasing Services, Tool Rental, Furniture Rental, and Appliance Rental
+7395Photofinishing Laboratories, Photo Developing
+7399Business Services, Not Elsewhere Classified
+7512Car Rental Companies ( Not Listed Below)
+7513Truck and Utility Trailer Rentals
+7519Motor Home and Recreational Vehicle Rentals
+7523Automobile Parking Lots and Garages
+7531Automotive Body Repair Shops
+7534Tire Re - treading and Repair Shops
+7535Paint Shops - Automotive
+7538Automotive Service Shops
+7542Car Washes
+7549Towing Services
+7622Radio Repair Shops
+7623Air Conditioning and Refrigeration Repair Shops
+7629Electrical And Small Appliance Repair Shops
+7631Watch, Clock, and Jewelry Repair
+7641Furniture, Furniture Repair, and Furniture Refinishing
+7692Welding Repair
+7699Repair Shops and Related Services - Miscellaneous
+7829Motion Pictures and Video Tape Production and Distribution
+7832Motion Picture Theaters
+7841Video Tape Rental Stores
+7911Dance Halls, Studios and Schools
+7922Theatrical Producers (Except Motion Pictures), Ticket Agencies
+7929Bands. Orchestras, and Miscellaneous Entertainers (Not Elsewhere Classified)
+7932Billiard and Pool Establishments
+7933Bowling Alleys
+7941Commercial Sports, Athletic Fields, Professional Sport Clubs, and Sport Promoters
+7991Tourist Attractions and Exhibits
+7992Golf Courses - Public
+7993Video Amusement Game Supplies
+7994Video Game Arcades/Establishments
+7995Betting (including Lottery Tickets, Casino Gaming Chips, Off - track Betting and Wagers)
+7996Amusement Parks, Carnivals, Circuses, Fortune Tellers
+7997Membership Clubs (Sports, Recreation, Athletic), Country Clubs, and Private Golf Courses
+7998Aquariums, Sea - aquariums, Dolphinariums
+7999Recreation Services (Not Elsewhere Classified)
+8011Doctors and Physicians (Not Elsewhere Classified)
+8021Dentists and Orthodontists
+8031 Osteopaths
+8041Chiropractors
+8042Optometrists and Ophthalmologists
+8043Opticians, Opticians Goods and Eyeglasses
+8044Opticians, Optical Goods, and Eyeglasses (no longer valid for first presentments)
+8049Podiatrists and Chiropodists
+8050Nursing and Personal Care Facilities
+8062Hospitals
+8071Medical and Dental Laboratories
+8099Medical Services and Health Practitioners (Not Elsewhere Classified)
+8111Legal Services and Attorneys
+8211Elementary and Secondary Schools
+8220Colleges, Junior Colleges, Universities, and Professional Schools
+8241Correspondence Schools
+8244Business and Secretarial Schools
+8249Vocational Schools and Trade Schools
+8299Schools and Educational Services ( Not Elsewhere Classified)
+8351Child Care Services
+8398Charitable and Social Service Organizations
+8641Civic, Fraternal, and Social Associations
+8651Political Organizations
+8661Religious Organizations
+8675Automobile Associations
+8699Membership Organizations ( Not Elsewhere Classified)
+8734Testing Laboratories ( non - medical)
+8911Architectural - Engineering and Surveying Services
+8931Accounting, Auditing, and Bookkeeping Services
+8999Professional Services ( Not Elsewhere Defined)
+9211Court Costs, including Alimony and Child Support
+9222Fines
+9223Bail and Bond Payments
+9311Tax Payments
+9399Government Services ( Not Elsewhere Classified)
+9402Postal Services - Government Only
+9405Intra - Government Transactions 
+9700Automated Referral Service (For Visa Only)
+9701Visa Credential Service ( For Visa Only)
+9702GCAS Emergency Services ( For Visa Only)
+9950Intra - Company Purchases ( For Visa Only)
+4111Subway

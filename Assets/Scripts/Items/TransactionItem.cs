@@ -26,6 +26,7 @@ namespace Items
             comment.text = transaction.Comment;
             count.text = transaction.Count.ToString();
             _transactionItemData = transaction;
+            typeTransaction.text = transaction.IsBankTransaction ? "Bank Transaction" : "Cash Transaction";
         }
 
         private bool _pointerDown;
@@ -43,10 +44,10 @@ namespace Items
                     {
                         var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
                         
-                        var payment = monthlyTransaction.SelectMany(dailyTransaction => dailyTransaction._transactions)
+                        var payment = monthlyTransaction._transactions.SelectMany(dailyTransaction => dailyTransaction._transactions)
                             .First(transaction => transaction.Time == _transactionItemData.Time);
                         
-                        foreach (var dailyTransaction in monthlyTransaction)
+                        foreach (var dailyTransaction in monthlyTransaction._transactions)
                           if(dailyTransaction._transactions.Remove(payment))
                               break;
                         

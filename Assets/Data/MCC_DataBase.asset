@@ -1,0 +1,537 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4aa473014f9d1224fb6188b861d21922, type: 3}
+  m_Name: MCC_DataBase
+  m_EditorClassIdentifier: 
+  mccDataBase:
+  - Code: 4814
+    Description: Fax services
+  - Code: 4815
+    Description: VisaPhone
+  - Code: 4821
+    Description: Telegraph services
+  - Code: 4829
+    Description: Money Orders - Wire Transfer
+  - Code: 4899
+    Description: Cable and other pay television (previously Cable Services)
+  - Code: 4900
+    Description: Electric, Gas, Sanitary and Water Utilities
+  - Code: 5013
+    Description: Motor vehicle supplies and new parts
+  - Code: 5021
+    Description: Office and Commercial Furniture
+  - Code: 5039
+    Description: Construction Materials, Not Elsewhere Classified
+  - Code: 5044
+    Description: Office, Photographic, Photocopy, and Microfilm Equipment
+  - Code: 5045
+    Description: Computers, Computer Peripheral Equipment, Software
+  - Code: 5046
+    Description: Commercial Equipment, Not Elsewhere Classified
+  - Code: 5047
+    Description: Medical, Dental Ophthalmic, Hospital Equipment and Supplies
+  - Code: 5051
+    Description: Metal Service Centers and Offices
+  - Code: 5065
+    Description: Electrical Parts and Equipment
+  - Code: 5072
+    Description: Hardware Equipment and Supplies
+  - Code: 5074
+    Description: Plumbing and Heating Equipment and Supplies
+  - Code: 5085
+    Description: Industrial Supplies, Not Elsewhere Classified
+  - Code: 5094
+    Description: Precious Stones and Metals, Watches and Jewelry
+  - Code: 5099
+    Description: Durable Goods, Not Elsewhere Classified
+  - Code: 5111
+    Description: Stationery, Office Supplies, Printing, and Writing Paper
+  - Code: 5122
+    Description: "Drugs, Drug Proprietors, and Druggist\uFFFDs Sundries"
+  - Code: 5131
+    Description: Piece Goods, Notions, and Other Dry Goods
+  - Code: 5137
+    Description: "Men\uFFFDs Women\uFFFDs and Children\uFFFDs Uniforms and Commercial
+      Clothing"
+  - Code: 5139
+    Description: Commercial Footwear
+  - Code: 5169
+    Description: Chemicals and Allied Products, Not Elsewhere Classified
+  - Code: 5172
+    Description: Petroleum and Petroleum Products
+  - Code: 5192
+    Description: Books, Periodicals, and Newspapers
+  - Code: 5193
+    Description: "Florists\uFFFD Supplies, Nursery Stock and Flowers"
+  - Code: 5198
+    Description: Paints, Varnishes, and Supplies
+  - Code: 5199
+    Description: Non-durable Goods, Not Elsewhere Classified
+  - Code: 5200
+    Description: Home Supply Warehouse Stores
+  - Code: 5211
+    Description: Lumber and Building Materials Stores
+  - Code: 5231
+    Description: Wallpaper Stores
+  - Code: 5251
+    Description: Hardware Stores
+  - Code: 5261
+    Description: "Nurseries \uFFFD Lawn and Garden Supply Store"
+  - Code: 5271
+    Description: Mobile Home Dealers
+  - Code: 5300
+    Description: Wholesale Clubs
+  - Code: 5309
+    Description: Duty Free Store
+  - Code: 5310
+    Description: Discount Stores
+  - Code: 5311
+    Description: Department Stores
+  - Code: 5331
+    Description: Variety Stores
+  - Code: 5399
+    Description: Misc. General Merchandise
+  - Code: 5411
+    Description: Supermarkets
+  - Code: 5422
+    Description: Freezer and Locker Meat Provisioners
+  - Code: 5441
+    Description: Candy Stores
+  - Code: 5451
+    Description: Dairy Products Stores
+  - Code: 5462
+    Description: Bakeries
+  - Code: 5499
+    Description: Supermarkets
+  - Code: 5511
+    Description: Car and Truck Dealers (New and Used) Sales, Service, Repairs, Parts,
+      and Leasing
+  - Code: 5521
+    Description: Automobile and Truck Dealers (Used Only)
+  - Code: 5531
+    Description: Automobile Supply Stores
+  - Code: 5532
+    Description: Automotive Tire Stores
+  - Code: 5533
+    Description: Automotive Parts, Accessories Stores
+  - Code: 5541
+    Description: Service Stations ( with or without ancillary services)
+  - Code: 5542
+    Description: Automated Fuel Dispensers
+  - Code: 5551
+    Description: Boat Dealers
+  - Code: 5561
+    Description: Recreational and Utility Trailers, Camp Dealers
+  - Code: 5571
+    Description: Motorcycle Dealers
+  - Code: 5592
+    Description: Motor Home Dealers
+  - Code: 5598
+    Description: Snowmobile Dealers
+  - Code: 5611
+    Description: "Men\uFFFDs and Boy\uFFFDs Clothing and Accessories Stores"
+  - Code: 5621
+    Description: "Women\uFFFDs Ready - to - Wear Stores"
+  - Code: 5631
+    Description: "Women\uFFFDs Accessory and Specialty Shops"
+  - Code: 5641
+    Description: "Children\uFFFDs and Infant\uFFFDs Wear Stores"
+  - Code: 5651
+    Description: Family Clothing Stores
+  - Code: 5655
+    Description: Sports Apparel, Riding Apparel Stores
+  - Code: 5661
+    Description: Shoe Stores
+  - Code: 5681
+    Description: Furriers and Fur Shops
+  - Code: 5691
+    Description: "Men\uFFFDs and Women\uFFFDs Clothing Stores"
+  - Code: 5697
+    Description: Tailors, Seamstress, Mending, and Alterations
+  - Code: 5698
+    Description: Wig and Toupee Stores
+  - Code: 5699
+    Description: Miscellaneous Apparel and Accessory Shops
+  - Code: 5712
+    Description: Furniture, Home Furnishings, and Equipment Stores, Except Appliances
+  - Code: 5713
+    Description: Floor Covering Stores
+  - Code: 5714
+    Description: Drapery, Window Covering and Upholstery Stores
+  - Code: 5718
+    Description: Fireplace, Fireplace Screens, and Accessories Stores
+  - Code: 5719
+    Description: Miscellaneous Home Furnishing Specialty Stores
+  - Code: 5722
+    Description: Household Appliance Stores
+  - Code: 5732
+    Description: Electronic Sales
+  - Code: 5733
+    Description: Music Stores, Musical Instruments, Piano Sheet Music
+  - Code: 5734
+    Description: Computer Software Stores
+  - Code: 5735
+    Description: Record Shops
+  - Code: 5811
+    Description: Caterers
+  - Code: 5812
+    Description: Eating places and Restaurants
+  - Code: 5813
+    Description: Drinking Places (Alcoholic Beverages), Bars, Taverns, Cocktail lounges,
+      Nightclubs and Discotheques
+  - Code: 5814
+    Description: Fast Food Restaurants
+  - Code: 5912
+    Description: Drug Stores and Pharmacies
+  - Code: 5921
+    Description: Package Stores - Beer, Wine, and Liquor
+  - Code: 5931
+    Description: Used Merchandise and Secondhand Stores
+  - Code: 5832
+    Description: Antique Shops - Sales, Repairs, and Restoration Services
+  - Code: 5933
+    Description: Pawn Shops and Salvage Yards
+  - Code: 5935
+    Description: Wrecking and Salvage Yards
+  - Code: 5937
+    Description: Antique Reproductions
+  - Code: 5940
+    Description: Bicycle Shops - Sales and Service
+  - Code: 5941
+    Description: Sporting Goods Stores
+  - Code: 5942
+    Description: Book Stores
+  - Code: 5943
+    Description: Stationery Stores, Office and School Supply Stores
+  - Code: 5944
+    Description: Watch, Clock, Jewelry, and Silverware Stores
+  - Code: 5945
+    Description: Hobby, Toy, and Game Shops
+  - Code: 5946
+    Description: Camera and Photographic Supply Stores
+  - Code: 5947
+    Description: Card Shops, Gift, Novelty, and Souvenir Shops
+  - Code: 5948
+    Description: Leather Foods Stores
+  - Code: 5949
+    Description: Sewing, Needle, Fabric, and Price Goods Stores
+  - Code: 5950
+    Description: Glassware/Crystal Stores
+  - Code: 5960
+    Description: Direct Marketing - Insurance Service
+  - Code: 5961
+    Description: Mail Order Houses Including Catalog Order Stores, Book/Record Clubs
+      (No longer permitted for .S. original presentments)
+  - Code: 5962
+    Description: Direct Marketing - Travel Related Arrangements Services
+  - Code: 5963
+    Description: Door - to - Door Sales
+  - Code: 5964
+    Description: Direct Marketing - Catalog Merchant
+  - Code: 5965
+    Description: Direct Marketing - Catalog and Catalog and Retail Merchant Direct
+      Marketing - Outbound Telemarketing Merchant
+  - Code: 5967
+    Description: Direct Marketing -Inbound Teleservices Merchant
+  - Code: 5968
+    Description: Direct Marketing - Continuity/Subscription Merchant
+  - Code: 5969
+    Description: Direct Marketing - Not Elsewhere Classified
+  - Code: 5970
+    Description: "Artist\uFFFDs Supply and Craft Shops"
+  - Code: 5971
+    Description: Art Dealers and Galleries
+  - Code: 5972
+    Description: Stamp and Coin Stores - Philatelic and Numismatic Supplies
+  - Code: 5973
+    Description: Religious Goods Stores
+  - Code: 5975
+    Description: Hearing Aids - Sales, Service, and Supply Stores
+  - Code: 5976
+    Description: Orthopedic Goods Prosthetic Devices
+  - Code: 5977
+    Description: Cosmetic Stores
+  - Code: 5978
+    Description: Typewriter Stores - Sales, Rental, Service
+  - Code: 5983
+    Description: Fuel - Fuel Oil, Wood, Coal, Liquefied Petroleum
+  - Code: 5992
+    Description: Florists
+  - Code: 5993
+    Description: Cigar Stores and Stands
+  - Code: 5994
+    Description: News Dealers and Newsstands
+  - Code: 5995
+    Description: Pet Shops, Pet Foods, and Supplies Stores
+  - Code: 5996
+    Description: Swimming Pools - Sales, Service, and Supplies
+  - Code: 5997
+    Description: Electric Razor Stores - Sales and Service
+  - Code: 5998
+    Description: Tent and Awning Shops
+  - Code: 5999
+    Description: Miscellaneous and Specialty Retail Stores
+  - Code: 6010
+    Description: Financial Institutions - Manual Cash Disbursements
+  - Code: 6011
+    Description: Financial Institutions - Manual Cash Disbursements
+  - Code: 6012
+    Description: Financial Institutions - Merchandise and Services
+  - Code: 6051
+    Description: Non - Financial Institutions - Foreign Currency, Money Orders (not
+      wire transfer) and Travelers Cheques
+  - Code: 6211
+    Description: Security Brokers/Dealers
+  - Code: 6300
+    Description: Insurance Sales, Underwriting, and Premiums
+  - Code: 6381
+    Description: Insurance Premiums, (no longer valid for first presentment work)
+  - Code: 6399
+    Description: Insurance, Not Elsewhere Classified ( no longer valid for first
+      presentment work)
+  - Code: 7011
+    Description: Lodging - Hotels, Motels, Resorts, Central Reservation Services
+      (not elsewhere classified)
+  - Code: 7012
+    Description: Timeshares
+  - Code: 7032
+    Description: Sporting and Recreational Camps
+  - Code: 7033
+    Description: Trailer Parks and Camp Grounds
+  - Code: 7210
+    Description: Laundry, Cleaning, and Garment Services
+  - Code: 7211
+    Description: Laundry - Family and Commercial
+  - Code: 7216
+    Description: Dry Cleaners
+  - Code: 7217
+    Description: Carpet and Upholstery Cleaning
+  - Code: 7221
+    Description: Photographic Studios
+  - Code: 7230
+    Description: Barber and Beauty Shops
+  - Code: 7251
+    Description: Shop Repair Shops and Shoe Shine Parlors, and Hat Cleaning Shops
+  - Code: 7261
+    Description: Funeral Service and Crematories
+  - Code: 7273
+    Description: Dating and Escort Services
+  - Code: 7276
+    Description: Tax Preparation Service
+  - Code: 7277
+    Description: Counseling Service - Debt, Marriage, Personal
+  - Code: 7278
+    Description: Buying/Shopping Services, Clubs
+  - Code: 7296
+    Description: Clothing Rental - Costumes, Formal Wear, Uniforms
+  - Code: 7297
+    Description: Massage Parlors
+  - Code: 7298
+    Description: Health and Beauty Shops
+  - Code: 7299
+    Description: Miscellaneous Personal Services ( not elsewhere classifies)
+  - Code: 7311
+    Description: Advertising Services
+  - Code: 7321
+    Description: Consumer Credit Reporting Agencies
+  - Code: 7332
+    Description: Blueprinting and Photocopying Services
+  - Code: 7333
+    Description: Commercial Photography, Art and Graphics
+  - Code: 7338
+    Description: Quick Copy, Reproduction and Blueprinting Services
+  - Code: 7339
+    Description: Stenographic and Secretarial Support Services
+  - Code: 7342
+    Description: Disinfecting Services
+  - Code: 7349
+    Description: Cleaning and Maintenance, Janitorial Services
+  - Code: 7361
+    Description: Employment Agencies, Temporary Help Services
+  - Code: 7372
+    Description: Computer Programming, Integrated Systems Design and Data Processing
+      Services
+  - Code: 7375
+    Description: Information Retrieval Services
+  - Code: 7379
+    Description: Computer Maintenance and Repair Services, Not Elsewhere Classified
+  - Code: 7392
+    Description: Management, Consulting, and Public Relations Services
+  - Code: 7393
+    Description: Protective and Security Services - Including Armored Cars and Guard
+      Dogs
+  - Code: 7394
+    Description: Equipment Rental and Leasing Services, Tool Rental, Furniture Rental,
+      and Appliance Rental
+  - Code: 7395
+    Description: Photofinishing Laboratories, Photo Developing
+  - Code: 7399
+    Description: Business Services, Not Elsewhere Classified
+  - Code: 7512
+    Description: Car Rental Companies ( Not Listed Below)
+  - Code: 7513
+    Description: Truck and Utility Trailer Rentals
+  - Code: 7519
+    Description: Motor Home and Recreational Vehicle Rentals
+  - Code: 7523
+    Description: Automobile Parking Lots and Garages
+  - Code: 7531
+    Description: Automotive Body Repair Shops
+  - Code: 7534
+    Description: Tire Re - treading and Repair Shops
+  - Code: 7535
+    Description: Paint Shops - Automotive
+  - Code: 7538
+    Description: Automotive Service Shops
+  - Code: 7542
+    Description: Car Washes
+  - Code: 7549
+    Description: Towing Services
+  - Code: 7622
+    Description: Radio Repair Shops
+  - Code: 7623
+    Description: Air Conditioning and Refrigeration Repair Shops
+  - Code: 7629
+    Description: Electrical And Small Appliance Repair Shops
+  - Code: 7631
+    Description: Watch, Clock, and Jewelry Repair
+  - Code: 7641
+    Description: Furniture, Furniture Repair, and Furniture Refinishing
+  - Code: 7692
+    Description: Welding Repair
+  - Code: 7699
+    Description: Repair Shops and Related Services - Miscellaneous
+  - Code: 7829
+    Description: Motion Pictures and Video Tape Production and Distribution
+  - Code: 7832
+    Description: Motion Picture Theaters
+  - Code: 7841
+    Description: Video Tape Rental Stores
+  - Code: 7911
+    Description: Dance Halls, Studios and Schools
+  - Code: 7922
+    Description: Theatrical Producers (Except Motion Pictures), Ticket Agencies
+  - Code: 7929
+    Description: Bands. Orchestras, and Miscellaneous Entertainers (Not Elsewhere
+      Classified)
+  - Code: 7932
+    Description: Billiard and Pool Establishments
+  - Code: 7933
+    Description: Bowling Alleys
+  - Code: 7941
+    Description: Commercial Sports, Athletic Fields, Professional Sport Clubs, and
+      Sport Promoters
+  - Code: 7991
+    Description: Tourist Attractions and Exhibits
+  - Code: 7992
+    Description: Golf Courses - Public
+  - Code: 7993
+    Description: Video Amusement Game Supplies
+  - Code: 7994
+    Description: Video Game Arcades/Establishments
+  - Code: 7995
+    Description: Betting (including Lottery Tickets, Casino Gaming Chips, Off - track
+      Betting and Wagers)
+  - Code: 7996
+    Description: Amusement Parks, Carnivals, Circuses, Fortune Tellers
+  - Code: 7997
+    Description: Membership Clubs (Sports, Recreation, Athletic), Country Clubs,
+      and Private Golf Courses
+  - Code: 7998
+    Description: Aquariums, Sea - aquariums, Dolphinariums
+  - Code: 7999
+    Description: Recreation Services (Not Elsewhere Classified)
+  - Code: 8011
+    Description: Doctors and Physicians (Not Elsewhere Classified)
+  - Code: 8021
+    Description: Dentists and Orthodontists
+  - Code: 8031
+    Description: ' Osteopaths'
+  - Code: 8041
+    Description: Chiropractors
+  - Code: 8042
+    Description: Optometrists and Ophthalmologists
+  - Code: 8043
+    Description: Opticians, Opticians Goods and Eyeglasses
+  - Code: 8044
+    Description: Opticians, Optical Goods, and Eyeglasses (no longer valid for first
+      presentments)
+  - Code: 8049
+    Description: Podiatrists and Chiropodists
+  - Code: 8050
+    Description: Nursing and Personal Care Facilities
+  - Code: 8062
+    Description: Hospitals
+  - Code: 8071
+    Description: Medical and Dental Laboratories
+  - Code: 8099
+    Description: Medical Services and Health Practitioners (Not Elsewhere Classified)
+  - Code: 8111
+    Description: Legal Services and Attorneys
+  - Code: 8211
+    Description: Elementary and Secondary Schools
+  - Code: 8220
+    Description: Colleges, Junior Colleges, Universities, and Professional Schools
+  - Code: 8241
+    Description: Correspondence Schools
+  - Code: 8244
+    Description: Business and Secretarial Schools
+  - Code: 8249
+    Description: Vocational Schools and Trade Schools
+  - Code: 8299
+    Description: Schools and Educational Services ( Not Elsewhere Classified)
+  - Code: 8351
+    Description: Child Care Services
+  - Code: 8398
+    Description: Charitable and Social Service Organizations
+  - Code: 8641
+    Description: Civic, Fraternal, and Social Associations
+  - Code: 8651
+    Description: Political Organizations
+  - Code: 8661
+    Description: Religious Organizations
+  - Code: 8675
+    Description: Automobile Associations
+  - Code: 8699
+    Description: Membership Organizations ( Not Elsewhere Classified)
+  - Code: 8734
+    Description: Testing Laboratories ( non - medical)
+  - Code: 8911
+    Description: Architectural - Engineering and Surveying Services
+  - Code: 8931
+    Description: Accounting, Auditing, and Bookkeeping Services
+  - Code: 8999
+    Description: Professional Services ( Not Elsewhere Defined)
+  - Code: 9211
+    Description: Court Costs, including Alimony and Child Support
+  - Code: 9222
+    Description: Fines
+  - Code: 9223
+    Description: Bail and Bond Payments
+  - Code: 9311
+    Description: Tax Payments
+  - Code: 9399
+    Description: Government Services ( Not Elsewhere Classified)
+  - Code: 9402
+    Description: Postal Services - Government Only
+  - Code: 9405
+    Description: 'Intra - Government Transactions '
+  - Code: 9700
+    Description: Automated Referral Service (For Visa Only)
+  - Code: 9701
+    Description: Visa Credential Service ( For Visa Only)
+  - Code: 9702
+    Description: GCAS Emergency Services ( For Visa Only)
+  - Code: 9950
+    Description: Intra - Company Purchases ( For Visa Only)
+  - Code: 4111
+    Description: Subway
