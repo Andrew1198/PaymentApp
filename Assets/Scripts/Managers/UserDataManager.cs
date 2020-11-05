@@ -70,7 +70,7 @@ namespace Managers
         public static void SetNewBankTransactionsInData(Action onFinish)
         {
             if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime >
+                MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions >
                 60)
             {
                 MonoBankManager.GetTransactions(bankTransactions =>
@@ -83,7 +83,7 @@ namespace Managers
 
                     foreach (var bankTransaction in bankTransactions)
                     {
-                        if(bankTransaction.amount <= 0)
+                        if (bankTransaction.amount >= 0)
                             continue;
                         var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
                         if (!Instance.UserData._transactions.Any(item => item.year == time.Year))
@@ -115,6 +115,8 @@ namespace Managers
                         var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
                         if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
                         {
+                            bankTransaction.amount = ((long) Math.Round((float) bankTransaction.amount / 100,
+                                MidpointRounding.AwayFromZero))*-1;
                             dayTrans.bankTransactions.Add(bankTransaction);
                         }
                     }
@@ -122,6 +124,9 @@ namespace Managers
                     onFinish();
                 });
             }
+            else
+                onFinish();
+            
         }
 
         public static YearlyTransactions CurrentYearlyTransactions

@@ -114,6 +114,15 @@ namespace Managers
        [Button()]
         private void TestTransactions()
         {
+            UserDataManager.SetNewBankTransactionsInData(() =>
+            {
+                using (var sr = new StreamWriter(Application.persistentDataPath + "/transactions.txt"))
+                {
+                    var json = JsonUtility.ToJson(UserDataManager.CurrentYearlyTransactions,true);
+                    sr.Write(json);
+                    Debug.LogError("Success");
+                }
+            });
         }
         private void Update()
         {

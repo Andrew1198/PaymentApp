@@ -15,16 +15,17 @@ namespace Items
         [SerializeField] private TextMeshProUGUI category;
         [SerializeField] private TextMeshProUGUI comment;
         [SerializeField] private TextMeshProUGUI count;
+        [SerializeField] private TextMeshProUGUI typeTransaction;
         [SerializeField] private ConfirmWindow confirmWindow;
-
-        private Transaction _transaction;
         
-        public void Init(Transaction transaction)
+        private TransactionItemData _transactionItemData;
+        
+        public void Init(TransactionItemData transaction)
         {
-            category.text = transaction._category;
-            comment.text = transaction._comment;
-            count.text = transaction._count.ToString();
-            _transaction = transaction;
+            category.text = transaction.Category;
+            comment.text = transaction.Comment;
+            count.text = transaction.Count.ToString();
+            _transactionItemData = transaction;
         }
 
         private bool _pointerDown;
@@ -36,12 +37,14 @@ namespace Items
             {
                 if (Time.time >= _downClickTime + _requireHold)
                 {
+                    if(!_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
+                        return;
                     confirmWindow.Open(() =>
                     {
                         var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
                         
                         var payment = monthlyTransaction.SelectMany(dailyTransaction => dailyTransaction._transactions)
-                            .First(transaction => transaction == _transaction);
+                            .First(transaction => transaction.Time == _transactionItemData.Time);
                         
                         foreach (var dailyTransaction in monthlyTransaction)
                           if(dailyTransaction._transactions.Remove(payment))
@@ -69,6 +72,15 @@ namespace Items
         private void Reset()
         {
             _pointerDown = false;
+        }
+
+        public class TransactionItemData
+        {
+            public long Count;
+            public string Comment;
+            public DateTime Time;
+            public string Category;
+            public bool IsBankTransaction;
         }
     }
 }

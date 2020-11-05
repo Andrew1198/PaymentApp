@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Data;
+using DefaultNamespace;
 using Items;
 using Managers;
 using TMPro;
@@ -26,23 +28,55 @@ namespace Tabs
         {
             foreach (Transform child in content)
                 Destroy(child.gameObject);
-            
-            var transactions = GetTransactions();
-            foreach (var dailyTransaction in transactions)
+            Events.EnableLoadingScreen.Invoke();
+            UserDataManager.SetNewBankTransactionsInData(()=>
             {
-                if (dailyTransaction._transactions.Count == 0)
-                    continue;
-                var daySeparator = Instantiate(daySeparatorPref, content);
-                var data = daySeparator.transform.Find("Data");
-                data.Find("Number").GetComponent<TextMeshProUGUI>().text = dailyTransaction.day.ToString();
-                data.Find("Month").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.First().Time.ToString("dddd");
-                data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.Sum(payment=>payment._count).ToString();
+                var transactions = GetTransactions();
+                foreach (var dailyTransaction in transactions)
+                {
+                    if (dailyTransaction._transactions.Count == 0 && dailyTransaction.bankTransactions.Count == 0)
+                        continue;
+                    var daySeparator = Instantiate(daySeparatorPref, content);
+                    var data = daySeparator.transform.Find("Data");
+                    data.Find("Number").GetComponent<TextMeshProUGUI>().text = dailyTransaction.day.ToString();
+                    data.Find("Month").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.First().Time.ToString("dddd");
+                    data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = dailyTransaction._transactions.Sum(payment=>payment._count).ToString();
+                    
+                    
+                 var allTypeTransactions = new List<TransactionItem.TransactionItemData>();
+                 foreach (var transaction in dailyTransaction._transactions)
+                     allTypeTransactions.Add(new TransactionItem.TransactionItemData
+                     {
+                         Count   =  transaction._count,
+                         Category = transaction._category,
+                         Comment = transaction._comment,
+                         Time = transaction.Time
+                     });
+                 /*foreach (var transaction in dailyTransaction.bankTransactions)
+                 {
+                     allTypeTransactions.Add(new TransactionItem.TransactionItemData
+                     {
+                         Count   =  transaction.amount,
+                         Category = transaction._category,
+                         Comment = transaction._comment,
+                         Time = DateTimeOffset.FromUnixTimeSeconds(transaction.time).LocalDateTime
+                     });
+                 }*/
+                 
+                 
+                        /*Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(new TransactionItem.TransactionItemData
+                            {
+                                Count   =  transaction._count,
+                                Category = transaction._category,
+                                Comment = transaction._comment,
+                                Time = transaction.Time
+                            }
+                        );*/
                 
-                foreach (var transaction in dailyTransaction._transactions)
-                    Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(transaction);
-                
-            }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
+                }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
+            });
+            
         }
         
         private List<DailyTransaction> GetTransactions()
@@ -50,12 +84,7 @@ namespace Tabs
             var currentMonthlyTransactions = UserDataManager.CurrentMonthlyTransaction;
             currentMonthlyTransactions = currentMonthlyTransactions.OrderByDescending(transaction => transaction.day).ToList();
             
-            foreach (var dayTransaction in currentMonthlyTransactions)
-            {
-                dayTransaction._transactions =
-                    dayTransaction._transactions.OrderByDescending(transaction => transaction.Time).ToList();
-            }
-
+            
             return currentMonthlyTransactions;
         }
     }
