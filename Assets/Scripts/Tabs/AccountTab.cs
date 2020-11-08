@@ -20,7 +20,6 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            Events.EnableLoadingScreen.Invoke();
             foreach (Transform wallet in savingContainer)
             {
                 Destroy(wallet.gameObject);
@@ -39,7 +38,6 @@ namespace Tabs
                 }
 
                 wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
-                Events.DisableLoadingScreen.Invoke();
             });
             
         }

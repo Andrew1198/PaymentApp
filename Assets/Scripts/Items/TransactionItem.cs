@@ -38,7 +38,7 @@ namespace Items
             {
                 if (Time.time >= _downClickTime + _requireHold)
                 {
-                    if(!_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
+                    if(_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
                         return;
                     confirmWindow.Open(() =>
                     {

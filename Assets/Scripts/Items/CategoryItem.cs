@@ -98,7 +98,7 @@ namespace Items
          
          public static int GetSumByCategory(string category)
          {
-             var transactions = UserDataManager.TransactionsPerMonth;
+             var transactions = TransactionUtils.CashTransactionsPerMonth;
 
              return transactions.Where(transaction => transaction._category == category)
                  .Sum(transaction => transaction._count);

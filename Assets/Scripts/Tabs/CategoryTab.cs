@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using HelperWindows;
 using Items;
 using Managers;
 using NaughtyAttributes;
@@ -37,7 +38,7 @@ namespace Tabs
 
         private void SetWholeAmount()
         {
-            var amountPerMonth = UserDataManager.AmountPerMonth;
+            var amountPerMonth = TransactionUtils.AmountPerMonth(true,false);
             wholeAmount.uahText.text = amountPerMonth.ToString();
             UserDataManager.GetDollarRate(dollarRate =>
             {

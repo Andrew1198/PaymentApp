@@ -11,7 +11,7 @@ namespace DefaultNamespace
         [SerializeField] private GameObject back;
 
         private Coroutine _coroutine;
-
+        private int _count;
         private void Awake()
         {
             Events.EnableLoadingScreen += Show;
@@ -20,8 +20,13 @@ namespace DefaultNamespace
 
         private void Show()
         {
-            back.SetActive(true);
-            _coroutine = StartCoroutine(Anim());
+            if (_coroutine == null)
+            {
+                back.SetActive(true);
+                _coroutine = StartCoroutine(Anim());
+            }
+
+            _count++;
         } 
 
         private IEnumerator Anim()
@@ -39,6 +44,9 @@ namespace DefaultNamespace
 
         private void Hide()
         {
+            _count--;
+            if(_count != 0)
+                return;
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);

@@ -38,11 +38,13 @@ namespace Managers
 
         public static void GetDollarRate(Action<float> result)
         {
+            Events.EnableLoadingScreen.Invoke();
             GetCurrenciesRate(infos =>
             {
                 result((float) Math.Round(infos.First(item =>
                         item.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD).rateSell, 2,
                     MidpointRounding.AwayFromZero));
+                Events.DisableLoadingScreen.Invoke();
             });
         }
 
@@ -52,6 +54,7 @@ namespace Managers
                 MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime >
                 60 * 5)
             {
+                Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetExchangeRates(onSuccessful =>
                 {
                     MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
@@ -60,7 +63,12 @@ namespace Managers
                     MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
                         DateTimeOffset.Now.ToUnixTimeSeconds();
                     result(onSuccessful);
-                },onError:()=>result(Instance.UserData.currenciesRate));
+                    Events.DisableLoadingScreen.Invoke();
+                },onError:()=>
+                {
+                    result(Instance.UserData.currenciesRate);
+                    Events.DisableLoadingScreen.Invoke();
+                });
             }
             else
                 result(Instance.UserData.currenciesRate);
@@ -72,6 +80,7 @@ namespace Managers
                 MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions >
                 60)
             {
+                Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetTransactions(bankTransactions =>
                 {
                     MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions =
@@ -122,6 +131,7 @@ namespace Managers
                         }
                     }
 
+                    Events.DisableLoadingScreen.Invoke();
                     onFinish();
                 });
             }
@@ -180,19 +190,7 @@ namespace Managers
                     transaction.day == Instance._selectedDate.Day);
             }
         }
-
-        public static List<Transaction> TransactionsPerMonth
-        {
-            get
-            {
-                var result = new List<Transaction>();
-                foreach (var dailyTransaction in CurrentMonthlyTransaction._transactions)
-                    result.AddRange(dailyTransaction._transactions);
-
-                return result;
-            }
-        }
-
+        
         public static void AddTransactionWindow(Transaction transaction)
         {
 
@@ -202,10 +200,7 @@ namespace Managers
         {
             get => Instance.UserData.categories;
         }
-
-        public static int AmountPerMonth => UserDataManager.CurrentMonthlyTransaction._transactions
-            .SelectMany(dailyTransaction => dailyTransaction._transactions).Sum(transaction => transaction._count);
-
+        
         public static int AmountPerDay => UserDataManager.CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
 
         public static int AmountPerWeek

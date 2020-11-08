@@ -28,7 +28,6 @@ namespace Tabs
         {
             foreach (Transform child in content)
                 Destroy(child.gameObject);
-            Events.EnableLoadingScreen.Invoke();
             UserDataManager.SetNewBankTransactionsInData(()=>
             {
                 var monthlyTransaction = GetTransactions();
@@ -70,7 +69,6 @@ namespace Tabs
                      Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(transaction);
                 }
                 LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
-                Events.DisableLoadingScreen.Invoke();
             });
             
         }
