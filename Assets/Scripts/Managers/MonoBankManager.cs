@@ -19,8 +19,6 @@ namespace Managers
         public MCC_DataBase mccDataBase;
         private const string token = "uOpR4ZpvpBxHnnCcI0OXXjWD2-qwK_owBS6pC1UCdh7Q";
         private const string ApiEndPoint = "https://api.monobank.ua/";
-
-        public UpdateMonobankTime updateInfo = new UpdateMonobankTime();
         
         public static void GetTransactions(Action<BankTransaction[]>onFinish)
         {

@@ -51,39 +51,37 @@ namespace Managers
         public static void GetCurrenciesRate(Action<CurrencyInfo[]> result)
         {
             if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime >
+               Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime >
                 60 * 5)
             {
                 Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetExchangeRates(onSuccessful =>
                 {
-                    MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
+                    Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
                         DateTimeOffset.Now.ToUnixTimeSeconds();
-                    Instance.UserData.currenciesRate = onSuccessful;
-                    MonoBankManager.Instance.updateInfo.LastUpdateCurrencyInfoTime =
-                        DateTimeOffset.Now.ToUnixTimeSeconds();
+                    Instance.UserData.monobankData.currenciesRate = onSuccessful;
                     result(onSuccessful);
                     Events.DisableLoadingScreen.Invoke();
                 },onError:()=>
                 {
-                    result(Instance.UserData.currenciesRate);
+                    result(Instance.UserData.monobankData.currenciesRate);
                     Events.DisableLoadingScreen.Invoke();
                 });
             }
             else
-                result(Instance.UserData.currenciesRate);
+                result(Instance.UserData.monobankData.currenciesRate);
         }
 
         public static void SetNewBankTransactionsInData(Action onFinish)
         {
             if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions >
+                Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions >
                 60)
             {
                 Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetTransactions(bankTransactions =>
-                {
-                    MonoBankManager.Instance.updateInfo.LastUpdateBankTransactions =
+                { 
+                    Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions =
                         DateTimeOffset.Now.ToUnixTimeSeconds();
                     if (bankTransactions == null)
                     {
