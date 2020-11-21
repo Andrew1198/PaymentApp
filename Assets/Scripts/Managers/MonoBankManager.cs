@@ -82,7 +82,7 @@ namespace Managers
                     if (webRequest.downloadHandler.text.Contains("Too many requests"))
                     {
                         Utility.Invoke(this,()=>SendRequest(uri,onFinish,onError,header),.5f);
-                        Debug.Log("reapet");
+                        Debug.Log($"repeat {uri}");
                         yield break;
                     }
                     onFinish(webRequest.downloadHandler.text);
@@ -96,7 +96,7 @@ namespace Managers
         }
         
        
-
+       [Serializable]
         public struct UpdateMonobankTime
         {
             public long LastUpdateCurrencyInfoTime;
@@ -109,21 +109,7 @@ namespace Managers
             UAH = 980,
             EUR = 978
         }
-
-
-       [Button()]
-        private void TestTransactions()
-        {
-            UserDataManager.SetNewBankTransactionsInData(() =>
-            {
-                using (var sr = new StreamWriter(Application.persistentDataPath + "/transactions.txt"))
-                {
-                    var json = JsonUtility.ToJson(UserDataManager.CurrentYearlyTransactions,true);
-                    sr.Write(json);
-                    Debug.LogError("Success");
-                }
-            });
-        }
+        
         private void Update()
         {
 #if UNITY_EDITOR

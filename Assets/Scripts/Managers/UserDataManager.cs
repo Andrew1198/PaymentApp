@@ -35,109 +35,15 @@ namespace Managers
         {
             UserData = data;
         }
-
-        public static void GetDollarRate(Action<float> result)
+        public static float DollarRate
         {
-            Events.EnableLoadingScreen.Invoke();
-            GetCurrenciesRate(infos =>
+            get
             {
-                result((float) Math.Round(infos.First(item =>
+                return (float) Math.Round(Instance.UserData.monobankData.currenciesRate.First(item =>
                         item.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD).rateSell, 2,
-                    MidpointRounding.AwayFromZero));
-                Events.DisableLoadingScreen.Invoke();
-            });
-        }
-
-        public static void GetCurrenciesRate(Action<CurrencyInfo[]> result)
-        {
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-               Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime >
-                60 * 5)
-            {
-                Events.EnableLoadingScreen.Invoke();
-                MonoBankManager.GetExchangeRates(onSuccessful =>
-                {
-                    Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
-                        DateTimeOffset.Now.ToUnixTimeSeconds();
-                    Instance.UserData.monobankData.currenciesRate = onSuccessful;
-                    result(onSuccessful);
-                    Events.DisableLoadingScreen.Invoke();
-                },onError:()=>
-                {
-                    result(Instance.UserData.monobankData.currenciesRate);
-                    Events.DisableLoadingScreen.Invoke();
-                });
+                    MidpointRounding.AwayFromZero);
             }
-            else
-                result(Instance.UserData.monobankData.currenciesRate);
         }
-
-        public static void SetNewBankTransactionsInData(Action onFinish)
-        {
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions >
-                60)
-            {
-                Events.EnableLoadingScreen.Invoke();
-                MonoBankManager.GetTransactions(bankTransactions =>
-                { 
-                    Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions =
-                        DateTimeOffset.Now.ToUnixTimeSeconds();
-                    if (bankTransactions == null)
-                    {
-                        onFinish();
-                        return;
-                    }
-
-                    foreach (var bankTransaction in bankTransactions)
-                    {
-                        if (bankTransaction.amount >= 0)
-                            continue;
-                        var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
-                        if (!Instance.UserData._transactions.Any(item => item.year == time.Year))
-                        {
-                            Instance.UserData._transactions.Add(new YearlyTransactions
-                            {
-                                year = time.Year
-                            });
-                        }
-
-                        var yearlyTrans = Instance.UserData._transactions.First(item => item.year == time.Year);
-                        if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
-                        {
-                            yearlyTrans.transactions.Add(new MonthlyTransaction
-                            {
-                                month = time.Month
-                            });
-                        }
-
-                        var monthlyTrans = yearlyTrans.transactions.First(item => item.month == time.Month);
-                        if (!monthlyTrans._transactions.Any(item => item.day == time.Day))
-                        {
-                            monthlyTrans._transactions.Add(new DailyTransaction
-                            {
-                                day = time.Day
-                            });
-                        }
-
-                        var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
-                        if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
-                        {
-                            bankTransaction.amount = ((long) Math.Round((float) bankTransaction.amount / 100,
-                                MidpointRounding.AwayFromZero))*-1;
-                            dayTrans.bankTransactions.Add(bankTransaction);
-                        }
-                    }
-
-                    Events.DisableLoadingScreen.Invoke();
-                    onFinish();
-                });
-            }
-            else
-                onFinish();
-            
-        }
-
         public static YearlyTransactions CurrentYearlyTransactions
         {
             get

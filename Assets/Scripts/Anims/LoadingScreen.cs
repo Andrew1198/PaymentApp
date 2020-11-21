@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+
 #pragma warning disable 0649
 namespace DefaultNamespace
 {
@@ -9,7 +12,7 @@ namespace DefaultNamespace
     {
         [SerializeField] private TextMeshProUGUI loadingField;
         [SerializeField] private GameObject back;
-
+        [SerializeField] private float appearTime;// время после которого должен появится загрузочный экран, сделанно для того что бы если загрузка будет короткая окно не появлялось
         private Coroutine _coroutine;
         private int _count;
         private void Awake()
@@ -21,22 +24,24 @@ namespace DefaultNamespace
         private void Show()
         {
             if (_coroutine == null)
-            {
-                back.SetActive(true);
                 _coroutine = StartCoroutine(Anim());
-            }
+            
 
             _count++;
         } 
 
         private IEnumerator Anim()
         {
+            yield return new WaitForSeconds(appearTime);
+            back.SetActive(true);
+            
             string[] points = {"", ".", "..", "..."};
             var loadingText = "Loading";
             string result;
-            for (var i = 0;; i++)
+            while(true)
             {
-                result = loadingText + points[i % points.Length];
+                
+                result = loadingText + points[Random.Range(0, int.MaxValue) % points.Length];
                 loadingField.text = result;
                 yield return new WaitForSeconds(.3f);
             }
@@ -50,6 +55,7 @@ namespace DefaultNamespace
             if (_coroutine != null)
             {
                 StopCoroutine(_coroutine);
+                _coroutine = null;
             }
             back.SetActive(false);
         }

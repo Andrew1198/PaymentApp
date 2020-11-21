@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Data;
 using DefaultNamespace;
+using HelperWindows;
 using Items;
 using Managers;
 using TMPro;
@@ -24,22 +25,22 @@ namespace Tabs
             {
                 Destroy(wallet.gameObject);
             }
-            
-            UserDataManager.GetDollarRate(dollarRate =>
+
+            TransactionUtils.UpdateCurrencyRates(() =>
             {
                 var sumSavingUsd = 0f;
                 foreach (var saving in UserDataManager.Savings)
                 {
                     SetSaving(saving);
                     if (saving.currency == Currency.UAH)
-                        sumSavingUsd += saving.count * dollarRate;
+                        sumSavingUsd += saving.count * UserDataManager.DollarRate;
                     else
                         sumSavingUsd += saving.count;
                 }
 
                 wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
             });
-            
+            Inited = true;
         }
 
         private void SetSaving(Saving saving)

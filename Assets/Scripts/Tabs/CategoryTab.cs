@@ -7,6 +7,7 @@ using Items;
 using Managers;
 using NaughtyAttributes;
 using TMPro;
+using UnityEditorInternal;
 using UnityEngine;
 #pragma warning disable 0649
 namespace Tabs
@@ -33,19 +34,21 @@ namespace Tabs
             {
                 categoryItems[i].Init(UserDataManager.Categories[i]);
             }
-            SetWholeAmount();
+            TransactionUtils.UpdateCurrencyRates(() =>
+            {
+                SetWholeAmount();
+            });
+            Inited = true;
         }
 
         private void SetWholeAmount()
         {
             var amountPerMonth = TransactionUtils.AmountPerMonth(true,false);
             wholeAmount.uahText.text = amountPerMonth.ToString();
-            UserDataManager.GetDollarRate(dollarRate =>
-            {
-                wholeAmount.usdText.text =
-                    ((int) Math.Round(amountPerMonth / dollarRate, MidpointRounding.AwayFromZero)).ToString();
-            });
-            
+
+            wholeAmount.usdText.text =
+                ((int) Math.Round(amountPerMonth / UserDataManager.DollarRate, MidpointRounding.AwayFromZero))
+                .ToString();
         }
         
         

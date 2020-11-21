@@ -1,4 +1,5 @@
 using System;
+using HelperWindows;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -14,14 +15,17 @@ namespace Items
         [SerializeField] private TextMeshProUGUI count;
         public void Init(OverviewData data)
         {
-            UserDataManager.GetDollarRate(dollarRate =>
+            TransactionUtils.UpdateCurrencyRates(() =>
             {
                 categoryName.text = data.CategoryName;
                 slider.value = data.percentageOfAmount;
                 percentCount.text = $"<color=red>{data.percentageOfAmount}%</color=red>";
-                var countUsd = Math.Round(data.sum / dollarRate,1, MidpointRounding.AwayFromZero);
+                var countUsd = Math.Round(data.sum / UserDataManager.DollarRate,1, MidpointRounding.AwayFromZero);
                 count.text = data.sum.ToString() + "(" + countUsd + ")";
             });
+           
+               
+            
            
         }
         

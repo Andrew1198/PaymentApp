@@ -30,25 +30,24 @@ namespace HelperWindows
             }
 
             gameObject.SetActive(true);
-            UserDataManager.GetCurrenciesRate(currencyInfos =>
-                {
+            TransactionUtils.UpdateCurrencyRates(() =>
+            {
+                var currencyInfos = UserDataManager.Instance.UserData.monobankData.currenciesRate;
                     Array.Sort(currencyInfos, delegate(CurrencyInfo user1, CurrencyInfo user2)
-                    {
-                        if (user1.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD)
-                            return -1;
-                        return 1;
-                    }); // доллар выставляем на пе
-                    var result = string.Empty;
-                    foreach (var item in currencyInfos)
-                    {
-                        result += MonoBankManager.GetNameByCurrencyCode(item.currencyCodeA) + " " +
-                                  Math.Round(item.rateBuy, 2, MidpointRounding.AwayFromZero).ToString("0.00") + " / " +
-                                  Math.Round(item.rateSell, 2, MidpointRounding.AwayFromZero).ToString("0.00") + "\n";
-                    }
-                    exchangeRates.text =result ;
+                {
+                    if (user1.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD)
+                        return -1;
+                    return 1;
+                }); // доллар выставляем на пе
+                var result = string.Empty;
+                foreach (var item in currencyInfos)
+                {
+                    result += MonoBankManager.GetNameByCurrencyCode(item.currencyCodeA) + " " +
+                              Math.Round(item.rateBuy, 2, MidpointRounding.AwayFromZero).ToString("0.00") + " / " +
+                              Math.Round(item.rateSell, 2, MidpointRounding.AwayFromZero).ToString("0.00") + "\n";
                 }
-            );
-            
+                exchangeRates.text =result ;
+            });
         }
 
         public void OnClose()

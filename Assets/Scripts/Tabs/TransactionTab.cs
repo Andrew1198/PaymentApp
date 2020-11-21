@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Data;
 using DefaultNamespace;
+using HelperWindows;
 using Items;
 using Managers;
 using TMPro;
@@ -22,13 +23,14 @@ namespace Tabs
             base.Init();
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
            Draw();
+           Inited = true;
         }
 
         private void Draw()
         {
             foreach (Transform child in content)
                 Destroy(child.gameObject);
-            UserDataManager.SetNewBankTransactionsInData(()=>
+            TransactionUtils.UpdateAllBankTransactions(()=>
             {
                 var monthlyTransaction = GetTransactions();
                 foreach (var dailyTransaction in monthlyTransaction._transactions)

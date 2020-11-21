@@ -1,7 +1,9 @@
+using System;
 using Managers;
 
 namespace Data
 {
+    [Serializable]
     public class MonobankData
     {
         public CurrencyInfo[] currenciesRate = {new CurrencyInfo()};
