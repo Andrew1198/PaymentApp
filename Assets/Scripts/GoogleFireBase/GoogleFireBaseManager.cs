@@ -48,11 +48,16 @@ namespace GoogleFireBase
                 Debug.LogError("firebase doesn't init");
                 return;
             }
-
+            var fireBaseBackup = new FireBaseBackup
+            {
+                _transactions =  UserDataManager.YearlyTransactions,
+                categories = UserDataManager.Instance.UserData.categories,
+                savings = UserDataManager.Instance.UserData.savings
+            };
             var docRef = Instance.Db.Collection("userData").Document("data");
             var docData = new Dictionary<string, object>
             {
-                {"json", JsonUtility.ToJson(UserDataManager.Instance.UserData)},
+                {"json", JsonUtility.ToJson(fireBaseBackup)},
             };
             docRef.SetAsync(docData).ContinueWithOnMainThread(task =>
             {

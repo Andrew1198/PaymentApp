@@ -32,19 +32,22 @@ namespace Tabs
         {
             base.Init();
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
-            SetAmounts();
-            SetOverviewItems(GetTransactionsPerMonthByMcc(),mccContainer);
-            SetOverviewItems(GetBankTransactionsDescriptions(),descriptionContainer);
-            if (_graph == null)
-                _graph = Instantiate(graphPrefab,transform.parent.parent);
-            Inited = true;
+            TransactionUtils.UpdateAllBankTransactions(() =>
+            {
+                SetAmounts();
+                SetOverviewItems(GetTransactionsPerMonthByMcc(),mccContainer);
+                SetOverviewItems(GetBankTransactionsDescriptions(),descriptionContainer);
+                if (_graph == null)
+                    _graph = Instantiate(graphPrefab,transform.parent.parent);
+                Inited = true;
+            });
         }
 
         private void SetAmounts()
         {
-            TransactionUtils.UpdateCurrencyRates(() =>
+            TransactionUtils.UpdateCurrencyRates(()=>
             {
-                 var amountPerMonth = TransactionUtils.AmountPerMonth(true, true);
+                var amountPerMonth = TransactionUtils.AmountPerMonth(true, true);
                 if (UserDataManager.SelectedDate.Month == DateTime.Now.Month)
                 {
                     var dayAvgValue = Math.Round(amountPerMonth / (float) DateTime.Today.Day,
@@ -81,7 +84,7 @@ namespace Tabs
                     var weekAmountPerMonthUsd = Math.Round(amountPerMonth / UserDataManager.DollarRate, 1,MidpointRounding.AwayFromZero);
                     WeekAmountOrMonth.text = "Month\n"+amountPerMonth + "(" + weekAmountPerMonthUsd + ")";
                     Spent.gameObject.SetActive(false);
-                } 
+                }
             });
         }
 

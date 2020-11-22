@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class UserDataManager 
+    public class UserDataManager
     {
         public static UserDataManager Instance;
         private DateTime _selectedDate;
@@ -35,6 +35,7 @@ namespace Managers
         {
             UserData = data;
         }
+
         public static float DollarRate
         {
             get
@@ -44,6 +45,9 @@ namespace Managers
                     MidpointRounding.AwayFromZero);
             }
         }
+
+        public static List<YearlyTransactions> YearlyTransactions => Instance.UserData._transactions;
+
         public static YearlyTransactions CurrentYearlyTransactions
         {
             get
@@ -95,32 +99,38 @@ namespace Managers
             }
         }
         
-        public static void AddTransactionWindow(Transaction transaction)
-        {
-
-        }
+     
 
         public static CategoryData[] Categories
         {
             get => Instance.UserData.categories;
         }
         
-        public static int AmountPerDay => UserDataManager.CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
-
-        public static int AmountPerWeek
+        public static long AmountPerDay
         {
             get
             {
-                var currentWeek = GetWeekNumber(DateTime.Now);
+                long result = 0;
+                result += CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
+                result += CurrentDailyTransactions.bankTransactions.Sum(transaction => transaction.amount);
+                return result;
+            }
+        }
 
-                var result = 0; 
-                foreach (var dailyTransaction in CurrentMonthlyTransaction._transactions)
-                foreach (var transaction in dailyTransaction._transactions)
+        public static long AmountPerWeek
+        {
+            get
+            {
+                
+                long result = 0;
+                for (int i = 0; i < 7; i++)
                 {
-                    if (GetWeekNumber(transaction.Time) == currentWeek)
-                        result += transaction._count;
+                    SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i>0?1:0));
+                    result += CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
+                    result += CurrentDailyTransactions.bankTransactions.Sum(transaction => transaction.amount);
                 }
 
+                SelectedDate = SelectedDate.AddDays(6);
                 return result;
             }
         }
