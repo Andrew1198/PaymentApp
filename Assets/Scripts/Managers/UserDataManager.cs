@@ -149,15 +149,15 @@ namespace Managers
                 Debug.LogError("Coudn't save userData is null");
                 return;
             }
+            GoogleFireBaseManager.UpdateUserData();
             var path = Path.Combine(Application.persistentDataPath, SystemInfo.deviceUniqueIdentifier + ".json");
-            var json = JsonUtility.ToJson(Instance.UserData, true);
+            var json = JsonUtility.ToJson(Instance.UserData);
             if (File.Exists(path))
             {
                 var oldJson = File.ReadAllText(path);
                 if (json == oldJson) return;
             }
             File.WriteAllText(path, json);
-            GoogleFireBaseManager.UpdateUserData();
             Debug.Log("Save");
         }
         

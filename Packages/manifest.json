@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
-    "com.google.firebase.app": "6.15.2",
-    "com.google.firebase.firestore": "6.15.2",
-    "com.google.firebase.storage": "6.15.2",
+    "com.google.firebase.app": "6.16.1",
+    "com.google.firebase.firestore": "6.16.1",
+    "com.google.firebase.storage": "6.16.1",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "1.3.9",
     "com.unity.ide.rider": "1.2.1",

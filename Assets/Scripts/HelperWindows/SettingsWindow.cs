@@ -20,6 +20,18 @@ namespace HelperWindows
     public class SettingsWindow : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI exchangeRates;
+        [SerializeField] private TMP_InputField monobankTokenInputField;
+        [SerializeField] private Button monobankTokenApproveBttn;
+
+        private void Awake()
+        {
+            monobankTokenApproveBttn.onClick.AddListener(() =>
+                {
+                    UserDataManager.Instance.UserData.monobankData.token = monobankTokenInputField.text;
+                    monobankTokenApproveBttn.interactable = false;
+                    Events.OnUpdateTab?.Invoke();
+                });
+        }
 
         public void Init()
         {
@@ -30,6 +42,9 @@ namespace HelperWindows
             }
 
             gameObject.SetActive(true);
+            if (!string.IsNullOrEmpty(UserDataManager.Instance.UserData.monobankData.token))
+                monobankTokenInputField.text = UserDataManager.Instance.UserData.monobankData.token;
+            monobankTokenApproveBttn.interactable = true;
             TransactionUtils.UpdateCurrencyRates(() =>
             {
                 var currencyInfos = UserDataManager.Instance.UserData.monobankData.currenciesRate;
@@ -55,16 +70,9 @@ namespace HelperWindows
             gameObject.SetActive(false);
         }
 
-        public void LoadDataFromFirebase()
+        private void OnDestroy()
         {
-            GoogleFireBaseManager.GetData( userData =>
-            {
-                if (userData == null) return;
-                UserDataManager.Init(userData);
-                UserDataManager.Save();
-                Events.OnUpdateTab?.Invoke();
-                Debug.Log("FirebaseData has been loaded");
-            });
+            monobankTokenApproveBttn.onClick.RemoveAllListeners();
         }
     }
 }

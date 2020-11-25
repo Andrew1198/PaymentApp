@@ -8,45 +8,45 @@
       "hash": "b46e9e8fde10448accd59ecabd09fbe296ef62f7"
     },
     "com.google.external-dependency-manager": {
-      "version": "1.2.156",
+      "version": "1.2.161",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.app": {
-      "version": "6.15.2",
+      "version": "6.16.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.external-dependency-manager": "1.2.156"
+        "com.google.external-dependency-manager": "1.2.161"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.auth": {
-      "version": "6.15.2",
+      "version": "6.16.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.app": "6.15.2"
+        "com.google.firebase.app": "6.16.1"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.firestore": {
-      "version": "6.15.2",
+      "version": "6.16.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.app": "6.15.2"
+        "com.google.firebase.app": "6.16.1"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.storage": {
-      "version": "6.15.2",
+      "version": "6.16.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.auth": "6.15.2"
+        "com.google.firebase.auth": "6.16.1"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using Data;
 using Firebase;
@@ -54,25 +55,33 @@ namespace GoogleFireBase
                 categories = UserDataManager.Instance.UserData.categories,
                 savings = UserDataManager.Instance.UserData.savings
             };
-            var docRef = Instance.Db.Collection("userData").Document("data");
-            var docData = new Dictionary<string, object>
+            var jsonFireBaseBackUp = JsonUtility.ToJson(fireBaseBackup);
+            GetData((serverFireBaseBackup,doc) =>
             {
-                {"json", JsonUtility.ToJson(fireBaseBackup)},
-            };
-            docRef.SetAsync(docData).ContinueWithOnMainThread(task =>
-            {
-                if (task.IsFaulted || task.IsCanceled)
-                    Debug.LogError("Eror writing Firebase Firestore");
-                else
-                    Debug.Log("UpdateGoogleFireBase");
+                if (doc == null)
+                    return;
+                
+                var jsonServerFireBaseBackUp = JsonUtility.ToJson(serverFireBaseBackup);
+                if (jsonFireBaseBackUp == jsonServerFireBaseBackUp)
+                    return;
+                
+                var docRef = Instance.Db.Collection("userData").Document("data");
+                doc[SystemInfo.deviceUniqueIdentifier] = jsonFireBaseBackUp;
+                docRef.SetAsync(doc).ContinueWithOnMainThread(task =>
+                {
+                    if (task.IsFaulted || task.IsCanceled)
+                        Debug.LogError("Eror writing Firebase Firestore");
+                    else
+                        Debug.Log("UpdateGoogleFireBase");
+                });
             });
         }
 
-        public static void GetData(Action<UserData> onReceived)
+        public static void GetData(Action<FireBaseBackup,Dictionary<string,object>> onReceived)
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                onReceived(null);
+                onReceived(null,null);
                 return;
             }
 
@@ -83,12 +92,21 @@ namespace GoogleFireBase
                 if (snapshot.Exists)
                 {
                     var data = snapshot.ToDictionary();
-                    var userData = JsonUtility.FromJson<UserData>(data["json"].ToString());
-                    onReceived.Invoke(userData);
+                    if (data.ContainsKey(SystemInfo.deviceUniqueIdentifier))
+                    {
+                        var userData =
+                            JsonUtility.FromJson<FireBaseBackup>(data[SystemInfo.deviceUniqueIdentifier].ToString());
+                        onReceived.Invoke(userData,data);
+                    }
+                    else
+                    {
+                        onReceived.Invoke(null,data);
+                        Debug.Log($"Field {snapshot.Id} does not exist!");
+                    }
                 }
                 else
                 {
-                    onReceived.Invoke(null);
+                    onReceived.Invoke(null,null);
                     Debug.Log($"Document {snapshot.Id} does not exist!");
                 }
             });

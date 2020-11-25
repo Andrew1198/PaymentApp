@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Data;
 using DefaultNamespace;
-using Firebase.Firestore;
 using HelperScripts;
 using NaughtyAttributes;
 using UnityEngine;
@@ -17,18 +16,40 @@ namespace Managers
     public class MonoBankManager : Singleton<MonoBankManager>
     {
         public MCC_DataBase mccDataBase;
-        private const string token = "uOpR4ZpvpBxHnnCcI0OXXjWD2-qwK_owBS6pC1UCdh7Q";
         private const string ApiEndPoint = "https://api.monobank.ua/";
+
+        private RequestStatus traansactionRequsetStatus = RequestStatus.Updated;
+        private RequestStatus currencyRequsetStatus = RequestStatus.Updated;
         
         public static void GetTransactions(Action<BankTransaction[]>onFinish)
         {
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
+                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions <
+                60)
+            {
+                onFinish(null);
+                return;
+            }
+
+            if (Instance.traansactionRequsetStatus == RequestStatus.Updating)
+            {
+                Utility.Invoke(() => { onFinish(null); },
+                    () => Instance.traansactionRequsetStatus == RequestStatus.Updated);
+                return;
+            }
+
+            Instance.traansactionRequsetStatus = RequestStatus.Updating;
             var to = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             var from = to - 60 * 60 * 24 * 31;
             var url = ApiEndPoint + $"/personal/statement/0/{from}/{to}";
             Instance.SendRequest(url, result =>
             {
+                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions =
+                    DateTimeOffset.Now.ToUnixTimeSeconds();
                 onFinish(JsonHelper.GetJsonArray<BankTransaction>(result));
-            },header:new KeyValuePair<string, string>("X-Token", token),onError: () => { onFinish(null);
+                Instance.traansactionRequsetStatus = RequestStatus.Updated;
+            },header:new KeyValuePair<string, string>("X-Token", UserDataManager.Instance.UserData.monobankData.token),onError: () => { onFinish(null);
+                Instance.traansactionRequsetStatus = RequestStatus.Updated;
             });
         }
         
@@ -37,6 +58,22 @@ namespace Managers
         /// </summary>
         public static void GetExchangeRates(Action<CurrencyInfo[]> onSuccessful,Action onError = null)
         {
+            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
+                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime <
+                60 * 5)
+            {
+                onError();
+                return;
+            }
+
+            if (Instance.currencyRequsetStatus == RequestStatus.Updating)
+            {
+                Utility.Invoke(onError,
+                    () => Instance.currencyRequsetStatus == RequestStatus.Updated);
+                return;
+            }
+
+            Instance.currencyRequsetStatus = RequestStatus.Updating;
             var url = ApiEndPoint + "bank/currency";
             Instance.SendRequest(url, result=>
             {
@@ -45,7 +82,14 @@ namespace Managers
                     !((item.currencyCodeA == (int) CurrencyCode.EUR || item.currencyCodeA == (int) CurrencyCode.USD) && // удаляем все ненужные валюта кроме USD/UAH EUR/UAH
                       item.currencyCodeB == (int) CurrencyCode.UAH)
                 );
+                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
+                    DateTimeOffset.Now.ToUnixTimeSeconds();
                 onSuccessful(data.ToArray());
+                Instance.currencyRequsetStatus = RequestStatus.Updated;
+            },()=>
+            {
+                Instance.currencyRequsetStatus = RequestStatus.Updated;
+                onError();
             });
         }
 
@@ -59,7 +103,7 @@ namespace Managers
                 {
                     sw.Write(result);
                 }
-            }, header: new KeyValuePair<string, string>("X-Token", token));
+            }, header: new KeyValuePair<string, string>("X-Token", UserDataManager.Instance.UserData.monobankData.token));
         }
 
         void SendRequest(string uri, Action<string> onFinish,Action onError = null,KeyValuePair<string,string> header = default) => StartCoroutine(SendRequestCor(uri, onFinish,onError,header));
@@ -67,24 +111,26 @@ namespace Managers
         {
             using (var webRequest = UnityWebRequest.Get(uri))
             {
-                if(header.Key != null)
-                    webRequest.SetRequestHeader(header.Key,header.Value);
+                if (header.Key != null)
+                {
+                    if (string.IsNullOrEmpty(header.Value))
+                    {
+                        onError();
+                        yield break;
+                    }
+                    webRequest.SetRequestHeader(header.Key, header.Value);
+                }
+
                 // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
                 
-                if (webRequest.isNetworkError)
+                if (webRequest.isNetworkError || webRequest.isHttpError)
                 {
-                    Debug.Log( "Error: " + webRequest.error);
-                    onError();
+                    Debug.LogError( "Error: " + webRequest.error + $"\n {uri}");
+                    onError?.Invoke();
                 }
                 else
                 {
-                    if (webRequest.downloadHandler.text.Contains("Too many requests"))
-                    {
-                        Utility.Invoke(this,()=>SendRequest(uri,onFinish,onError,header),.5f);
-                        Debug.Log($"repeat {uri}");
-                        yield break;
-                    }
                     onFinish(webRequest.downloadHandler.text);
                 }
             }
@@ -119,6 +165,12 @@ namespace Managers
                 Debug.LogError("Save");
             }
 #endif
+        }
+        
+        enum RequestStatus
+
+        {
+            Updated,Updating
         }
         
     }

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Data;
 using HelperWindows;
 using Items;
 using Managers;
 using NaughtyAttributes;
 using TMPro;
-using UnityEditorInternal;
 using UnityEngine;
 #pragma warning disable 0649
 namespace Tabs

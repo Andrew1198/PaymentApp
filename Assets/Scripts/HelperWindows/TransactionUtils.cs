@@ -66,18 +66,13 @@ namespace HelperWindows
 
         public static void UpdateAllBankTransactions(Action onFinish)
         {
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions >
-                60)
-            {
-                Events.EnableLoadingScreen.Invoke();
+            Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetTransactions(bankTransactions =>
                 {
-                    UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions =
-                        DateTimeOffset.Now.ToUnixTimeSeconds();
                     if (bankTransactions == null)
                     {
                         onFinish();
+                        Events.DisableLoadingScreen.Invoke();
                         return;
                     }
 
@@ -125,10 +120,6 @@ namespace HelperWindows
                     Events.DisableLoadingScreen.Invoke();
                     onFinish();
                 });
-            }
-            else
-                onFinish();
-
         }
 
        
@@ -139,11 +130,11 @@ namespace HelperWindows
                 UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime >
                 60 * 5)
             {
+                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
+                    DateTimeOffset.Now.ToUnixTimeSeconds();
                 Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetExchangeRates(onSuccessful =>
                 {
-                    UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
-                        DateTimeOffset.Now.ToUnixTimeSeconds();
                     UserDataManager.Instance.UserData.monobankData.currenciesRate = onSuccessful;
                     onFinish();
                     Events.DisableLoadingScreen.Invoke();
