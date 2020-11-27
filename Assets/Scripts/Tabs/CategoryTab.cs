@@ -52,7 +52,7 @@ namespace Tabs
         [Button]
         private void UpdateCategoryItemsFromTemplate()
         {
-            var categoryItemTemplate = transform.root.Find("Templates").Find("CategoryItem").gameObject;
+            var categoryItemTemplate = transform.Find("Template").Find("CategoryItem").gameObject;
 
             for (var i = 0; i < categoryItems.Count; ++i)
             {

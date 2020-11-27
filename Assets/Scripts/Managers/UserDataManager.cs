@@ -144,6 +144,7 @@ namespace Managers
         
         public static void Save()
         {
+            CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0 && transaction.bankTransactions.Count ==0);
             if (!Inited)
             {
                 Debug.LogError("Coudn't save userData is null");

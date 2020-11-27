@@ -147,5 +147,10 @@ namespace HelperWindows
             else
                 onFinish();
         }
+
+        public static bool IsThereTransactionInMonth()
+        {
+            return UserDataManager.CurrentMonthlyTransaction._transactions.Count != 0;
+        }
     }
 }

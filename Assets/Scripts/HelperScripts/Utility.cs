@@ -57,7 +57,7 @@ namespace HelperScripts
         }
 
         [Button()]
-        private void TestJson()
+        private void ChangeOldData()
         {
             var path = Application.persistentDataPath + "/OldData.json";
             string json;
@@ -148,8 +148,34 @@ namespace HelperScripts
                 }
             }
         }
+
+
+        [Button]
+        private void DeleteEmptyObjects()
+        {
+            UserData userData;
+            using (var sr1 =
+                new StreamReader(Application.persistentDataPath + "/old.json"))
+            {
+                var json = sr1.ReadToEnd();
+                userData = JsonUtility.FromJson<UserData>(json);
+            }
+            userData._transactions.RemoveAll(transaction => transaction.transactions.Count == 0);
+            foreach (var yearlyTransactionse in userData._transactions)
+                yearlyTransactionse.transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
+                
+            foreach (var yearlyTransaction in userData._transactions)
+            foreach (var monthlyTransaction in yearlyTransaction.transactions)
+                monthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0 && transaction.bankTransactions.Count ==0);
+            
+            using (var sr1 = new StreamWriter(Application.persistentDataPath + "/new.json"))
+            {
+               sr1.Write(JsonUtility.ToJson(userData));
+            }
+            Debug.LogError("success");
+        }
         
-        
+      
         
     }
 }
