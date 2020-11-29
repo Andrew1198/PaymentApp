@@ -126,13 +126,7 @@ namespace HelperWindows
         
         public static void UpdateCurrencyRates(Action onFinish)
         {
-            if (DateTimeOffset.Now.ToUnixTimeSeconds() -
-                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime >
-                60 * 5)
-            {
-                UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateCurrencyInfoTime =
-                    DateTimeOffset.Now.ToUnixTimeSeconds();
-                Events.EnableLoadingScreen.Invoke();
+            Events.EnableLoadingScreen.Invoke();
                 MonoBankManager.GetExchangeRates(onSuccessful =>
                 {
                     UserDataManager.Instance.UserData.monobankData.currenciesRate = onSuccessful;
@@ -143,9 +137,6 @@ namespace HelperWindows
                     onFinish();
                     Events.DisableLoadingScreen.Invoke();
                 });
-            }
-            else
-                onFinish();
         }
 
         public static bool IsThereTransactionInMonth()
