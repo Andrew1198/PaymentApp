@@ -8,7 +8,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+#pragma warning disable 0649
 namespace DefaultNamespace
 {
     public class Graph : UnityEngine.MonoBehaviour
@@ -156,12 +156,8 @@ namespace DefaultNamespace
                     var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
                     foreach (var dailyTransaction in monthlyTransaction._transactions)
                     {
-                        long sum = 0;
-                        foreach (var transaction in dailyTransaction._transactions)
-                            sum += transaction._count;
-                        foreach (var transaction in dailyTransaction.bankTransactions)
-                            sum += transaction.amount;
-
+                        long sum = dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        
                         points.Add(new Vector2(dailyTransaction.day, sum));
                     }
 
@@ -174,12 +170,8 @@ namespace DefaultNamespace
                     {
                         long sum =0;
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
-                        {
-                            foreach (var transaction in dailyTransaction._transactions)
-                                sum += transaction._count;
-                            foreach (var transaction in dailyTransaction.bankTransactions)
-                                sum += transaction.amount;
-                        }
+                            sum += dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        
                         points.Add(new Vector2(monthlyTransaction.month, sum));
                     }
 
@@ -194,12 +186,8 @@ namespace DefaultNamespace
                         long sum =0;
                         foreach (var monthlyTransaction in yearlyTransaction.transactions)
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
-                        {
-                            foreach (var transaction in dailyTransaction._transactions)
-                                sum += transaction._count;
-                            foreach (var transaction in dailyTransaction.bankTransactions)
-                                sum += transaction.amount;
-                        }
+                            sum+=dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        
                         points.Add(new Vector2(yearlyTransaction.year, sum));
                     }
                     break;

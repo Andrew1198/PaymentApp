@@ -1,5 +1,5 @@
 using UnityEngine;
-
+#pragma warning disable 0649
 namespace HelperScripts
 {
     public class JsonHelper

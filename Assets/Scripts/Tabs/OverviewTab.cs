@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Data;
 using DefaultNamespace;
 using HelperWindows;
 using Items;
@@ -102,17 +103,17 @@ namespace Tabs
         {
             var category = new Dictionary<string,long>();
             var cashTransactionsPerMonth = UserDataManager.CurrentMonthlyTransaction._transactions
-                .SelectMany(dailyTransaction => dailyTransaction._transactions);
+                .SelectMany(dailyTransaction => TransactionUtils.GetTransactionsByType<CashTransaction>(dailyTransaction._transactions));
             foreach (var transaction in cashTransactionsPerMonth)
             {
-                if (!category.ContainsKey(transaction._category))
-                    category[transaction._category] = transaction._count;
+                if (!category.ContainsKey(transaction.category))
+                    category[transaction.category] = transaction.amount;
                 else
-                    category[transaction._category] += transaction._count;
+                    category[transaction.category] += transaction.amount;
             }
 
             var bankTransactionsPerMonth = UserDataManager.CurrentMonthlyTransaction._transactions
-                .SelectMany(dailyTransaction => dailyTransaction.bankTransactions);
+                .SelectMany(dailyTransaction => TransactionUtils.GetTransactionsByType<BankTransaction>(dailyTransaction._transactions));
             foreach (var transaction in bankTransactionsPerMonth)
             {
                 if (!category.ContainsKey(MonoBankManager.Instance.mccDataBase.GetDescriptionByMccCode(transaction.mcc)))
@@ -146,13 +147,13 @@ namespace Tabs
             var category = new Dictionary<string,long>();
             
             var bankTransactionsPerMonth = UserDataManager.CurrentMonthlyTransaction._transactions
-                .SelectMany(dailyTransaction => dailyTransaction.bankTransactions);
+                .SelectMany(dailyTransaction => TransactionUtils.GetTransactionsByType<BankTransaction>(dailyTransaction._transactions));
             foreach (var transaction in bankTransactionsPerMonth)
             {
-                if (!category.ContainsKey(transaction.description))
-                    category[transaction.description] = transaction.amount;
+                if (!category.ContainsKey(transaction.comment))
+                    category[transaction.comment] = transaction.amount;
                 else
-                    category[transaction.description] += transaction.amount;
+                    category[transaction.comment] += transaction.amount;
             }
             
             var result = new List<OverviewItem.OverviewData>();

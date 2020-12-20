@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using DefaultNamespace;
-using HelperWindows;
-using Managers;
-using UnityEngine;
 
 namespace Data
 {
@@ -12,7 +7,6 @@ namespace Data
     public class DailyTransaction
     {
         public int day;
-        public List<Transaction> _transactions = new List<Transaction>();
-        public List<BankTransaction> bankTransactions = new List<BankTransaction>();
+        public List<TransactionBase> _transactions = new List<TransactionBase>();
     }
 }

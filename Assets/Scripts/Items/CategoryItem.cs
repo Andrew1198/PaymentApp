@@ -96,12 +96,12 @@ namespace Items
              addCategoryWindow.Open();
          }
          
-         public static int GetSumByCategory(string category)
+         public static long GetSumByCategory(string category)
          {
              var transactions = TransactionUtils.CashTransactionsPerMonth;
 
-             return transactions.Where(transaction => transaction._category == category)
-                 .Sum(transaction => transaction._count);
+             return transactions.Where(transaction => transaction.category == category)
+                 .Sum(transaction => transaction.amount);
          }
     }
 }

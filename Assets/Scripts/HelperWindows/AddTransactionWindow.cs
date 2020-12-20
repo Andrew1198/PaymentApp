@@ -33,13 +33,14 @@ namespace HelperWindows
 
             var count = int.Parse(countField.text);
 
-            var transaction = new Transaction
+            var transaction = new CashTransaction(new CashTransaction.CashTransactionInitData
             {
-                _category = fromCategory,
-                _count = count,
-                _comment = commentField.text,
-                Time = DateTime.Now
-            };
+                amount = count,
+                category = fromCategory,
+                comment = commentField.text,
+                time = DateTime.Now.ToBinary(),
+                type = TransactionType.Cash
+            });
             UserDataManager.CurrentDailyTransactions._transactions.Add(transaction);
             Events.OnUpdateTab?.Invoke();
             
