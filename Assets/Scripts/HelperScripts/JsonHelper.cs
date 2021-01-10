@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace HelperScripts
@@ -6,12 +7,12 @@ namespace HelperScripts
     {
         public static T[] GetJsonArray<T>(string json)
         {
-            string newJson = "{ \"array\": " + json + "}";
-            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
+            var newJson = "{ \"array\": " + json + "}";
+            var wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
             return wrapper.array;
         }
- 
-        [System.Serializable]
+
+        [Serializable]
         private class Wrapper<T>
         {
             public T[] array;

@@ -6,17 +6,18 @@ namespace Data
     [Serializable]
     public class MonobankData
     {
-        public CurrencyInfo[] currenciesRate = {new CurrencyInfo
+        public CurrencyInfo[] currenciesRate =
+        {
+            new CurrencyInfo
             {
-                currencyCodeA =  (int)MonoBankManager.CurrencyCode.USD,
-                currencyCodeB = (int)MonoBankManager.CurrencyCode.UAH,
+                currencyCodeA = (int) MonoBankManager.CurrencyCode.USD,
+                currencyCodeB = (int) MonoBankManager.CurrencyCode.UAH,
                 rateBuy = 25f,
                 rateSell = 25f
             }
-
         };
-        public MonoBankManager.UpdateMonobankTime updateInfo = new MonoBankManager.UpdateMonobankTime();
-        public string token;
 
+        public MonoBankManager.UpdateMonobankTime updateInfo;
+        public string token;
     }
 }

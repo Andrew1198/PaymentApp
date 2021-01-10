@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Data;
 using Managers;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    public class Graph : UnityEngine.MonoBehaviour
+    public class Graph : MonoBehaviour
     {
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject dotPrefab;
@@ -27,19 +25,19 @@ namespace DefaultNamespace
             gameObject.SetActive(true);
             Show(GetPoints());
         }
-        private void Show(List<Vector2>points)
+
+        private void Show(List<Vector2> points)
         {
             foreach (Transform tr in content)
                 Destroy(tr.gameObject);
-            
+
             foreach (Transform tr in dividerContent)
                 Destroy(tr.gameObject);
-            
+
             var graphSize = content.rect.size;
-            graphSize = new Vector2(graphSize.x * .9f,graphSize.y * .9f);
-           
-          
-            
+            graphSize = new Vector2(graphSize.x * .9f, graphSize.y * .9f);
+
+
             var yMax = points.Max(item => item.y);
             var xMax = points.Max(item => item.x);
             var yMin = points.Min(item => item.y);
@@ -49,23 +47,23 @@ namespace DefaultNamespace
             foreach (var point in points)
             {
                 var gm = Instantiate(dotPrefab, content);
-                var cofX = (point.x - (xMin - 1)) / (xMax - (xMin-1));
-                
-                var pos = new Vector2(cofX  * graphSize.x,point.y/yMax*graphSize.y);
+                var cofX = (point.x - (xMin - 1)) / (xMax - (xMin - 1));
+
+                var pos = new Vector2(cofX * graphSize.x, point.y / yMax * graphSize.y);
 
                 currentDot = pos;
-                SetConnection(lastDot,currentDot);
+                SetConnection(lastDot, currentDot);
                 lastDot = currentDot;
                 (gm.transform as RectTransform).anchoredPosition = pos;
             }
-            
-            SetDividers(new Vector2(xMax,yMax),new Vector2(xMin,yMin), graphSize );
+
+            SetDividers(new Vector2(xMax, yMax), new Vector2(xMin, yMin), graphSize);
         }
 
-        private void SetDividers(Vector2 max,Vector2 min,Vector2 graphSize)
+        private void SetDividers(Vector2 max, Vector2 min, Vector2 graphSize)
         {
             var offset = 100;
-            var DividersCountY = (int)(graphSize.y/offset);
+            var DividersCountY = (int) (graphSize.y / offset);
             var createdDividersY = new List<int>();
             RectTransform maxSetYDivider = null;
             for (var i = 0; i < DividersCountY; i++)
@@ -73,16 +71,16 @@ namespace DefaultNamespace
                 var xValue = 0;
                 var yValue = (i + 1) * offset;
                 var cof = yValue / graphSize.y;
-                var count = (int)Math.Round(cof*max.y,MidpointRounding.AwayFromZero);
-                if(createdDividersY.Any(item => item==count))
+                var count = (int) Math.Round(cof * max.y, MidpointRounding.AwayFromZero);
+                if (createdDividersY.Any(item => item == count))
                     continue;
                 var gm = Instantiate(dividerPrefab, dividerContent);
                 var dividerCount = gm.transform.Find("Count").GetComponent<TextMeshProUGUI>();
-                dividerCount.text = count.ToString(CultureInfo.InvariantCulture); 
-                (gm.transform as RectTransform).anchoredPosition = new Vector2(xValue,yValue);
+                dividerCount.text = count.ToString(CultureInfo.InvariantCulture);
+                (gm.transform as RectTransform).anchoredPosition = new Vector2(xValue, yValue);
                 if (maxSetYDivider == null || yValue > maxSetYDivider.anchoredPosition.y)
                     maxSetYDivider = gm.transform as RectTransform;
-                
+
                 createdDividersY.Add(count);
             }
 
@@ -90,32 +88,32 @@ namespace DefaultNamespace
             {
                 var gm = Instantiate(dividerPrefab, dividerContent);
                 var dividerCount = gm.transform.Find("Count").GetComponent<TextMeshProUGUI>();
-                dividerCount.text = ((int)Math.Round(max.y, MidpointRounding.AwayFromZero)).ToString();
-                (gm.transform as RectTransform).anchoredPosition = new Vector2(0,graphSize.y);
+                dividerCount.text = ((int) Math.Round(max.y, MidpointRounding.AwayFromZero)).ToString();
+                (gm.transform as RectTransform).anchoredPosition = new Vector2(0, graphSize.y);
                 if (graphSize.y - maxSetYDivider.anchoredPosition.y < 100)
                     Destroy(maxSetYDivider.gameObject);
             }
-            
+
             var createdDividersX = new List<int>();
-            var DividersCountX = (int)(graphSize.x/offset);
+            var DividersCountX = (int) (graphSize.x / offset);
             RectTransform maxSetXDivider = null;
             for (var i = 0; i < DividersCountX; i++)
             {
                 var xValue = (i + 1) * offset;
                 var yValue = 0;
                 var cof = xValue / graphSize.x;
-                var count = (int)Math.Round(min.x -1 +cof*(max.x-min.x+1),MidpointRounding.AwayFromZero);
-               
-                xValue = (int)((count - (min.x - 1)) / (max.x - (min.x - 1))*graphSize.x);
-                if(createdDividersX.Any(item=>item == count))
+                var count = (int) Math.Round(min.x - 1 + cof * (max.x - min.x + 1), MidpointRounding.AwayFromZero);
+
+                xValue = (int) ((count - (min.x - 1)) / (max.x - (min.x - 1)) * graphSize.x);
+                if (createdDividersX.Any(item => item == count))
                     continue;
                 var gm = Instantiate(dividerPrefab, dividerContent);
-                gm.transform.localEulerAngles = new Vector3(0,0,90);
+                gm.transform.localEulerAngles = new Vector3(0, 0, 90);
                 var dividerCount = gm.transform.Find("Count").GetComponent<TextMeshProUGUI>();
                 dividerCount.text = count.ToString(CultureInfo.InvariantCulture);
-                dividerCount.transform.localEulerAngles = new Vector3(0f,0f,-90f);
+                dividerCount.transform.localEulerAngles = new Vector3(0f, 0f, -90f);
                 createdDividersX.Add(count);
-                (gm.transform as RectTransform).anchoredPosition = new Vector2(xValue,yValue);
+                (gm.transform as RectTransform).anchoredPosition = new Vector2(xValue, yValue);
                 if (maxSetXDivider == null || xValue > maxSetXDivider.anchoredPosition.x)
                     maxSetXDivider = gm.transform as RectTransform;
             }
@@ -127,23 +125,22 @@ namespace DefaultNamespace
                 var count = max.x;
                 var dividerCount = gm.transform.Find("Count").GetComponent<TextMeshProUGUI>();
                 dividerCount.text = count.ToString(CultureInfo.InvariantCulture);
-                dividerCount.transform.localEulerAngles = new Vector3(0f,0f,-90f);
-                (gm.transform as RectTransform).anchoredPosition = new Vector2(graphSize.x,0);
+                dividerCount.transform.localEulerAngles = new Vector3(0f, 0f, -90f);
+                (gm.transform as RectTransform).anchoredPosition = new Vector2(graphSize.x, 0);
                 if (graphSize.x - maxSetXDivider.anchoredPosition.x < 65)
                     Destroy(maxSetXDivider.gameObject);
             }
-
         }
-        
+
         private void SetConnection(Vector2 lastDot, Vector2 currentDot)
         {
-            var dir = (currentDot - lastDot);
+            var dir = currentDot - lastDot;
             var distance = dir.magnitude;
-            var angle = Math.Atan2(dir.y,dir.x) * Mathf.Rad2Deg;
+            var angle = Math.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             var dot = Instantiate(connectionPrefab, content).transform as RectTransform;
             dot.anchoredPosition = lastDot;
-            dot.localEulerAngles = new Vector3(0f,0f,(float)angle);
-            dot.sizeDelta = new Vector2(distance,dot.sizeDelta.y);
+            dot.localEulerAngles = new Vector3(0f, 0f, (float) angle);
+            dot.sizeDelta = new Vector2(distance, dot.sizeDelta.y);
         }
 
         private List<Vector2> GetPoints()
@@ -172,7 +169,7 @@ namespace DefaultNamespace
                     var yearlyTransaction = UserDataManager.CurrentYearlyTransactions;
                     foreach (var monthlyTransaction in yearlyTransaction.transactions)
                     {
-                        long sum =0;
+                        long sum = 0;
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
                         {
                             foreach (var transaction in dailyTransaction._transactions)
@@ -180,6 +177,7 @@ namespace DefaultNamespace
                             foreach (var transaction in dailyTransaction.bankTransactions)
                                 sum += transaction.amount;
                         }
+
                         points.Add(new Vector2(monthlyTransaction.month, sum));
                     }
 
@@ -188,10 +186,10 @@ namespace DefaultNamespace
                 case "Year":
                 {
                     var yearlyTransactions = UserDataManager.YearlyTransactions;
-                    
+
                     foreach (var yearlyTransaction in yearlyTransactions)
-                    { 
-                        long sum =0;
+                    {
+                        long sum = 0;
                         foreach (var monthlyTransaction in yearlyTransaction.transactions)
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
                         {
@@ -200,34 +198,37 @@ namespace DefaultNamespace
                             foreach (var transaction in dailyTransaction.bankTransactions)
                                 sum += transaction.amount;
                         }
+
                         points.Add(new Vector2(yearlyTransaction.year, sum));
                     }
+
                     break;
                 }
             }
-            
+
             switch (currencyDropdown.options[currencyDropdown.value].text)
             {
                 case "USD":
-                    for(var i =0;i<points.Count;i++)
-                        points[i] = new Vector2(points[i].x,points[i].y/UserDataManager.DollarRate);
+                    for (var i = 0; i < points.Count; i++)
+                        points[i] = new Vector2(points[i].x, points[i].y / UserDataManager.DollarRate);
                     break;
             }
+
             return points.OrderBy(item => item.x).ToList();
         }
-        
+
         [Button]
         private void Test()
         {
             var points = new List<Vector2>
             {
                 new Vector2(10, 1043),
-                new Vector2(11, 2763),
+                new Vector2(11, 2763)
             };
             Show(points);
         }
 
-        [Button()]
+        [Button]
         private void Delete()
         {
             foreach (Transform tr in content)

@@ -6,7 +6,7 @@ namespace HelperScripts
 {
     public class TestTime : MonoBehaviour
     {
-        [Button()]
+        [Button]
         private void Test()
         {
             var a = -8586148816602275128;
@@ -14,6 +14,5 @@ namespace HelperScripts
             var dt = DateTime.FromBinary(a);
             Debug.LogError(dt);
         }
-        
     }
 }

@@ -2,6 +2,7 @@ using DefaultNamespace;
 using Managers;
 using TMPro;
 using UnityEngine;
+
 #pragma warning disable 0649
 namespace HelperWindows
 {
@@ -10,6 +11,7 @@ namespace HelperWindows
         [SerializeField] private TMP_InputField categoryName;
 
         public int numberOfPlace;
+
         public void Open()
         {
             gameObject.SetActive(true);
@@ -24,8 +26,8 @@ namespace HelperWindows
         public void OnOk()
         {
             var category = UserDataManager.Categories[numberOfPlace];
-            
-          
+
+
             category.IsEmpty = false;
             category.Name = categoryName.text;
             Events.OnUpdateTab?.Invoke();

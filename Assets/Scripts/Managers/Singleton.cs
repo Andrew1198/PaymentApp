@@ -4,18 +4,20 @@ namespace Managers
 {
     public class Singleton<T> : MonoBehaviour where T : Component
     {
-        private static T _instance;
-        public static T Instance => _instance;
         public static bool Init;
+        public static T Instance { get; private set; }
 
-        public virtual void Awake ()
+        public virtual void Awake()
         {
-            if (_instance == null) {
-                _instance = this as T;
-                DontDestroyOnLoad (this.gameObject);
+            if (Instance == null)
+            {
+                Instance = this as T;
+                DontDestroyOnLoad(gameObject);
                 Init = true;
-            } else {
-                Destroy (gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
     }

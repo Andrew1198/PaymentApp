@@ -8,6 +8,7 @@ using DefaultNamespace;
 using Managers;
 using NaughtyAttributes;
 using UnityEngine;
+
 namespace HelperScripts
 {
     public class Utility : Singleton<Utility>
@@ -22,6 +23,7 @@ namespace HelperScripts
             yield return new WaitForSeconds(time);
             method();
         }
+
         private static IEnumerator InvokeCor(Action method, Func<bool> predicate)
         {
             yield return new WaitUntil(predicate);
@@ -37,7 +39,7 @@ namespace HelperScripts
         {
             Instance.StartCoroutine(InvokeCor(method, predicate));
         }
-        
+
 
         public static void StartCor(IEnumerator routine)
         {
@@ -56,7 +58,7 @@ namespace HelperScripts
             Events.DisableLoadingScreen.Invoke();
         }
 
-        [Button()]
+        [Button]
         private void ChangeOldData()
         {
             var path = Application.persistentDataPath + "/OldData.json";
@@ -96,9 +98,9 @@ namespace HelperScripts
             foreach (var key in dict.Keys)
             foreach (var transaction in dict[key])
             {
-                int year = transaction.Time.Year;
-                int month = transaction.Time.Month;
-                int day = transaction.Time.Day;
+                var year = transaction.Time.Year;
+                var month = transaction.Time.Month;
+                var day = transaction.Time.Day;
                 if (!userData._transactions.Any(yearlyTransaction =>
                     yearlyTransaction.year == year))
                     userData._transactions.Add(new YearlyTransactions
@@ -125,27 +127,10 @@ namespace HelperScripts
                     monthlyTransaction._transactions.First(dayTrans => dayTrans.day == day);
                 dayTransaction._transactions.Add(transaction);
             }
-            using (var sr = new StreamWriter(Application.persistentDataPath+"/newData.json"))
-            {
-                 sr.Write(JsonUtility.ToJson(userData));
-            }
-        }
 
-        [Serializable]
-        class OldUserData
-        {
-            public List<OldUserData.YearlyTransactions> _transactions = new List<OldUserData.YearlyTransactions>();
-            [Serializable]
-            public class YearlyTransactions
+            using (var sr = new StreamWriter(Application.persistentDataPath + "/newData.json"))
             {
-                public int year;
-                public List<MonthlyTransaction> _monthlyTransactions = new List<MonthlyTransaction>();
-
-                [Serializable]
-                public class MonthlyTransaction
-                {
-                    public List<DailyTransaction> _transactions = new List<DailyTransaction>();
-                }
+                sr.Write(JsonUtility.ToJson(userData));
             }
         }
 
@@ -160,22 +145,41 @@ namespace HelperScripts
                 var json = sr1.ReadToEnd();
                 userData = JsonUtility.FromJson<UserData>(json);
             }
+
             userData._transactions.RemoveAll(transaction => transaction.transactions.Count == 0);
             foreach (var yearlyTransactionse in userData._transactions)
                 yearlyTransactionse.transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
-                
+
             foreach (var yearlyTransaction in userData._transactions)
             foreach (var monthlyTransaction in yearlyTransaction.transactions)
-                monthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0 && transaction.bankTransactions.Count ==0);
-            
+                monthlyTransaction._transactions.RemoveAll(transaction =>
+                    transaction._transactions.Count == 0 && transaction.bankTransactions.Count == 0);
+
             using (var sr1 = new StreamWriter(Application.persistentDataPath + "/new.json"))
             {
-               sr1.Write(JsonUtility.ToJson(userData));
+                sr1.Write(JsonUtility.ToJson(userData));
             }
+
             Debug.LogError("success");
         }
-        
-      
-        
+
+        [Serializable]
+        private class OldUserData
+        {
+            public List<YearlyTransactions> _transactions = new List<YearlyTransactions>();
+
+            [Serializable]
+            public class YearlyTransactions
+            {
+                public int year;
+                public List<MonthlyTransaction> _monthlyTransactions = new List<MonthlyTransaction>();
+
+                [Serializable]
+                public class MonthlyTransaction
+                {
+                    public List<DailyTransaction> _transactions = new List<DailyTransaction>();
+                }
+            }
+        }
     }
 }

@@ -1,32 +1,32 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace Crystal
 {
     public class SafeAreaDemo : MonoBehaviour
     {
-        [SerializeField] KeyCode KeySafeArea = KeyCode.A;
-        SafeArea.SimDevice[] Sims;
-        int SimIdx;
+        [SerializeField] private KeyCode KeySafeArea = KeyCode.A;
+        private int SimIdx;
+        private SafeArea.SimDevice[] Sims;
 
-        void Awake ()
+        private void Awake()
         {
             if (!Application.isEditor)
-                Destroy (this);
+                Destroy(this);
 
-            Sims = (SafeArea.SimDevice[])Enum.GetValues (typeof (SafeArea.SimDevice));
+            Sims = (SafeArea.SimDevice[]) Enum.GetValues(typeof(SafeArea.SimDevice));
         }
 
-        void Update ()
+        private void Update()
         {
-            if (Input.GetKeyDown (KeySafeArea))
-                ToggleSafeArea ();
+            if (Input.GetKeyDown(KeySafeArea))
+                ToggleSafeArea();
         }
 
         /// <summary>
-        /// Toggle the safe area simulation device.
+        ///     Toggle the safe area simulation device.
         /// </summary>
-        void ToggleSafeArea ()
+        private void ToggleSafeArea()
         {
             SimIdx++;
 
@@ -34,7 +34,7 @@ namespace Crystal
                 SimIdx = 0;
 
             SafeArea.Sim = Sims[SimIdx];
-            Debug.LogFormat ("Switched to sim device {0} with debug key '{1}'", Sims[SimIdx], KeySafeArea);
+            Debug.LogFormat("Switched to sim device {0} with debug key '{1}'", Sims[SimIdx], KeySafeArea);
         }
     }
 }

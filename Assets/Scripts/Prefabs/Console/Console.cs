@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 #pragma warning disable 0649
 namespace Prefabs.Console
 {
-    public class Console : UnityEngine.MonoBehaviour
+    public class Console : MonoBehaviour
     {
         [SerializeField] private LogIcons logIcons;
         [SerializeField] private ConsoleItem consoleItemPrefab;
@@ -16,42 +16,50 @@ namespace Prefabs.Console
         [SerializeField] private Toggle logToogle;
         [SerializeField] private Toggle warningToogle;
         [SerializeField] private Toggle errorToogle;
-        private List<LogData> _logs = new List<LogData>();
-        private List<ConsoleItem> _spawnedConsoleItems = new List<ConsoleItem>();
+
+
+        private int _clickCount;
+        private int _errorCount;
+        private float _lastClickTime;
+        private int _logCount;
+        private readonly List<LogData> _logs = new List<LogData>();
+        private bool _showError = true;
         private bool _showLog = true;
         private bool _showWarning = true;
-        private bool _showError = true;
-        private int _logCount;
+        private readonly List<ConsoleItem> _spawnedConsoleItems = new List<ConsoleItem>();
         private int _warningCount;
-        private int _errorCount;
-        
-        
+
+
         private void Awake()
         {
             Application.logMessageReceivedThreaded += HandleLog;
             logToogle.onValueChanged.AddListener(isOn =>
             {
                 _showLog = !isOn;
-                logToogle.targetGraphic.color = isOn ? Color.red:Color.clear;
+                logToogle.targetGraphic.color = isOn ? Color.red : Color.clear;
                 DrawLogs();
             });
-            
+
             warningToogle.onValueChanged.AddListener(isOn =>
                 {
                     _showWarning = !isOn;
-                    warningToogle.targetGraphic.color = isOn ? Color.red:Color.clear;
+                    warningToogle.targetGraphic.color = isOn ? Color.red : Color.clear;
                     DrawLogs();
                 }
             );
             errorToogle.onValueChanged.AddListener(isOn =>
             {
                 _showError = !isOn;
-                errorToogle.targetGraphic.color = isOn ? Color.red:Color.clear;
+                errorToogle.targetGraphic.color = isOn ? Color.red : Color.clear;
                 DrawLogs();
             });
         }
-        
-        void OnDestroy()
+
+        private void Update()
+        {
+        }
+
+        private void OnDestroy()
         {
             Application.logMessageReceivedThreaded -= HandleLog;
             logToogle.onValueChanged.RemoveAllListeners();
@@ -59,22 +67,18 @@ namespace Prefabs.Console
             errorToogle.onValueChanged.RemoveAllListeners();
         }
 
-        private void Update()
-        {
-        }
-
         private void OpenMainZone()
         {
             mainZone.gameObject.SetActive(true);
             DrawLogs();
         }
-        
+
 
         public void DrawLogs()
         {
-           SpawnLogObject();
-           HideLogObjectByToggles();
-           SetTooglesCount();
+            SpawnLogObject();
+            HideLogObjectByToggles();
+            SetTooglesCount();
         }
 
         private void SpawnLogObject()
@@ -85,9 +89,9 @@ namespace Prefabs.Console
                 Debug.LogError("Incorrect behavior Console");
                 return;
             }
-            
-            for (var i = childCount; i < _logs.Count;i++)
-                CreateConsoleItem(_logs[i],logIcons);
+
+            for (var i = childCount; i < _logs.Count; i++)
+                CreateConsoleItem(_logs[i], logIcons);
         }
 
         private void HideLogObjectByToggles()
@@ -112,6 +116,7 @@ namespace Prefabs.Console
                         flag = false;
                         break;
                 }
+
                 spawnedConsoleItem.gameObject.SetActive(flag);
             }
         }
@@ -122,12 +127,12 @@ namespace Prefabs.Console
             warningToogle.transform.Find("Count").GetComponent<TextMeshProUGUI>().text = _warningCount.ToString();
             errorToogle.transform.Find("Count").GetComponent<TextMeshProUGUI>().text = _errorCount.ToString();
         }
-        
+
         public void Clear()
         {
             foreach (Transform child in consoleItemContainer)
                 Destroy(child.gameObject);
-            
+
             _spawnedConsoleItems.Clear();
             _logs.Clear();
             _logCount = 0;
@@ -141,46 +146,43 @@ namespace Prefabs.Console
             mainZone.gameObject.SetActive(false);
         }
 
-        void HandleLog(string logString, string stackTrace, LogType type)
+        private void HandleLog(string logString, string stackTrace, LogType type)
         {
-           var logData = new LogData
-           {
-               LogString = logString,
-               StackTrace =  stackTrace,
-               Type = type
-           };
-           _logs.Add(logData);
-           switch (type)
-           {
-               case LogType.Assert:
-               case LogType.Log:
-                   _logCount++;
-                   break;
-               case LogType.Warning:
-                   _warningCount++;
-                   break;
-               case LogType.Exception:
-               case LogType.Error:
-                   _errorCount++;
-                   break;
-           }
+            var logData = new LogData
+            {
+                LogString = logString,
+                StackTrace = stackTrace,
+                Type = type
+            };
+            _logs.Add(logData);
+            switch (type)
+            {
+                case LogType.Assert:
+                case LogType.Log:
+                    _logCount++;
+                    break;
+                case LogType.Warning:
+                    _warningCount++;
+                    break;
+                case LogType.Exception:
+                case LogType.Error:
+                    _errorCount++;
+                    break;
+            }
         }
 
-        private void CreateConsoleItem(LogData logData,LogIcons icons)
+        private void CreateConsoleItem(LogData logData, LogIcons icons)
         {
             var consoleItem = Instantiate(consoleItemPrefab, consoleItemContainer);
-            consoleItem.Init(logData,logIcons);
+            consoleItem.Init(logData, logIcons);
             _spawnedConsoleItems.Add(consoleItem);
         }
 
-
-        private int _clickCount;
-        private float _lastClickTime;
         public void OnActivationButtonClick()
         {
             if (Time.time - _lastClickTime >= .5f)
                 _clickCount = 0;
-            
+
             _clickCount++;
             _lastClickTime = Time.time;
             if (_clickCount == 3)
@@ -201,6 +203,5 @@ namespace Prefabs.Console
             public string StackTrace;
             public LogType Type;
         }
-        
     }
 }

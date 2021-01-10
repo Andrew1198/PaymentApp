@@ -1,5 +1,4 @@
 using DefaultNamespace;
-using Managers;
 
 namespace HelperWindows.ManageWalletWindow
 {

@@ -1,22 +1,20 @@
 using System;
-using System.Globalization;
-using System.Linq;
-using System.Xml;
 using Data;
 using DefaultNamespace;
-using GoogleFireBase;
 using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 #pragma warning disable 0649
 namespace HelperWindows
 {
     [Serializable]
-    class DollarRate
+    internal class DollarRate
     {
         public TMP_InputField count;
     }
+
     public class SettingsWindow : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI exchangeRates;
@@ -26,11 +24,16 @@ namespace HelperWindows
         private void Awake()
         {
             monobankTokenApproveBttn.onClick.AddListener(() =>
-                {
-                    UserDataManager.Instance.UserData.monobankData.token = monobankTokenInputField.text;
-                    monobankTokenApproveBttn.interactable = false;
-                    Events.OnUpdateTab?.Invoke();
-                });
+            {
+                UserDataManager.Instance.UserData.monobankData.token = monobankTokenInputField.text;
+                monobankTokenApproveBttn.interactable = false;
+                Events.OnUpdateTab?.Invoke();
+            });
+        }
+
+        private void OnDestroy()
+        {
+            monobankTokenApproveBttn.onClick.RemoveAllListeners();
         }
 
         public void Init()
@@ -48,7 +51,7 @@ namespace HelperWindows
             TransactionUtils.UpdateCurrencyRates(() =>
             {
                 var currencyInfos = UserDataManager.Instance.UserData.monobankData.currenciesRate;
-                    Array.Sort(currencyInfos, delegate(CurrencyInfo user1, CurrencyInfo user2)
+                Array.Sort(currencyInfos, delegate(CurrencyInfo user1, CurrencyInfo user2)
                 {
                     if (user1.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD)
                         return -1;
@@ -56,23 +59,16 @@ namespace HelperWindows
                 }); // доллар выставляем на пе
                 var result = string.Empty;
                 foreach (var item in currencyInfos)
-                {
                     result += MonoBankManager.GetNameByCurrencyCode(item.currencyCodeA) + " " +
                               Math.Round(item.rateBuy, 2, MidpointRounding.AwayFromZero).ToString("0.00") + " / " +
                               Math.Round(item.rateSell, 2, MidpointRounding.AwayFromZero).ToString("0.00") + "\n";
-                }
-                exchangeRates.text =result ;
+                exchangeRates.text = result;
             });
         }
 
         public void OnClose()
         {
             gameObject.SetActive(false);
-        }
-
-        private void OnDestroy()
-        {
-            monobankTokenApproveBttn.onClick.RemoveAllListeners();
         }
     }
 }

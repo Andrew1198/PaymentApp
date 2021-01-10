@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Data;
-using DefaultNamespace;
 using HelperWindows;
 using Items;
 using Managers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 #pragma warning disable 0649
 namespace Tabs
 {
@@ -21,10 +18,7 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            foreach (Transform wallet in savingContainer)
-            {
-                Destroy(wallet.gameObject);
-            }
+            foreach (Transform wallet in savingContainer) Destroy(wallet.gameObject);
 
             TransactionUtils.UpdateCurrencyRates(() =>
             {

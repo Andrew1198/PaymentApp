@@ -5,6 +5,5 @@ namespace Managers
     public static class EventManager
     {
         public static Action onReceivedData;
-        
     }
 }

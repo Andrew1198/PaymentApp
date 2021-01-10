@@ -13,27 +13,21 @@ namespace Managers
     public class UserDataManager
     {
         public static UserDataManager Instance;
-        private DateTime _selectedDate;
-        public readonly UserData UserData;
         public static bool Inited;
+        public readonly UserData UserData;
+        private DateTime _selectedDate;
+
+        private UserDataManager(UserData data)
+        {
+            UserData = data;
+        }
+
         public static List<Saving> Savings => Instance.UserData.savings;
 
         public static DateTime SelectedDate
         {
             get => Instance._selectedDate;
             set => Instance._selectedDate = value;
-        }
-
-        public static void Init(UserData data)
-        {
-            Instance = new UserDataManager(data);
-            SelectedDate = DateTime.Now;
-            Inited = true;
-        }
-
-        private UserDataManager(UserData data)
-        {
-            UserData = data;
         }
 
         public static float DollarRate
@@ -72,24 +66,21 @@ namespace Managers
             get
             {
                 if (!CurrentYearlyTransactions.transactions.Any(item => item.month == Instance._selectedDate.Month))
-                {
                     CurrentYearlyTransactions.transactions.Add(new MonthlyTransaction
                     {
-                        month =  Instance._selectedDate.Month
+                        month = Instance._selectedDate.Month
                     });
-                }
                 return CurrentYearlyTransactions.transactions.First(item => item.month == Instance._selectedDate.Month);
             }
         }
-
-
 
 
         public static DailyTransaction CurrentDailyTransactions
         {
             get
             {
-                if (!CurrentMonthlyTransaction._transactions.Any(transaction => transaction.day == Instance._selectedDate.Day))
+                if (!CurrentMonthlyTransaction._transactions.Any(transaction =>
+                    transaction.day == Instance._selectedDate.Day))
                     CurrentMonthlyTransaction._transactions.Add(new DailyTransaction
                     {
                         day = Instance._selectedDate.Day
@@ -98,14 +89,10 @@ namespace Managers
                     transaction.day == Instance._selectedDate.Day);
             }
         }
-        
-     
 
-        public static CategoryData[] Categories
-        {
-            get => Instance.UserData.categories;
-        }
-        
+
+        public static CategoryData[] Categories => Instance.UserData.categories;
+
         public static long AmountPerDay
         {
             get
@@ -121,11 +108,10 @@ namespace Managers
         {
             get
             {
-                
                 long result = 0;
-                for (int i = 0; i < 7; i++)
+                for (var i = 0; i < 7; i++)
                 {
-                    SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i>0?1:0));
+                    SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i > 0 ? 1 : 0));
                     result += CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
                     result += CurrentDailyTransactions.bankTransactions.Sum(transaction => transaction.amount);
                 }
@@ -134,22 +120,32 @@ namespace Managers
                 return result;
             }
         }
+
+        public static void Init(UserData data)
+        {
+            Instance = new UserDataManager(data);
+            SelectedDate = DateTime.Now;
+            Inited = true;
+        }
+
         public static int GetWeekNumber(DateTime dt)
         {
-            CultureInfo curr= CultureInfo.CurrentCulture;
-            int week = curr.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            var curr = CultureInfo.CurrentCulture;
+            var week = curr.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
             return week;
         }
-        
-        
+
+
         public static void Save()
         {
-            CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0 && transaction.bankTransactions.Count ==0);
+            CurrentMonthlyTransaction._transactions.RemoveAll(transaction =>
+                transaction._transactions.Count == 0 && transaction.bankTransactions.Count == 0);
             if (!Inited)
             {
                 Debug.LogError("Coudn't save userData is null");
                 return;
             }
+
             GoogleFireBaseManager.UpdateUserData();
             var path = Path.Combine(Application.persistentDataPath, SystemInfo.deviceUniqueIdentifier + ".json");
             var json = JsonUtility.ToJson(Instance.UserData);
@@ -158,11 +154,12 @@ namespace Managers
                 var oldJson = File.ReadAllText(path);
                 if (json == oldJson) return;
             }
+
             File.WriteAllText(path, json);
             Debug.Log("Save");
         }
-        
-        
+
+
         public static void AddSaving(Saving saving)
         {
             Instance.UserData.savings.Add(saving);
@@ -173,10 +170,5 @@ namespace Managers
         {
             return Instance.UserData.categories.Where(data => data.IsEmpty == false).Select(data => data.Name);
         }
-
-
-
-
-       
     }
 }

@@ -9,7 +9,6 @@ namespace HelperWindows
 {
     public class TransactionUtils
     {
-
         public static List<Transaction> CashTransactionsPerMonth
         {
             get
@@ -33,8 +32,6 @@ namespace HelperWindows
                 return result;
             }
         }
-
-
 
 
         public static long AmountPerMonth(bool includeCashTransactions, bool includeBankTransactions)
@@ -67,76 +64,69 @@ namespace HelperWindows
         public static void UpdateAllBankTransactions(Action onFinish)
         {
             Events.EnableLoadingScreen.Invoke();
-                MonoBankManager.GetTransactions(bankTransactions =>
+            MonoBankManager.GetTransactions(bankTransactions =>
+            {
+                if (bankTransactions == null)
                 {
-                    if (bankTransactions == null)
-                    {
-                        onFinish();
-                        Events.DisableLoadingScreen.Invoke();
-                        return;
-                    }
-
-                    foreach (var bankTransaction in bankTransactions)
-                    {
-                        if (bankTransaction.amount >= 0)
-                            continue;
-                        var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
-                        if (!UserDataManager.Instance.UserData._transactions.Any(item => item.year == time.Year))
-                        {
-                            UserDataManager.Instance.UserData._transactions.Add(new YearlyTransactions
-                            {
-                                year = time.Year
-                            });
-                        }
-
-                        var yearlyTrans =
-                            UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
-                        if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
-                        {
-                            yearlyTrans.transactions.Add(new MonthlyTransaction
-                            {
-                                month = time.Month
-                            });
-                        }
-
-                        var monthlyTrans = yearlyTrans.transactions.First(item => item.month == time.Month);
-                        if (!monthlyTrans._transactions.Any(item => item.day == time.Day))
-                        {
-                            monthlyTrans._transactions.Add(new DailyTransaction
-                            {
-                                day = time.Day
-                            });
-                        }
-
-                        var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
-                        if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
-                        {
-                            bankTransaction.amount = ((long) Math.Round((float) bankTransaction.amount / 100,
-                                                         MidpointRounding.AwayFromZero)) * -1;
-                            dayTrans.bankTransactions.Add(bankTransaction);
-                        }
-                    }
-
-                    Events.DisableLoadingScreen.Invoke();
                     onFinish();
-                });
+                    Events.DisableLoadingScreen.Invoke();
+                    return;
+                }
+
+                foreach (var bankTransaction in bankTransactions)
+                {
+                    if (bankTransaction.amount >= 0)
+                        continue;
+                    var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
+                    if (!UserDataManager.Instance.UserData._transactions.Any(item => item.year == time.Year))
+                        UserDataManager.Instance.UserData._transactions.Add(new YearlyTransactions
+                        {
+                            year = time.Year
+                        });
+
+                    var yearlyTrans =
+                        UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
+                    if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
+                        yearlyTrans.transactions.Add(new MonthlyTransaction
+                        {
+                            month = time.Month
+                        });
+
+                    var monthlyTrans = yearlyTrans.transactions.First(item => item.month == time.Month);
+                    if (!monthlyTrans._transactions.Any(item => item.day == time.Day))
+                        monthlyTrans._transactions.Add(new DailyTransaction
+                        {
+                            day = time.Day
+                        });
+
+                    var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
+                    if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
+                    {
+                        bankTransaction.amount = (long) Math.Round((float) bankTransaction.amount / 100,
+                            MidpointRounding.AwayFromZero) * -1;
+                        dayTrans.bankTransactions.Add(bankTransaction);
+                    }
+                }
+
+                Events.DisableLoadingScreen.Invoke();
+                onFinish();
+            });
         }
 
-       
-        
+
         public static void UpdateCurrencyRates(Action onFinish)
         {
             Events.EnableLoadingScreen.Invoke();
-                MonoBankManager.GetExchangeRates(onSuccessful =>
-                {
-                    UserDataManager.Instance.UserData.monobankData.currenciesRate = onSuccessful;
-                    onFinish();
-                    Events.DisableLoadingScreen.Invoke();
-                }, onError: () =>
-                {
-                    onFinish();
-                    Events.DisableLoadingScreen.Invoke();
-                });
+            MonoBankManager.GetExchangeRates(onSuccessful =>
+            {
+                UserDataManager.Instance.UserData.monobankData.currenciesRate = onSuccessful;
+                onFinish();
+                Events.DisableLoadingScreen.Invoke();
+            }, () =>
+            {
+                onFinish();
+                Events.DisableLoadingScreen.Invoke();
+            });
         }
 
         public static bool IsThereTransactionInMonth()

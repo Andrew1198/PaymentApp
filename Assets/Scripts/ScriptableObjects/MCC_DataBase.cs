@@ -4,22 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NaughtyAttributes;
-using UnityEditor;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
-    [UnityEngine.CreateAssetMenu(fileName = "MCC_DataBase", menuName = "ScriptableObjects/MCC_DataBase", order = 0)]
-    public class MCC_DataBase : UnityEngine.ScriptableObject
+    [CreateAssetMenu(fileName = "MCC_DataBase", menuName = "ScriptableObjects/MCC_DataBase", order = 0)]
+    public class MCC_DataBase : ScriptableObject
     {
         public List<MccData> mccDataBase = new List<MccData>();
-        
-        [Serializable]
-        public class MccData
-        {
-            public int Code;
-            public string Description;
-        }
 
         public string GetDescriptionByMccCode(int code)
         {
@@ -45,8 +37,15 @@ namespace DefaultNamespace
                     });
                 }
             }
+
             Debug.LogError("Finish");
-            
+        }
+
+        [Serializable]
+        public class MccData
+        {
+            public int Code;
+            public string Description;
         }
     }
 }

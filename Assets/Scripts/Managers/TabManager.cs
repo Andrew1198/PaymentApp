@@ -1,22 +1,23 @@
-﻿using System;
-using System.Linq;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using HelperWindows;
 using Tabs;
 using UnityEngine;
-using UnityEngine.Networking;
 
 #pragma warning disable 0649
 namespace Managers
 {
     public class TabManager : MonoBehaviour
     {
-        
         [SerializeField] private Tab _currentTab;
-        
+
         private void Awake()
         {
             Events.OnUpdateTab += UpdateTab;
+        }
+
+        private void OnDestroy()
+        {
+            Events.OnUpdateTab -= UpdateTab;
         }
 
         public void OpenTab(Tab tab)
@@ -29,11 +30,6 @@ namespace Managers
         private void UpdateTab()
         {
             _currentTab.Init();
-        }
-
-        private void OnDestroy()
-        {
-            Events.OnUpdateTab -= UpdateTab;
         }
 
         public void OnPreviousMonth()
@@ -51,6 +47,7 @@ namespace Managers
 
                 return;
             }
+
             Events.OnUpdateTab?.Invoke();
         }
 
@@ -69,6 +66,7 @@ namespace Managers
 
                 return;
             }
+
             Events.OnUpdateTab?.Invoke();
         }
     }

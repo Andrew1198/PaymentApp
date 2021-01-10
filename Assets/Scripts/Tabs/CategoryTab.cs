@@ -6,49 +6,44 @@ using Managers;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
+
 #pragma warning disable 0649
 namespace Tabs
 {
     [Serializable]
-    class WholeAmount
+    internal class WholeAmount
     {
         public TextMeshProUGUI usdText;
         public TextMeshProUGUI uahText;
     }
-    
+
     public class CategoryTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
         [SerializeField] private WholeAmount wholeAmount;
 
         [SerializeField] private List<CategoryItem> categoryItems = new List<CategoryItem>();
-        
+
         public override void Init()
         {
             base.Init();
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
-            for (var i = 0; i < categoryItems.Count; i++)
-            {
-                categoryItems[i].Init(UserDataManager.Categories[i]);
-            }
-            TransactionUtils.UpdateCurrencyRates(() =>
-            {
-                SetWholeAmount();
-            });
+            for (var i = 0; i < categoryItems.Count; i++) categoryItems[i].Init(UserDataManager.Categories[i]);
+            TransactionUtils.UpdateCurrencyRates(() => { SetWholeAmount(); });
             Inited = true;
         }
 
         private void SetWholeAmount()
         {
-            var amountPerMonth = TransactionUtils.AmountPerMonth(true,false);
+            var amountPerMonth = TransactionUtils.AmountPerMonth(true, false);
             wholeAmount.uahText.text = amountPerMonth.ToString();
 
             wholeAmount.usdText.text =
                 ((int) Math.Round(amountPerMonth / UserDataManager.DollarRate, MidpointRounding.AwayFromZero))
                 .ToString();
         }
-        
-        
+
+
         [Button]
         private void UpdateCategoryItemsFromTemplate()
         {
@@ -62,7 +57,7 @@ namespace Tabs
                 DestroyImmediate(categoryItem.gameObject);
                 categoryItems[i] = newCategoryItem.GetComponent<CategoryItem>();
             }
-            
+
             Debug.Log("Success!");
         }
     }

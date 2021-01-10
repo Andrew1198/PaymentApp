@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
+using UnityEngine.UI;
 
 #pragma warning disable 0649
 namespace Prefabs.Console
@@ -14,13 +13,13 @@ namespace Prefabs.Console
         [HideInInspector] public string _logString;
         [HideInInspector] public string _stackTrace;
         [HideInInspector] public LogType _type;
-        
-        public void Init(Console.LogData logData,Console.LogIcons logIcons)
+
+        public void Init(Console.LogData logData, Console.LogIcons logIcons)
         {
             _logString = logData.LogString;
             _stackTrace = logData.StackTrace;
             _type = logData.Type;
-            SetIcon(logData.Type,logIcons);
+            SetIcon(logData.Type, logIcons);
             textField.text = logData.LogString;
         }
 

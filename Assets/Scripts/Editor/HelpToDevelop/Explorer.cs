@@ -6,7 +6,7 @@ namespace HelpToDevelop
     public class Explorer : MonoBehaviour
     {
         [MenuItem("MyMenu/ShowPersistentDataPath")]
-        static void ShowPersistentDataPath()
+        private static void ShowPersistentDataPath()
         {
             EditorUtility.RevealInFinder(Application.persistentDataPath);
         }

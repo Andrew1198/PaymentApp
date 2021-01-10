@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using Data;
 using Firebase;
 using Firebase.Extensions;
@@ -13,19 +11,18 @@ namespace GoogleFireBase
 {
     public class GoogleFireBaseManager : Singleton<GoogleFireBaseManager>
     {
-        private FirebaseApp app;
+        [HideInInspector] public bool init;
         private FirebaseFirestore _db;
+        private FirebaseApp app;
 
         private FirebaseFirestore Db => _db ?? (_db = FirebaseFirestore.DefaultInstance);
-
-        [HideInInspector] public bool init;
 
         public void Start()
         {
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
             {
                 var dependencyStatus = task.Result;
-                if (dependencyStatus == Firebase.DependencyStatus.Available)
+                if (dependencyStatus == DependencyStatus.Available)
                 {
                     // Create and hold a reference to your FirebaseApp,
                     // where app is a Firebase.FirebaseApp property of your application class.
@@ -35,13 +32,13 @@ namespace GoogleFireBase
                 }
                 else
                 {
-                    Debug.LogError(System.String.Format(
+                    Debug.LogError(string.Format(
                         "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
                     // Firebase Unity SDK is not safe to use here.
                 }
             });
         }
-        
+
         public static void UpdateUserData()
         {
             if (!Instance.init || Application.internetReachability == NetworkReachability.NotReachable)
@@ -49,22 +46,23 @@ namespace GoogleFireBase
                 Debug.LogError("firebase doesn't init");
                 return;
             }
+
             var fireBaseBackup = new FireBaseBackup
             {
-                _transactions =  UserDataManager.YearlyTransactions,
+                _transactions = UserDataManager.YearlyTransactions,
                 categories = UserDataManager.Instance.UserData.categories,
                 savings = UserDataManager.Instance.UserData.savings
             };
             var jsonFireBaseBackUp = JsonUtility.ToJson(fireBaseBackup);
-            GetData((serverFireBaseBackup,doc) =>
+            GetData((serverFireBaseBackup, doc) =>
             {
                 if (doc == null)
                     return;
-                
+
                 var jsonServerFireBaseBackUp = JsonUtility.ToJson(serverFireBaseBackup);
                 if (jsonFireBaseBackUp == jsonServerFireBaseBackUp)
                     return;
-                
+
                 var docRef = Instance.Db.Collection("userData").Document("data");
                 doc[SystemInfo.deviceUniqueIdentifier] = jsonFireBaseBackUp;
                 docRef.SetAsync(doc).ContinueWithOnMainThread(task =>
@@ -77,11 +75,11 @@ namespace GoogleFireBase
             });
         }
 
-        public static void GetData(Action<FireBaseBackup,Dictionary<string,object>> onReceived)
+        public static void GetData(Action<FireBaseBackup, Dictionary<string, object>> onReceived)
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
             {
-                onReceived(null,null);
+                onReceived(null, null);
                 return;
             }
 
@@ -96,17 +94,17 @@ namespace GoogleFireBase
                     {
                         var userData =
                             JsonUtility.FromJson<FireBaseBackup>(data[SystemInfo.deviceUniqueIdentifier].ToString());
-                        onReceived.Invoke(userData,data);
+                        onReceived.Invoke(userData, data);
                     }
                     else
                     {
-                        onReceived.Invoke(null,data);
+                        onReceived.Invoke(null, data);
                         Debug.Log($"Field {snapshot.Id} does not exist!");
                     }
                 }
                 else
                 {
-                    onReceived.Invoke(null,null);
+                    onReceived.Invoke(null, null);
                     Debug.Log($"Document {snapshot.Id} does not exist!");
                 }
             });

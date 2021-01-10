@@ -11,6 +11,5 @@ namespace Data
         public int mcc;
         public long amount;
         public long commissionRate;
-            
     }
 }

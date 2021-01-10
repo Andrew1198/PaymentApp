@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Data;
 using DefaultNamespace;
 using HelperWindows;
 using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 #pragma warning disable 0649
 namespace Items
 {
@@ -17,45 +17,41 @@ namespace Items
         [SerializeField] private TextMeshProUGUI count;
         [SerializeField] private TextMeshProUGUI typeTransaction;
         [SerializeField] private ConfirmWindow confirmWindow;
-        
-        private TransactionItemData _transactionItemData;
-        
-        public void Init(TransactionItemData transaction)
-        {
-            category.text = transaction.Category;
-            comment.text = transaction.Comment;
-            count.text = transaction.Count.ToString();
-            _transactionItemData = transaction;
-            typeTransaction.text = transaction.IsBankTransaction ? "Bank Transaction" : "Cash Transaction";
-        }
+        private float _downClickTime;
 
         private bool _pointerDown;
-        private float _downClickTime;
-        private float _requireHold = 1f;
+        private readonly float _requireHold = 1f;
+
+        private TransactionItemData _transactionItemData;
+
+        private void Reset()
+        {
+            _pointerDown = false;
+        }
+
         private void Update()
         {
             if (_pointerDown)
-            {
                 if (Time.time >= _downClickTime + _requireHold)
                 {
-                    if(_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
+                    if (_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
                         return;
                     confirmWindow.Open(() =>
                     {
                         var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
-                        
-                        var payment = monthlyTransaction._transactions.SelectMany(dailyTransaction => dailyTransaction._transactions)
+
+                        var payment = monthlyTransaction._transactions
+                            .SelectMany(dailyTransaction => dailyTransaction._transactions)
                             .First(transaction => transaction.Time == _transactionItemData.Time);
-                        
+
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
-                          if(dailyTransaction._transactions.Remove(payment))
-                              break;
-                        
+                            if (dailyTransaction._transactions.Remove(payment))
+                                break;
+
                         Events.OnUpdateTab?.Invoke();
                     });
                     Reset();
                 }
-            }
         }
 
 
@@ -70,18 +66,22 @@ namespace Items
             _pointerDown = false;
         }
 
-        private void Reset()
+        public void Init(TransactionItemData transaction)
         {
-            _pointerDown = false;
+            category.text = transaction.Category;
+            comment.text = transaction.Comment;
+            count.text = transaction.Count.ToString();
+            _transactionItemData = transaction;
+            typeTransaction.text = transaction.IsBankTransaction ? "Bank Transaction" : "Cash Transaction";
         }
 
         public class TransactionItemData
         {
-            public long Count;
-            public string Comment;
-            public DateTime Time;
             public string Category;
+            public string Comment;
+            public long Count;
             public bool IsBankTransaction;
+            public DateTime Time;
         }
     }
 }
