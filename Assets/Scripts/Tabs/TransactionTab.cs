@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Data;
-using HelperScripts;
 using HelperWindows;
 using Items;
 using Managers;
@@ -45,36 +43,36 @@ namespace Tabs
                 var monthlyTransaction = GetTransactions();
                 foreach (var dailyTransaction in monthlyTransaction._transactions)
                 {
-                    if (dailyTransaction._transactions.Count == 0 && dailyTransaction.bankTransactions.Count == 0)
+                    if (dailyTransaction._transactions.Count == 0)
                         continue;
                     var daySeparator = Instantiate(daySeparatorPref, content);
                     var data = daySeparator.transform.Find("Data");
                     data.Find("Number").GetComponent<TextMeshProUGUI>().text = dailyTransaction.day.ToString();
-                    var moneySpended = dailyTransaction._transactions.Sum(payment => payment._count) +
-                                       dailyTransaction.bankTransactions.Sum(payment => payment.amount);
+                    var moneySpended = dailyTransaction._transactions.Sum(payment => payment.amount);
                     data.Find("MoneySpent").GetComponent<TextMeshProUGUI>().text = "<color=yellow>" + moneySpended;
 
                     var allTypeTransactions = new List<TransactionItem.TransactionItemData>();
-                    foreach (var transaction in dailyTransaction._transactions)
-                        allTypeTransactions.Add(new TransactionItem.TransactionItemData
-                        {
-                            Count = transaction._count,
-                            Category = transaction._category,
-                            Comment = transaction._comment,
-                            Time = transaction.Time,
-                            IsBankTransaction = false
-                        });
-                    foreach (var transaction in dailyTransaction.bankTransactions)
-                        allTypeTransactions.Add(new TransactionItem.TransactionItemData
-                        {
-                            Count = transaction.amount,
-                            Category = MonoBankManager.Instance.mccDataBase.GetDescriptionByMccCode(transaction.mcc),
-                            Comment = transaction.description,
-                            Time = DateTimeOffset.FromUnixTimeSeconds(transaction.time).LocalDateTime,
-                            IsBankTransaction = true
-                        });
-
-                    allTypeTransactions = allTypeTransactions.OrderByDescending(u => u.Time).ToList();
+                 foreach (var transaction in TransactionUtils.GetTransactionsByType<CashTransaction>(dailyTransaction._transactions))
+                     allTypeTransactions.Add(new TransactionItem.TransactionItemData
+                     {
+                         Count   =  transaction.amount,
+                         Category = transaction.category,
+                         Comment = transaction.comment,
+                         Time = transaction.Time,
+                         IsBankTransaction = false
+                     });
+                 foreach (var transaction in TransactionUtils.GetTransactionsByType<BankTransaction>(dailyTransaction._transactions))
+                 {
+                     allTypeTransactions.Add(new TransactionItem.TransactionItemData
+                     {
+                         Count   =  transaction.amount,
+                         Category = MonoBankManager.Instance.mccDataBase.GetDescriptionByMccCode(transaction.mcc),
+                         Comment = transaction.comment,
+                         Time = transaction.Time,
+                         IsBankTransaction = true
+                     });
+                 }
+                 allTypeTransactions = allTypeTransactions.OrderByDescending(u => u.Time).ToList();
                     foreach (var transaction in allTypeTransactions)
                         Instantiate(transactionItemPref, content).GetComponent<TransactionItem>().Init(transaction);
                 }

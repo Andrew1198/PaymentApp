@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using DefaultNamespace;
 using HelperScripts;
 using HelperWindows;
 using UnityEngine;
-using UnityEngine.Diagnostics;
-
+#pragma warning disable 0649
 namespace Tabs
 {
     [RequireComponent(typeof(CanvasGroup))]

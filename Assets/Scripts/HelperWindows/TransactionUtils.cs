@@ -9,14 +9,18 @@ namespace HelperWindows
 {
     public class TransactionUtils
     {
-        public static List<Transaction> CashTransactionsPerMonth
+
+
+        public static List<CashTransaction> CashTransactionsPerMonth
         {
             get
             {
-                var result = new List<Transaction>();
+                var result = new List<CashTransaction>();
                 foreach (var dailyTransaction in UserDataManager.CurrentMonthlyTransaction._transactions)
-                    result.AddRange(dailyTransaction._transactions);
-
+                    result.AddRange(dailyTransaction._transactions
+                        .Where(transaction => transaction.type == TransactionType.Cash)
+                        .Select(transaction => (CashTransaction)transaction).ToList());
+                
                 return result;
             }
         }
@@ -27,8 +31,10 @@ namespace HelperWindows
             {
                 var result = new List<BankTransaction>();
                 foreach (var dailyTransaction in UserDataManager.CurrentMonthlyTransaction._transactions)
-                    result.AddRange(dailyTransaction.bankTransactions);
-
+                    result.AddRange(dailyTransaction._transactions
+                        .Where(transaction => transaction.type == TransactionType.Bank)
+                        .Select(transaction => (BankTransaction)transaction).ToList());
+                
                 return result;
             }
         }
@@ -39,11 +45,11 @@ namespace HelperWindows
             long result = 0;
             if (includeCashTransactions)
                 result += UserDataManager.CurrentMonthlyTransaction._transactions
-                    .SelectMany(dailyTransaction => dailyTransaction._transactions)
-                    .Sum(transaction => transaction._count);
+                    .SelectMany(dailyTransaction => dailyTransaction._transactions.Where(transaction=>transaction.type == TransactionType.Cash))
+                    .Sum(transaction => transaction.amount);
             if (includeBankTransactions)
                 result += UserDataManager.CurrentMonthlyTransaction._transactions
-                    .SelectMany(dailyTransaction => dailyTransaction.bankTransactions)
+                    .SelectMany(dailyTransaction => dailyTransaction._transactions.Where(transaction=>transaction.type == TransactionType.Bank))
                     .Sum(transaction => transaction.amount);
 
             return result;
@@ -72,14 +78,23 @@ namespace HelperWindows
                     Events.DisableLoadingScreen.Invoke();
                     return;
                 }
-
+                
                 foreach (var bankTransaction in bankTransactions)
-                {
-                    if (bankTransaction.amount >= 0)
-                        continue;
-                    var time = DateTimeOffset.FromUnixTimeSeconds(bankTransaction.time).LocalDateTime;
-                    if (!UserDataManager.Instance.UserData._transactions.Any(item => item.year == time.Year))
-                        UserDataManager.Instance.UserData._transactions.Add(new YearlyTransactions
+                    {
+                        if (bankTransaction.amount >= 0)
+                            continue;
+                        var time = bankTransaction.Time;
+                        if (!UserDataManager.Instance.UserData._transactions.Any(item => item.year == time.Year))
+                        {
+                            UserDataManager.Instance.UserData._transactions.Add(new YearlyTransactions
+                            {
+                                year = time.Year
+                            });
+                        }
+
+                        var yearlyTrans =
+                            UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
+                        if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
                         {
                             year = time.Year
                         });
@@ -89,22 +104,20 @@ namespace HelperWindows
                     if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
                         yearlyTrans.transactions.Add(new MonthlyTransaction
                         {
-                            month = time.Month
-                        });
+                            monthlyTrans._transactions.Add(new DailyTransaction
+                            {
+                                day = time.Day
+                            });
+                        }
 
-                    var monthlyTrans = yearlyTrans.transactions.First(item => item.month == time.Month);
-                    if (!monthlyTrans._transactions.Any(item => item.day == time.Day))
-                        monthlyTrans._transactions.Add(new DailyTransaction
+                        var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
+                        var dayBankTransactions = GetTransactionsByType<BankTransaction>(dayTrans._transactions);
+                        if (!dayBankTransactions.Any(item => item.id == bankTransaction.id))
                         {
-                            day = time.Day
-                        });
-
-                    var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
-                    if (!dayTrans.bankTransactions.Any(item => item.id == bankTransaction.id))
-                    {
-                        bankTransaction.amount = (long) Math.Round((float) bankTransaction.amount / 100,
-                            MidpointRounding.AwayFromZero) * -1;
-                        dayTrans.bankTransactions.Add(bankTransaction);
+                            bankTransaction.amount = (long) Math.Round((float) bankTransaction.amount / 100,
+                                                         MidpointRounding.AwayFromZero) * -1;
+                            dayTrans._transactions.Add(bankTransaction);
+                        }
                     }
                 }
 
@@ -132,6 +145,18 @@ namespace HelperWindows
         public static bool IsThereTransactionInMonth()
         {
             return UserDataManager.CurrentMonthlyTransaction._transactions.Count != 0;
+        }
+
+        public static List<T> GetTransactionsByType<T>(List<TransactionBase> transactions)where T : TransactionBase
+        {
+            TransactionType type = TransactionType.Bank;
+            if (typeof(T) == typeof(BankTransaction))
+                type = TransactionType.Bank;
+            else
+            if (typeof(T) == typeof(CashTransaction))
+                type = TransactionType.Cash;
+
+            return transactions.Where(transaction => transaction.type == type).Select(transaction => (T) transaction).ToList();
         }
     }
 }

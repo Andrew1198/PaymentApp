@@ -91,19 +91,14 @@ namespace Managers
         }
 
 
-        public static CategoryData[] Categories => Instance.UserData.categories;
-
-        public static long AmountPerDay
+        public static CategoryData[] Categories
         {
-            get
-            {
-                long result = 0;
-                result += CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
-                result += CurrentDailyTransactions.bankTransactions.Sum(transaction => transaction.amount);
-                return result;
-            }
+            get => Instance.UserData.categories;
         }
-
+        
+        public static long AmountPerDay=>CurrentDailyTransactions._transactions.Sum(transaction => transaction.amount);
+       
+        
         public static long AmountPerWeek
         {
             get
@@ -111,11 +106,10 @@ namespace Managers
                 long result = 0;
                 for (var i = 0; i < 7; i++)
                 {
-                    SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i > 0 ? 1 : 0));
-                    result += CurrentDailyTransactions._transactions.Sum(transaction => transaction._count);
-                    result += CurrentDailyTransactions.bankTransactions.Sum(transaction => transaction.amount);
+                    SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i>0?1:0));
+                    result += CurrentDailyTransactions._transactions.Sum(transaction => transaction.amount);
                 }
-
+                
                 SelectedDate = SelectedDate.AddDays(6);
                 return result;
             }
@@ -138,8 +132,9 @@ namespace Managers
 
         public static void Save()
         {
-            CurrentMonthlyTransaction._transactions.RemoveAll(transaction =>
-                transaction._transactions.Count == 0 && transaction.bankTransactions.Count == 0);
+
+            CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
+
             if (!Inited)
             {
                 Debug.LogError("Coudn't save userData is null");

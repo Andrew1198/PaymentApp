@@ -3,13 +3,27 @@ using System;
 namespace Data
 {
     [Serializable]
-    public class BankTransaction
+    public class BankTransaction : TransactionBase
     {
         public string id;
-        public long time;
-        public string description;
         public int mcc;
-        public long amount;
-        public long commissionRate;
+        
+        public override DateTime Time
+        {
+            get => DateTimeOffset.FromUnixTimeSeconds(time).LocalDateTime;
+            set {}
+        }
+
+        public BankTransaction(BankTransactionInitData initData) : base(initData)
+        {
+            mcc = initData.mcc;
+            id = initData.id;
+        }
+
+        public class BankTransactionInitData : TransactionBaseInitData
+        {
+            public string id;
+            public int mcc;
+        }
     }
 }
