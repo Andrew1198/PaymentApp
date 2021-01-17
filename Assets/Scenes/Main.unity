@@ -643,6 +643,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 560103410014227909, guid: 2e272ca3c52bb844e8a602cd6e139142,
+        type: 3}
+      propertyPath: m_text
+      value: 'Month name
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 560103410014227909, guid: 2e272ca3c52bb844e8a602cd6e139142,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 54.95
+      objectReference: {fileID: 0}
     - target: {fileID: 1083392286050786205, guid: 2e272ca3c52bb844e8a602cd6e139142,
         type: 3}
       propertyPath: m_AnchorMin.y

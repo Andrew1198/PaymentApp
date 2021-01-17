@@ -18,10 +18,9 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            foreach (Transform wallet in savingContainer) Destroy(wallet.gameObject);
-
-            TransactionUtils.UpdateCurrencyRates(() =>
+            InitTabByTabData(() =>
             {
+                foreach (Transform wallet in savingContainer) Destroy(wallet.gameObject);
                 var sumSavingUsd = 0f;
                 foreach (var saving in UserDataManager.Savings)
                 {
@@ -31,10 +30,9 @@ namespace Tabs
                     else
                         sumSavingUsd += saving.count;
                 }
-
                 wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
+                Inited = true;
             });
-            Inited = true;
         }
 
         private void SetSaving(Saving saving)

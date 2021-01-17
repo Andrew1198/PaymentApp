@@ -107,7 +107,7 @@
 5961Mail Order Houses Including Catalog Order Stores, Book/Record Clubs (No longer permitted for .S. original presentments)
 5962Direct Marketing - Travel Related Arrangements Services
 5963Door - to - Door Sales
-5964Direct Marketing - Catalog Merchant
+5964Direct Marketing - Others
 5965Direct Marketing - Catalog and Catalog and Retail Merchant Direct Marketing - Outbound Telemarketing Merchant
 5967Direct Marketing -Inbound Teleservices Merchant
 5968Direct Marketing - Continuity/Subscription Merchant
@@ -199,7 +199,7 @@
 7929Bands. Orchestras, and Miscellaneous Entertainers (Not Elsewhere Classified)
 7932Billiard and Pool Establishments
 7933Bowling Alleys
-7941Commercial Sports, Athletic Fields, Professional Sport Clubs, and Sport Promoters
+7941Sport
 7991Tourist Attractions and Exhibits
 7992Golf Courses - Public
 7993Video Amusement Game Supplies
@@ -227,7 +227,7 @@
 8241Correspondence Schools
 8244Business and Secretarial Schools
 8249Vocational Schools and Trade Schools
-8299Schools and Educational Services ( Not Elsewhere Classified)
+8299Others
 8351Child Care Services
 8398Charitable and Social Service Organizations
 8641Civic, Fraternal, and Social Associations

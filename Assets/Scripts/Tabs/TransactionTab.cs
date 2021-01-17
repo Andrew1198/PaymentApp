@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using HelperScripts;
 using HelperWindows;
 using Items;
 using Managers;
@@ -19,20 +20,28 @@ namespace Tabs
         [SerializeField] private GameObject daySeparatorPref;
         [SerializeField] private Transform content;
 
+
+        private void Awake()
+        {
+            data.needToUpdateCurrencyRate = false;
+        }
+        
         public override void Init()
         {
             base.Init();
-            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
-            Draw();
-            Inited = true;
+            InitTabByTabData(() =>
+            {
+                Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
+                Draw();
+                Inited = true;
+            });
         }
 
         private void Draw()
         {
             foreach (Transform child in content)
                 Destroy(child.gameObject);
-            TransactionUtils.UpdateAllBankTransactions(() =>
-            {
+          
                 var monthlyTransaction = GetTransactions();
                 foreach (var dailyTransaction in monthlyTransaction._transactions)
                 {
@@ -71,7 +80,7 @@ namespace Tabs
                 }
 
                 LayoutRebuilder.ForceRebuildLayoutImmediate(content as RectTransform);
-            });
+            
         }
 
         private MonthlyTransaction GetTransactions()

@@ -8,45 +8,45 @@
       "hash": "b46e9e8fde10448accd59ecabd09fbe296ef62f7"
     },
     "com.google.external-dependency-manager": {
-      "version": "1.2.161",
+      "version": "1.2.163",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.app": {
-      "version": "6.16.1",
+      "version": "7.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.external-dependency-manager": "1.2.161"
+        "com.google.external-dependency-manager": "1.2.163"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.auth": {
-      "version": "6.16.1",
+      "version": "7.0.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.app": "6.16.1"
+        "com.google.firebase.app": "7.0.2"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.firestore": {
-      "version": "6.16.1",
+      "version": "7.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.app": "6.16.1"
+        "com.google.firebase.app": "7.0.2"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.google.firebase.storage": {
-      "version": "6.16.1",
+      "version": "7.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.google.firebase.auth": "6.16.1"
+        "com.google.firebase.auth": "7.0.2"
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
@@ -64,7 +64,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -79,33 +79,19 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ide.vscode": {
-      "version": "1.2.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.test-framework": {
-      "version": "1.1.16",
+      "version": "1.1.20",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.ext.nunit": "1.0.0",
+        "com.unity.ext.nunit": "1.0.6",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.textmeshpro": {
-      "version": "3.0.1",
+      "version": "3.0.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {

@@ -236,7 +236,7 @@ MonoBehaviour:
   - Code: 5963
     Description: Door - to - Door Sales
   - Code: 5964
-    Description: Direct Marketing - Catalog Merchant
+    Description: Direct Marketing - Others
   - Code: 5965
     Description: Direct Marketing - Catalog and Catalog and Retail Merchant Direct
       Marketing - Outbound Telemarketing Merchant
@@ -428,8 +428,7 @@ MonoBehaviour:
   - Code: 7933
     Description: Bowling Alleys
   - Code: 7941
-    Description: Commercial Sports, Athletic Fields, Professional Sport Clubs, and
-      Sport Promoters
+    Description: Sport
   - Code: 7991
     Description: Tourist Attractions and Exhibits
   - Code: 7992
@@ -488,7 +487,7 @@ MonoBehaviour:
   - Code: 8249
     Description: Vocational Schools and Trade Schools
   - Code: 8299
-    Description: Schools and Educational Services ( Not Elsewhere Classified)
+    Description: Others
   - Code: 8351
     Description: Child Care Services
   - Code: 8398

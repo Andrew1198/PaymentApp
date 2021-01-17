@@ -17,20 +17,29 @@ namespace Tabs
         public TextMeshProUGUI uahText;
     }
 
+    
     public class CategoryTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
         [SerializeField] private WholeAmount wholeAmount;
 
         [SerializeField] private List<CategoryItem> categoryItems = new List<CategoryItem>();
+        
+        private void Awake()
+        {
+            data.needToUpdateBankTransactions = false;
+        }
 
         public override void Init()
         {
             base.Init();
-            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
-            for (var i = 0; i < categoryItems.Count; i++) categoryItems[i].Init(UserDataManager.Categories[i]);
-            TransactionUtils.UpdateCurrencyRates(() => { SetWholeAmount(); });
-            Inited = true;
+            InitTabByTabData(() =>
+            {
+                Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
+                for (var i = 0; i < categoryItems.Count; i++) categoryItems[i].Init(UserDataManager.Categories[i]);
+                SetWholeAmount();
+                Inited = true;
+            });
         }
 
         private void SetWholeAmount()

@@ -29,7 +29,7 @@ namespace HelperScripts
             yield return new WaitUntil(predicate);
             method();
         }
-
+        
         public static void Invoke(Action method, float time)
         {
             Instance.StartCoroutine(InvokeCor(method, time));

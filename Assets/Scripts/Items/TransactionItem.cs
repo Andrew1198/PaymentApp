@@ -46,7 +46,10 @@ namespace Items
 
                         foreach (var dailyTransaction in monthlyTransaction._transactions)
                             if (dailyTransaction._transactions.Remove(payment))
+                            {
+                                UserDataManager.Instance.UserData.deletedTransactions.Add(payment);
                                 break;
+                            }
 
                         Events.OnUpdateTab?.Invoke();
                     });

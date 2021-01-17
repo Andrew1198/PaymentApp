@@ -30,9 +30,9 @@ namespace Tabs
         public override void Init()
         {
             base.Init();
-            Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
-            TransactionUtils.UpdateAllBankTransactions(() =>
+            InitTabByTabData(() =>
             {
+                Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
                 SetAmounts();
                 SetOverviewItems(GetTransactionsPerMonthByMcc(), mccContainer);
                 SetOverviewItems(GetBankTransactionsDescriptions(), descriptionContainer);
@@ -44,9 +44,7 @@ namespace Tabs
 
         private void SetAmounts()
         {
-            TransactionUtils.UpdateCurrencyRates(() =>
-            {
-                var amountPerMonth = TransactionUtils.AmountPerMonth(true, true);
+            var amountPerMonth = TransactionUtils.AmountPerMonth(true, true);
                 if (UserDataManager.SelectedDate.Month == DateTime.Now.Month)
                 {
                     var dayAvgValue = Math.Round(amountPerMonth / (float) DateTime.Today.Day,
@@ -89,7 +87,6 @@ namespace Tabs
                     WeekAmountOrMonth.text = "Month\n" + amountPerMonth + "(" + weekAmountPerMonthUsd + ")";
                     Spent.gameObject.SetActive(false);
                 }
-            });
         }
 
         private void SetOverviewItems(List<OverviewItem.OverviewData> overviewsData, Transform content)

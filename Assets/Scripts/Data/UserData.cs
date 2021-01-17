@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -9,6 +10,7 @@ namespace Data
         public List<Saving> savings = new List<Saving>();
         public CategoryData[] categories = new CategoryData[14];
         public List<YearlyTransactions> _transactions = new List<YearlyTransactions>();
+        public List<Transaction> deletedTransactions = new List<Transaction>();
         public MonobankData monobankData = new MonobankData();
 
         public UserData()
