@@ -80,37 +80,45 @@ namespace HelperWindows
                 }
                 
                 foreach (var bankTransaction in bankTransactions)
-                    {
-                        if (bankTransaction.amount >= 0)
+                {
+                        if (bankTransaction.amount >= 0 || UserDataManager.Instance.UserData.deletedTransactions.Any(
+                            transaction =>
+                                transaction.type == TransactionType.Bank && ((BankTransaction) transaction).id == bankTransaction.id
+                        ))
                             continue;
+                        
                         var time = bankTransaction.Time;
+
+                        YearlyTransactions yearlyTransactions;
                         if (!UserDataManager.Instance.UserData._transactions.Any(item => item.year == time.Year))
                         {
                             UserDataManager.Instance.UserData._transactions.Add(new YearlyTransactions
                             {
                                 year = time.Year
                             });
+                            yearlyTransactions = UserDataManager.Instance.UserData._transactions.Last();
                         }
+                        else
+                            yearlyTransactions = UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
+                        
 
-                        var yearlyTrans =
-                            UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
                         if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
-                        {
-                            year = time.Year
-                        });
+                            yearlyTrans.transactions.Add(new MonthlyTransaction
+                            {
+                               month = time.Month
+                            });
 
-                    var yearlyTrans =
-                        UserDataManager.Instance.UserData._transactions.First(item => item.year == time.Year);
-                    if (!yearlyTrans.transactions.Any(item => item.month == time.Month))
-                        yearlyTrans.transactions.Add(new MonthlyTransaction
-                        {
+                        var monthlyTrans =
+                            yearlyTrans.transactions.First(transaction => transaction.month == time.Month);
+
+                        if (!monthlyTrans._transactions.Any(transaction => transaction.day == time.Day))
                             monthlyTrans._transactions.Add(new DailyTransaction
                             {
                                 day = time.Day
                             });
-                        }
 
                         var dayTrans = monthlyTrans._transactions.First(item => item.day == time.Day);
+                        
                         var dayBankTransactions = GetTransactionsByType<BankTransaction>(dayTrans._transactions);
                         if (!dayBankTransactions.Any(item => item.id == bankTransaction.id))
                         {
@@ -119,8 +127,7 @@ namespace HelperWindows
                             dayTrans._transactions.Add(bankTransaction);
                         }
                     }
-                }
-
+                
                 Events.DisableLoadingScreen.Invoke();
                 onFinish();
             });
