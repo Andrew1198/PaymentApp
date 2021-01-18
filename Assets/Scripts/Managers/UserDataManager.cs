@@ -16,10 +16,16 @@ namespace Managers
         public static bool Inited;
         public readonly UserData UserData;
         private DateTime _selectedDate;
+#if UNITY_EDITOR
+        public UserData OldUserData;
+#endif
 
         private UserDataManager(UserData data)
         {
             UserData = data;
+#if UNITY_EDITOR
+            OldUserData = data;
+#endif
         }
 
         public static List<Saving> Savings => Instance.UserData.savings;
@@ -132,7 +138,6 @@ namespace Managers
 
         public static void Save()
         {
-
             CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
 
             if (!Inited)
