@@ -34,6 +34,11 @@ namespace Managers
 
         }
 
+        private void OnApplicationQuit()
+        {
+            UserDataManager.Save();
+        }
+
         private void SetUserDataFromLocal()
         {
             var path = Path.Combine(Application.persistentDataPath, SystemInfo.deviceUniqueIdentifier + ".json");
@@ -46,6 +51,17 @@ namespace Managers
                 var json = File.ReadAllText(path);
                 UserDataManager.Init(JsonUtility.FromJson<UserData>(json));
             }
+        }
+        
+        
+        private void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
+            {
+                UserDataManager.Save(true);
+            }
+#endif
         }
     }
 }

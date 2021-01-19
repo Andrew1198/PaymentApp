@@ -27,19 +27,8 @@ namespace Managers
         private RequestStatus currencyRequsetStatus = RequestStatus.Updated;
 
         private RequestStatus traansactionRequsetStatus = RequestStatus.Updated;
-
-        private void Update()
-        {
-#if UNITY_EDITOR
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
-            {
-                UserDataManager.Save();
-                Debug.LogError("Save");
-            }
-#endif
-        }
-
-        public static void GetTransactions(Action<BankTransaction[]> onFinish)
+        
+        public static void GetTransactions(Action<List<BankTransaction>> onFinish)
         {
             if (DateTimeOffset.Now.ToUnixTimeSeconds() -
                 UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions <
@@ -64,7 +53,22 @@ namespace Managers
                 {
                     UserDataManager.Instance.UserData.monobankData.updateInfo.LastUpdateBankTransactions =
                         DateTimeOffset.Now.ToUnixTimeSeconds();
-                    onFinish(JsonHelper.GetJsonArray<BankTransaction>(result));
+                    var transactions = JsonHelper.GetJsonArray<PaymentData>(result);
+                    var bankTransactions = new List<BankTransaction>();
+                    foreach (var paymentData in transactions)
+                    {
+                        bankTransactions.Add(new BankTransaction(new BankTransaction.BankTransactionInitData
+                        {
+                            amount = paymentData.amount,
+                            comment = paymentData.description,
+                            id = paymentData.id,
+                            mcc = paymentData.mcc,
+                            time = paymentData.time,
+                            type = TransactionType.Bank
+                        }));
+                    }
+                    
+                    onFinish(bankTransactions);
                     Instance.traansactionRequsetStatus = RequestStatus.Updated;
                 },
                 header: new KeyValuePair<string, string>("X-Token",
@@ -188,6 +192,16 @@ namespace Managers
         {
             Updated,
             Updating
+        }
+
+        [Serializable]
+        class PaymentData
+        {
+            public string id;
+            public long time;
+            public string description;
+            public int mcc;
+            public long amount;
         }
     }
 }

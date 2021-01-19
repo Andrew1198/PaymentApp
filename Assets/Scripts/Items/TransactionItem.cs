@@ -6,6 +6,7 @@ using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 #pragma warning disable 0649
 namespace Items
@@ -34,8 +35,6 @@ namespace Items
             if (_pointerDown)
                 if (Time.time >= _downClickTime + _requireHold)
                 {
-                    if (_transactionItemData.IsBankTransaction) // удалять можем только транзакции за наличные
-                        return;
                     confirmWindow.Open(() =>
                     {
                         var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;

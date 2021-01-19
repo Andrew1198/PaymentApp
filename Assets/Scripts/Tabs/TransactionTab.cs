@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data;
+using HelperScripts;
 using HelperWindows;
 using Items;
 using Managers;
@@ -37,10 +38,9 @@ namespace Tabs
 
         private void Draw()
         {
-            foreach (Transform child in content)
-                Destroy(child.gameObject);
-          
-                var monthlyTransaction = GetTransactions();
+            content.DeleteChildren();
+            
+            var monthlyTransaction = GetTransactions();
                 foreach (var dailyTransaction in monthlyTransaction._transactions)
                 {
                     if (dailyTransaction._transactions.Count == 0)

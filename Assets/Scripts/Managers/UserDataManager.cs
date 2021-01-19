@@ -6,6 +6,7 @@ using System.Linq;
 using Data;
 using DefaultNamespace;
 using GoogleFireBase;
+using HelperScripts;
 using UnityEngine;
 
 namespace Managers
@@ -24,7 +25,7 @@ namespace Managers
         {
             UserData = data;
 #if UNITY_EDITOR
-            OldUserData = data;
+            OldUserData = Utility.DeepCopy(data);
 #endif
         }
 
@@ -136,7 +137,7 @@ namespace Managers
         }
 
 
-        public static void Save()
+        public static void Save(bool fromCtrl_C = false)
         {
             CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
 
@@ -154,6 +155,17 @@ namespace Managers
                 var oldJson = File.ReadAllText(path);
                 if (json == oldJson) return;
             }
+            
+#if UNITY_EDITOR
+            if (!fromCtrl_C)
+            {
+                Instance.OldUserData.monobankData = Instance.UserData.monobankData;
+                json = JsonUtility.ToJson(Instance.OldUserData);
+                File.WriteAllText(path, json);
+                Debug.Log("Light Save");
+                return;
+            }
+#endif
 
             File.WriteAllText(path, json);
             Debug.Log("Save");
