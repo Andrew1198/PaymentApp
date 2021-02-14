@@ -23,6 +23,7 @@ namespace Managers
         {
             Debug.Log($"<color=yellow>OnApplicationPause isPaused = {isPaused}</color>");
 
+            #if !UNITY_EDITOR
           if (isPaused)
                 UserDataManager.Save();
             else
@@ -31,7 +32,7 @@ namespace Managers
                 UserDataManager.SelectedDate = DateTime.Now;
                 Events.OnUpdateTab?.Invoke();
             }
-
+          #endif
         }
 
         private void OnApplicationQuit()

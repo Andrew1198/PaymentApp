@@ -151,9 +151,9 @@ namespace DefaultNamespace
                 case "Day":
                 {
                     var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
-                    foreach (var dailyTransaction in monthlyTransaction._transactions)
+                    foreach (var dailyTransaction in monthlyTransaction.transactions)
                     {
-                        long sum = dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        long sum = dailyTransaction.GetALlTypeTransactions().Sum(transaction => transaction.amount);
                         
                         points.Add(new Vector2(dailyTransaction.day, sum));
                     }
@@ -162,12 +162,12 @@ namespace DefaultNamespace
                 }
                 case "Month":
                 {
-                    var yearlyTransaction = UserDataManager.CurrentYearlyTransactions;
+                    var yearlyTransaction = UserDataManager.CurrentYearlyTransaction;
                     foreach (var monthlyTransaction in yearlyTransaction.transactions)
                     {
                         long sum = 0;
-                        foreach (var dailyTransaction in monthlyTransaction._transactions)
-                            sum += dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        foreach (var dailyTransaction in monthlyTransaction.transactions)
+                            sum += dailyTransaction.GetALlTypeTransactions().Sum(transaction => transaction.amount);
                         
 
                         points.Add(new Vector2(monthlyTransaction.month, sum));
@@ -183,8 +183,8 @@ namespace DefaultNamespace
                     {
                         long sum = 0;
                         foreach (var monthlyTransaction in yearlyTransaction.transactions)
-                        foreach (var dailyTransaction in monthlyTransaction._transactions)
-                            sum+=dailyTransaction._transactions.Sum(transaction => transaction.amount);
+                        foreach (var dailyTransaction in monthlyTransaction.transactions)
+                            sum+=dailyTransaction.GetALlTypeTransactions().Sum(transaction => transaction.amount);
                         
 
                         points.Add(new Vector2(yearlyTransaction.year, sum));

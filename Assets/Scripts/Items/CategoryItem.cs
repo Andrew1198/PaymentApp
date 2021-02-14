@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Windows;
+using Windows.HelperWindows;
 using Data;
 using HelperWindows;
 using Managers;

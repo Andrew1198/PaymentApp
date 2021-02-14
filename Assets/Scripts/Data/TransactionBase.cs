@@ -1,35 +1,36 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Data
 {
     [Serializable]
-    public abstract class TransactionBase
+    public class TransactionBase
     {
+        [SerializeField] protected long _time;
+        [SerializeField] protected long _amount;
+        public string description;
+        [SerializeField] protected string _category;
         public TransactionType type;
-        [SerializeField] protected long time;
-        public abstract DateTime Time { get; set; }
-        public long amount;
-        public string comment;
 
-        protected TransactionBase(TransactionBaseInitData initData)
+        public virtual long amount
         {
-            type = initData.type;
-            time = initData.time;
-            amount = initData.amount;
-            comment = initData.comment;
+            get => _amount;
+            set => _amount = value;
+        }
+
+        public virtual DateTime time
+        {
+            get;
+            set;
+        }
+        public virtual string category
+        {
+            get => _category;
+            set => _category = value;
         }
         
-        
-        public class TransactionBaseInitData
-        {
-            public TransactionType type;
-            public long time;
-            public long amount;
-            public string comment;
-        }
     }
-    
+    [Serializable]
     public enum TransactionType
     {
         Cash,

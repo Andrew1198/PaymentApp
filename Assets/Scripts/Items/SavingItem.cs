@@ -1,5 +1,6 @@
-﻿using Data;
-using HelperWindows.ManageWalletWindow;
+﻿using Windows;
+using Windows.HelperWindows.ManageWalletWindow;
+using Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -50,13 +50,13 @@ namespace HelperScripts
         [Button]
         private void EnableLoadingScreen()
         {
-            Events.EnableLoadingScreen.Invoke();
+            WindowsManager.EnableDisableLoadingWindow();
         }
 
         [Button]
         private void DisableLoadingScreen()
         {
-            Events.DisableLoadingScreen.Invoke();
+            WindowsManager.EnableDisableLoadingWindow(false);
         }
         public static T DeepCopy<T>(T other)
         {

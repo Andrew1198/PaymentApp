@@ -47,24 +47,24 @@ namespace Managers
             }
         }
 
-        public static List<YearlyTransactions> YearlyTransactions => Instance.UserData._transactions;
+        public static List<YearlyTransactions> YearlyTransactions => Instance.UserData.transactions;
 
-        public static YearlyTransactions CurrentYearlyTransactions
+        public static YearlyTransactions CurrentYearlyTransaction
         {
             get
             {
-                var tmp = Instance.UserData._transactions.FirstOrDefault(transactions =>
+                var yearlyTransaction = Instance.UserData.transactions.FirstOrDefault(transactions =>
                     transactions.year == Instance._selectedDate.Year);
-                if (tmp == null)
+                if (yearlyTransaction == null)
                 {
-                    Instance.UserData._transactions.Add(new YearlyTransactions
+                    Instance.UserData.transactions.Add(new YearlyTransactions
                     {
                         year = Instance._selectedDate.Year
                     });
-                    tmp = Instance.UserData._transactions.Last();
+                    yearlyTransaction = Instance.UserData.transactions.Last();
                 }
 
-                return tmp;
+                return yearlyTransaction;
             }
         }
 
@@ -72,38 +72,35 @@ namespace Managers
         {
             get
             {
-                if (!CurrentYearlyTransactions.transactions.Any(item => item.month == Instance._selectedDate.Month))
-                    CurrentYearlyTransactions.transactions.Add(new MonthlyTransaction
+                if (!CurrentYearlyTransaction.transactions.Any(item => item.month == Instance._selectedDate.Month))
+                    CurrentYearlyTransaction.transactions.Add(new MonthlyTransaction
                     {
                         month = Instance._selectedDate.Month
                     });
-                return CurrentYearlyTransactions.transactions.First(item => item.month == Instance._selectedDate.Month);
+                return CurrentYearlyTransaction.transactions.First(item => item.month == Instance._selectedDate.Month);
             }
         }
 
 
-        public static DailyTransaction CurrentDailyTransactions
+        public static DailyTransaction CurrentDailyTransaction
         {
             get
             {
-                if (!CurrentMonthlyTransaction._transactions.Any(transaction =>
+                if (!CurrentMonthlyTransaction.transactions.Any(transaction =>
                     transaction.day == Instance._selectedDate.Day))
-                    CurrentMonthlyTransaction._transactions.Add(new DailyTransaction
+                    CurrentMonthlyTransaction.transactions.Add(new DailyTransaction
                     {
                         day = Instance._selectedDate.Day
                     });
-                return CurrentMonthlyTransaction._transactions.First(transaction =>
+                return CurrentMonthlyTransaction.transactions.First(transaction =>
                     transaction.day == Instance._selectedDate.Day);
             }
         }
 
 
-        public static CategoryData[] Categories
-        {
-            get => Instance.UserData.categories;
-        }
-        
-        public static long AmountPerDay=>CurrentDailyTransactions._transactions.Sum(transaction => transaction.amount);
+        public static CategoryData[] CurrentCategories => Instance.UserData.categories;
+
+        public static long AmountPerDay=>CurrentDailyTransaction.GetALlTypeTransactions().Sum(transaction => transaction.amount);
        
         
         public static long AmountPerWeek
@@ -114,7 +111,7 @@ namespace Managers
                 for (var i = 0; i < 7; i++)
                 {
                     SelectedDate = SelectedDate.Subtract(TimeSpan.FromDays(i>0?1:0));
-                    result += CurrentDailyTransactions._transactions.Sum(transaction => transaction.amount);
+                    result += CurrentDailyTransaction.GetALlTypeTransactions().Sum(transaction => transaction.amount);
                 }
                 
                 SelectedDate = SelectedDate.AddDays(6);
@@ -128,18 +125,10 @@ namespace Managers
             SelectedDate = DateTime.Now;
             Inited = true;
         }
-
-        public static int GetWeekNumber(DateTime dt)
-        {
-            var curr = CultureInfo.CurrentCulture;
-            var week = curr.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
-            return week;
-        }
-
-
+        
         public static void Save(bool fromCtrl_C = false)
         {
-            CurrentMonthlyTransaction._transactions.RemoveAll(transaction => transaction._transactions.Count == 0);
+            CurrentMonthlyTransaction.transactions.RemoveAll(transaction => transaction.GetALlTypeTransactions().Count == 0);
 
             if (!Inited)
             {
@@ -155,7 +144,7 @@ namespace Managers
                 var oldJson = File.ReadAllText(path);
                 if (json == oldJson) return;
             }
-            
+
 #if UNITY_EDITOR
             if (!fromCtrl_C)
             {
@@ -176,11 +165,6 @@ namespace Managers
         {
             Instance.UserData.savings.Add(saving);
             Events.OnUpdateTab?.Invoke();
-        }
-
-        public static IEnumerable<string> GetCategoriesName()
-        {
-            return Instance.UserData.categories.Where(data => data.IsEmpty == false).Select(data => data.Name);
         }
     }
 }

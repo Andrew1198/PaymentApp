@@ -7,6 +7,6 @@ namespace Data
     public class MonthlyTransaction
     {
         public int month;
-        public List<DailyTransaction> _transactions = new List<DailyTransaction>();
+        public List<DailyTransaction> transactions = new List<DailyTransaction>();
     }
 }

@@ -1,25 +1,16 @@
 ﻿using System;
+using UnityEngine;
+
 #pragma warning disable 0649
 namespace Data
 {
     [Serializable]
     public class CashTransaction : TransactionBase
     {
-        public override DateTime Time
+        public override DateTime time
         {
-            get => DateTime.FromBinary(time);
-            set => time = value.ToBinary();
-        }
-        public string category;
-
-        public CashTransaction(CashTransactionInitData initData): base(initData)
-        {
-            category = initData.category;
-        }
-
-        public class CashTransactionInitData : TransactionBaseInitData
-        {
-            public string category;
+            get => DateTime.FromBinary(_time);
+            set => _time = value.ToBinary();
         }
     }
     

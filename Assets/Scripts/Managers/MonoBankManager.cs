@@ -56,17 +56,7 @@ namespace Managers
                     var transactions = JsonHelper.GetJsonArray<PaymentData>(result);
                     var bankTransactions = new List<BankTransaction>();
                     foreach (var paymentData in transactions)
-                    {
-                        bankTransactions.Add(new BankTransaction(new BankTransaction.BankTransactionInitData
-                        {
-                            amount = paymentData.amount,
-                            comment = paymentData.description,
-                            id = paymentData.id,
-                            mcc = paymentData.mcc,
-                            time = paymentData.time,
-                            type = TransactionType.Bank
-                        }));
-                    }
+                        bankTransactions.Add(new BankTransaction(paymentData));
                     
                     onFinish(bankTransactions);
                     Instance.traansactionRequsetStatus = RequestStatus.Updated;
@@ -195,7 +185,7 @@ namespace Managers
         }
 
         [Serializable]
-        class PaymentData
+        public class PaymentData
         {
             public string id;
             public long time;

@@ -1,71 +1,42 @@
 using System;
 using System.Linq;
+using Windows;
+using Windows.HelperWindows;
 using DefaultNamespace;
-using HelperWindows;
 using Managers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+
 
 #pragma warning disable 0649
 namespace Items
 {
-    public class TransactionItem : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class TransactionItem : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI category;
         [SerializeField] private TextMeshProUGUI comment;
         [SerializeField] private TextMeshProUGUI count;
         [SerializeField] private TextMeshProUGUI typeTransaction;
         [SerializeField] private ConfirmWindow confirmWindow;
-        private float _downClickTime;
-
-        private bool _pointerDown;
-        private readonly float _requireHold = 1f;
-
+        
         private TransactionItemData _transactionItemData;
 
-        private void Reset()
+        public void OnHoldActivate()
         {
-            _pointerDown = false;
-        }
+            WindowsManager.ConfirmWindow(() =>
+            {
+                var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
 
-        private void Update()
-        {
-            if (_pointerDown)
-                if (Time.time >= _downClickTime + _requireHold)
-                {
-                    confirmWindow.Open(() =>
-                    {
-                        var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
+                var payment = monthlyTransaction.transactions
+                    .SelectMany(dailyTransaction => dailyTransaction.GetALlTypeTransactions())
+                    .First(transaction => transaction.time == _transactionItemData.Time);
 
-                        var payment = monthlyTransaction._transactions
-                            .SelectMany(dailyTransaction => dailyTransaction._transactions)
-                            .First(transaction => transaction.Time == _transactionItemData.Time);
+                foreach (var dailyTransaction in monthlyTransaction.transactions)
+                    if (dailyTransaction.RemoveTransaction(payment))
+                        break;
 
-                        foreach (var dailyTransaction in monthlyTransaction._transactions)
-                            if (dailyTransaction._transactions.Remove(payment))
-                            {
-                                UserDataManager.Instance.UserData.deletedTransactions.Add(payment);
-                                break;
-                            }
-
-                        Events.OnUpdateTab?.Invoke();
-                    });
-                    Reset();
-                }
-        }
-
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            _pointerDown = true;
-            _downClickTime = Time.time;
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            _pointerDown = false;
+                Events.OnUpdateTab?.Invoke();
+            });
         }
 
         public void Init(TransactionItemData transaction)

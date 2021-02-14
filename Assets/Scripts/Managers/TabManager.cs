@@ -1,6 +1,6 @@
-﻿using DefaultNamespace;
+﻿using Windows;
+using DefaultNamespace;
 using HelperWindows;
-using Tabs;
 using UnityEngine;
 
 #pragma warning disable 0649
@@ -24,12 +24,12 @@ namespace Managers
         {
             _currentTab?.gameObject.SetActive(false);
             _currentTab = tab;
-            tab.Init();
+            
         }
 
         private void UpdateTab()
         {
-            _currentTab.Init();
+           
         }
 
         public void OnPreviousMonth()
@@ -42,7 +42,7 @@ namespace Managers
                     UserDataManager.YearlyTransactions.RemoveAll(transactions =>
                         transactions.year == UserDataManager.SelectedDate.Year - 1);
                 else
-                    UserDataManager.CurrentYearlyTransactions.transactions.RemoveAll(transaction =>
+                    UserDataManager.CurrentYearlyTransaction.transactions.RemoveAll(transaction =>
                         transaction.month == UserDataManager.SelectedDate.Month - 1);
 
                 return;
@@ -61,7 +61,7 @@ namespace Managers
                     UserDataManager.YearlyTransactions.RemoveAll(transactions =>
                         transactions.year == UserDataManager.SelectedDate.Year + 1);
                 else
-                    UserDataManager.CurrentYearlyTransactions.transactions.RemoveAll(transaction =>
+                    UserDataManager.CurrentYearlyTransaction.transactions.RemoveAll(transaction =>
                         transaction.month == UserDataManager.SelectedDate.Month + 1);
 
                 return;

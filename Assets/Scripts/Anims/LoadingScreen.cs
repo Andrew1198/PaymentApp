@@ -1,11 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
+using Windows.HelperWindows;
 using TMPro;
 using UnityEngine;
 
+
 #pragma warning disable 0649
-namespace DefaultNamespace
+namespace Anims
 {
-    public class LoadingScreen : MonoBehaviour
+    public class LoadingScreen : WindowBase
     {
         [SerializeField] private TextMeshProUGUI loadingField;
         [SerializeField] private GameObject back;
@@ -16,11 +19,16 @@ namespace DefaultNamespace
 
         private Coroutine _coroutine;
         private int _count;
-
-        private void Awake()
+        
+        public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
-            Events.EnableLoadingScreen += Show;
-            Events.DisableLoadingScreen += Hide;
+            base.Open(DynamicWindowData);
+            Show();
+        }
+
+        public override void Close()
+        {
+            Hide();
         }
 
         private void Show()
@@ -37,14 +45,16 @@ namespace DefaultNamespace
             yield return new WaitForSeconds(appearTime);
             back.SetActive(true);
 
-            string[] points = {"", ".", "..", "..."};
-            var loadingText = "Loading";
-            string result;
+            string[] points = {"",".", "..", "..."};
+            const string loadingText = "Loading";
+            var i = 0;
             while (true)
             {
-                result = loadingText + points[Random.Range(0, int.MaxValue) % points.Length];
-                loadingField.text = result;
+                loadingField.text = loadingText + points[i % points.Length];
                 yield return new WaitForSeconds(.3f);
+                i++;
+                if (i % 4 == 0)
+                    i = 0;
             }
         }
 
@@ -60,6 +70,7 @@ namespace DefaultNamespace
             }
 
             back.SetActive(false);
+            base.Close();
         }
     }
 }
