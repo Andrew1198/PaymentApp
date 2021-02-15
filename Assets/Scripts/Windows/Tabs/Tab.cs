@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Windows.HelperWindows;
-using DefaultNamespace;
 using HelperScripts;
-using HelperWindows;
 using Managers;
 using UnityEngine;
+
 #pragma warning disable 0649
-namespace Windows
+namespace Windows.Tabs
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Tab : WindowBase

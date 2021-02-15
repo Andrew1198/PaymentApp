@@ -30,7 +30,7 @@ namespace Windows.HelperWindows
 
             category.IsEmpty = false;
             category.Name = categoryName.text;
-            Events.OnUpdateTab?.Invoke();
+            TabManager.UpdateOpenedTab();
             gameObject.SetActive(false);
             categoryName.text = null;
         }

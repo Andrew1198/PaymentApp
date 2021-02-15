@@ -16,7 +16,7 @@ namespace Managers
 
         private void Start()
         {
-            Events.OnUpdateTab?.Invoke();
+            TabManager.UpdateOpenedTab();
         }
 
         private void OnApplicationPause(bool isPaused)

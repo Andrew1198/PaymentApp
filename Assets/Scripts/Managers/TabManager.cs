@@ -1,35 +1,52 @@
-﻿using Windows;
+﻿using System;
+using Windows;
+using Windows.Tabs;
+using Windows.WindowsData;
+using Windows.WindowsData.TabData;
+using Data.WindowData;
 using DefaultNamespace;
 using HelperWindows;
 using UnityEngine;
+using UnityEngine.UI;
 
 #pragma warning disable 0649
 namespace Managers
 {
-    public class TabManager : MonoBehaviour
+    public class TabManager : Singleton<TabManager>
     {
-        [SerializeField] private Tab _currentTab;
+        [Header("HUD Buttons")]
+        [SerializeField] private Button accountButton; 
+        [SerializeField] private Button categoriesButton; 
+        [SerializeField] private Button transactionsButton; 
+        [SerializeField] private Button overviewButton; 
+        private Tab _currentTab;
 
-        private void Awake()
+        public override void Awake()
         {
-            Events.OnUpdateTab += UpdateTab;
+            base.Awake();
+            accountButton.onClick.AddListener(OpenTab<AccountTabData>);
+            categoriesButton.onClick.AddListener(OpenTab<CategoriesTabData>);
+            transactionsButton.onClick.AddListener(OpenTab<TransactionTabData>);
+            overviewButton.onClick.AddListener(OpenTab<OverviewTabData>);
         }
 
-        private void OnDestroy()
+        public void OnDestroy()
         {
-            Events.OnUpdateTab -= UpdateTab;
+            accountButton.onClick.RemoveAllListeners();
+            categoriesButton.onClick.RemoveAllListeners();
+            transactionsButton.onClick.RemoveAllListeners();
+            overviewButton.onClick.RemoveAllListeners();
         }
 
-        public void OpenTab(Tab tab)
+        public void OpenTab<T>() where T : TabData, new()
         {
-            _currentTab?.gameObject.SetActive(false);
-            _currentTab = tab;
-            
+            _currentTab?.Close();
+           _currentTab = WindowsManager.OpenWindow<T>() as Tab;
         }
 
-        private void UpdateTab()
+        public static void UpdateOpenedTab()
         {
-           
+           Instance._currentTab?.Open();
         }
 
         public void OnPreviousMonth()
@@ -48,7 +65,7 @@ namespace Managers
                 return;
             }
 
-            Events.OnUpdateTab?.Invoke();
+            TabManager.UpdateOpenedTab();
         }
 
         public void OnNextMonth()
@@ -67,7 +84,6 @@ namespace Managers
                 return;
             }
 
-            Events.OnUpdateTab?.Invoke();
-        }
+            TabManager.UpdateOpenedTab();        }
     }
 }

@@ -38,8 +38,7 @@ namespace Windows.HelperWindows
             };
 
             UserDataManager.CurrentDailyTransaction.cashTransactions.Add(transaction);
-            Events.OnUpdateTab?.Invoke();
-
+            TabManager.UpdateOpenedTab();
             gameObject.SetActive(false);
         }
     }

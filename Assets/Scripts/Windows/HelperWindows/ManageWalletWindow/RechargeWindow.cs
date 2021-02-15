@@ -1,4 +1,5 @@
 using DefaultNamespace;
+using Managers;
 
 namespace Windows.HelperWindows.ManageWalletWindow
 {
@@ -7,7 +8,7 @@ namespace Windows.HelperWindows.ManageWalletWindow
         public override void OnOk()
         {
             SelectedSaving.count = int.Parse(countField.text);
-            Events.OnUpdateTab?.Invoke();
+            TabManager.UpdateOpenedTab();
             OnClose();
         }
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Data;
 using DefaultNamespace;
 using HelperWindows;
 using Items;
@@ -10,7 +9,7 @@ using TMPro;
 using UnityEngine;
 
 #pragma warning disable 0649
-namespace Windows
+namespace Windows.Tabs
 {
     public class OverviewTab : Tab
     {

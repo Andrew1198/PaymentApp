@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 #pragma warning disable 0649
-namespace Windows
+namespace Windows.Tabs
 {
     [Serializable]
     internal class WholeAmount
@@ -18,7 +18,7 @@ namespace Windows
     }
 
     
-    public class CategoryTab : Tab
+    public class CategoriesTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
         [SerializeField] private WholeAmount wholeAmount;

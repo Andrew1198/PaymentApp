@@ -2,7 +2,6 @@
 using System.Linq;
 using Data;
 using HelperScripts;
-using HelperWindows;
 using Items;
 using Managers;
 using TMPro;
@@ -10,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #pragma warning disable 0649
-namespace Windows
+namespace Windows.Tabs
 {
     public class TransactionTab : Tab
     {

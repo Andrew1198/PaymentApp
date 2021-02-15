@@ -164,7 +164,6 @@ namespace Managers
         public static void AddSaving(Saving saving)
         {
             Instance.UserData.savings.Add(saving);
-            Events.OnUpdateTab?.Invoke();
-        }
+            TabManager.UpdateOpenedTab();        }
     }
 }

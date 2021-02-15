@@ -22,9 +22,11 @@ namespace Managers
             PreloadWindows();
         }
 
-        public static void OpenWindow<T>(Dictionary<string,object>DynamicData = null) where T: WindowData, new()
+        public static WindowBase OpenWindow<T>(Dictionary<string,object>dynamicData = null) where T: WindowData, new()
         {
-            GetOrCreateWindowBehaviour<T>().Open();
+            var window = GetOrCreateWindowBehaviour<T>();
+            window.Open(dynamicData);
+            return window;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -60,7 +62,11 @@ namespace Managers
                 }
 
                 window = Instantiate(windowForInstantiate, parent);
-                window.gameObject.name = windowForInstantiate.name; // remove (Clone) from name 
+                window.gameObject.name = windowForInstantiate.name; // remove (Clone) from name
+                (window.transform as RectTransform).anchorMin = Vector2.zero;
+                (window.transform as RectTransform).anchorMax = Vector2.one;
+                (window.transform as RectTransform).offsetMax = Vector2.zero;
+                (window.transform as RectTransform).offsetMin = Vector2.zero;
                 window.SetWindowData(winData);
                 Instance._pool[typeof(T)] = window;
             }

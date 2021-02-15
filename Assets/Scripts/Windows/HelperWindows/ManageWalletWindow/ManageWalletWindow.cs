@@ -25,7 +25,7 @@ namespace Windows.HelperWindows.ManageWalletWindow
                 if (!deleted)
                     Debug.LogError("Can't delete wallet");
 
-                Events.OnUpdateTab?.Invoke();
+                TabManager.UpdateOpenedTab();
                 gameObject.SetActive(false);
             });
         }

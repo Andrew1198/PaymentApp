@@ -35,7 +35,7 @@ namespace Items
                     if (dailyTransaction.RemoveTransaction(payment))
                         break;
 
-                Events.OnUpdateTab?.Invoke();
+                TabManager.UpdateOpenedTab();
             });
         }
 

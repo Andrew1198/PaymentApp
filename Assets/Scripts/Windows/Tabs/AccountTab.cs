@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Data;
-using HelperWindows;
 using Items;
 using Managers;
 using TMPro;
 using UnityEngine;
 
 #pragma warning disable 0649
-namespace Windows
+namespace Windows.Tabs
 {
     public class AccountTab : Tab
     {

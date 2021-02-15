@@ -28,7 +28,8 @@ namespace Windows.HelperWindows.SettingWindow
             {
                 UserDataManager.Instance.UserData.monobankData.token = monobankTokenInputField.text;
                 monobankTokenApproveBttn.interactable = false;
-                Events.OnUpdateTab?.Invoke();
+                TabManager.UpdateOpenedTab();
+                
             });
         }
 
