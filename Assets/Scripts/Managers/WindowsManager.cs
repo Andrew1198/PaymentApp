@@ -67,7 +67,7 @@ namespace Managers
                 (window.transform as RectTransform).anchorMax = Vector2.one;
                 (window.transform as RectTransform).offsetMax = Vector2.zero;
                 (window.transform as RectTransform).offsetMin = Vector2.zero;
-                window.SetWindowData(winData);
+                window.data = winData;
                 Instance._pool[typeof(T)] = window;
             }
             else

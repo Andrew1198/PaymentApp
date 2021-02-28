@@ -32,7 +32,6 @@ namespace Windows.Tabs
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
             for (var i = 0; i < categoryItems.Count; i++) categoryItems[i].Init(UserDataManager.CurrentCategories[i]);
             SetWholeAmount();
-            Inited = true;
         }
         
         private void SetWholeAmount()

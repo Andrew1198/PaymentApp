@@ -11,7 +11,7 @@ namespace Data
         public List<Saving> savings = new List<Saving>();
         public CategoryData[] categories = new CategoryData[14];
         public List<YearlyTransactions> transactions = new List<YearlyTransactions>();
-        public List<TransactionBase> deletedTransactions = new List<TransactionBase>();
+        public List<DeletedTransaction> deletedTransactions = new List<DeletedTransaction>();
         public MonobankData monobankData = new MonobankData();
 
         public UserData()

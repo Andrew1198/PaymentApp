@@ -65,14 +65,14 @@ namespace HelperWindows
             return wholePart;
         }
 
-        public static void UpdateAllBankTransactions(Action onFinish)
+        public static void UpdateAllBankTransactions(Action onFinish = null)
         {
             WindowsManager.EnableDisableLoadingWindow();
             MonoBankManager.GetTransactions(bankTransactions =>
             {
                 if (bankTransactions == null)
                 {
-                    onFinish();
+                    onFinish?.Invoke();
                     WindowsManager.EnableDisableLoadingWindow(false);
                     return;
                 }
@@ -82,7 +82,7 @@ namespace HelperWindows
                     if (bankTransaction.amount <= 0 || UserDataManager.Instance.UserData.deletedTransactions.Any(
                         transaction =>
                             transaction.type == TransactionType.Bank &&
-                            ((BankTransaction) transaction).id == bankTransaction.id
+                            ((BankTransaction) transaction.Transaction).id == bankTransaction.id
                     ))
                         continue;
 
@@ -128,24 +128,36 @@ namespace HelperWindows
                 }
 
                 WindowsManager.EnableDisableLoadingWindow(false);
-                onFinish();
+                onFinish?.Invoke();
             });
         }
 
 
-        public static void UpdateCurrencyRates(Action onFinish)
+        public static void UpdateCurrencyRates(Action onFinish = null)
         {
             WindowsManager.EnableDisableLoadingWindow();
             MonoBankManager.GetExchangeRates(onSuccessful =>
             {
                 UserDataManager.Instance.UserData.monobankData.currenciesRate = onSuccessful;
-                onFinish();
+                onFinish?.Invoke();
                 WindowsManager.EnableDisableLoadingWindow(false);
             }, () =>
             {
-                onFinish();
+                onFinish?.Invoke();
                 WindowsManager.EnableDisableLoadingWindow(false);
             });
+        }
+
+        public static void DeleteTransaction(TransactionBase transaction)
+        {
+            var yearlyTransaction = UserDataManager.YearlyTransactions.First(tr =>
+                tr.year == transaction.time.Year);
+            var monthlyTransaction = yearlyTransaction.transactions.First(tr =>
+                tr.month == transaction.time.Month);
+            var dailyTransaction =
+                monthlyTransaction.transactions.First(tr =>
+                    tr.day == transaction.time.Day);
+            dailyTransaction.RemoveTransaction(transaction); 
         }
 
         public static bool IsThereTransactionInMonth()

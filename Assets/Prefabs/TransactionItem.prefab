@@ -271,7 +271,6 @@ MonoBehaviour:
   comment: {fileID: 6632638029998763607}
   count: {fileID: 6632638029562629307}
   typeTransaction: {fileID: 3020693219526203845}
-  confirmWindow: {fileID: 0}
 --- !u!222 &6632638029388334099
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -328,7 +327,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6632638029388334101}
         m_TargetAssemblyTypeName: Items.TransactionItem, Assembly-CSharp
-        m_MethodName: OnHoldActivate
+        m_MethodName: TryToDeleteTransaction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -413,8 +412,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4284830688
+  m_fontColor: {r: 0.87843144, g: 0.3254902, b: 0.39607847, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

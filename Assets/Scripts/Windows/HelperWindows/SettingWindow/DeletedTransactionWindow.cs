@@ -1,4 +1,5 @@
 ﻿#pragma warning disable 0649
+using System.Collections.Generic;
 using Data;
 using HelperScripts;
 using Items;
@@ -7,28 +8,21 @@ using UnityEngine;
 
 namespace Windows.HelperWindows.SettingWindow
 {
-    public class DeletedTransactionWindow : MonoBehaviour
+    public class DeletedTransactionWindow : WindowBase
     {
-        [SerializeField] private TransactionItem transactionItemPrefab;
+        [SerializeField] private DeletedTransactionItem deletedTransactionItemPrefab;
         [SerializeField] private Transform content;
-        public void Init()
+
+        public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
-            gameObject.SetActive(true);
+            base.Open(DynamicWindowData);
+            
             content.DeleteChildren();
-            foreach (var transaction in UserDataManager.Instance.UserData.deletedTransactions)
+            foreach (var deletedTransaction in UserDataManager.Instance.UserData.deletedTransactions)
             {
-                var transactionItem = Instantiate(transactionItemPrefab, content);
-                var transactionItemData = new TransactionItem.TransactionItemData
-                {
-                    Category = transaction.category,
-                    Comment = transaction.description,
-                    Count = transaction.amount,
-                    IsBankTransaction = transaction.type == TransactionType.Bank,
-                    Time = transaction.time
-                };
-                transactionItem.Init(transactionItemData);
+                var deletedTransactionItem = Instantiate(deletedTransactionItemPrefab, content);
+                deletedTransactionItem.Init(deletedTransaction.Transaction);
             }
         }
-        
     }
 }

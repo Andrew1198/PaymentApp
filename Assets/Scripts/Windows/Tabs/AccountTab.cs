@@ -29,7 +29,6 @@ namespace Windows.Tabs
                     sumSavingUsd += saving.count;
             }
             wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
-            Inited = true;
         }
         
         private void SetSaving(Saving saving)

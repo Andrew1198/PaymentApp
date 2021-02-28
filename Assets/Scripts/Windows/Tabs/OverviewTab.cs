@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DefaultNamespace;
+using Windows.WindowsData;
 using HelperWindows;
 using Items;
 using Managers;
@@ -22,11 +22,8 @@ namespace Windows.Tabs
         [SerializeField] private TextMeshProUGUI TodayAmountOrWeekAvg;
         [SerializeField] private TextMeshProUGUI WeekAmountOrMonth;
         [SerializeField] private TextMeshProUGUI Spent;
-
-        [SerializeField] private Graph graphPrefab;
-
-        private Graph _graph;
-
+        
+        
         public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
             base.Open(DynamicWindowData);
@@ -34,9 +31,6 @@ namespace Windows.Tabs
             SetAmounts();
             SetOverviewItems(GetTransactionsPerMonthByMcc(), mccContainer);
             SetOverviewItems(GetBankTransactionsDescriptions(), descriptionContainer);
-            if (_graph == null)
-                _graph = Instantiate(graphPrefab, transform.parent.parent);
-            Inited = true;
         }
         
         private void SetAmounts()
@@ -48,17 +42,17 @@ namespace Windows.Tabs
                         MidpointRounding.AwayFromZero);
                     var dayAvgValueUsd = Math.Round(dayAvgValue / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    DayAvg.text = "DayAvg\n" + dayAvgValue + "(" + dayAvgValueUsd + ")";
+                    DayAvg.text = "DayAvg\n<color=#FF5567>" + dayAvgValue + "(" + dayAvgValueUsd + ")</color>";
                     var todayAmountUsd = Math.Round(UserDataManager.AmountPerDay / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    TodayAmountOrWeekAvg.text = "Today\n" + UserDataManager.AmountPerDay + "(" + todayAmountUsd + ")";
+                    TodayAmountOrWeekAvg.text = "Today\n<color=#FF5567>" + UserDataManager.AmountPerDay + "(" + todayAmountUsd + ")</color>";
                     var weekAmountUsd = Math.Round(UserDataManager.AmountPerWeek / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    WeekAmountOrMonth.text = "Week\n" + UserDataManager.AmountPerWeek + "(" + weekAmountUsd + ")";
+                    WeekAmountOrMonth.text = "Week\n<color=#FF5567>" + UserDataManager.AmountPerWeek + "(" + weekAmountUsd + ")</color>";
                     var spentValue = TransactionUtils.AmountPerMonth(true, true);
                     var spentValueUsd = Math.Round(spentValue / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    Spent.text = "Spent\n" + spentValue + "(" + spentValueUsd + ")";
+                    Spent.text = "Spent\n<color=#FF5567>" + spentValue + "(" + spentValueUsd + ")</color>";
                     Spent.gameObject.SetActive(true);
                 }
                 else
@@ -68,7 +62,7 @@ namespace Windows.Tabs
                     var dayAvgValue = Math.Round(amountPerMonth / (float) daysInMonth, MidpointRounding.AwayFromZero);
                     var dailyAvgUsd = Math.Round(dayAvgValue / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    DayAvg.text = "DayAvg \n" + dayAvgValue + "(" + dailyAvgUsd + ")";
+                    DayAvg.text = "DayAvg \n<color=#FF5567>" + dayAvgValue + "(" + dailyAvgUsd + ")</color>";
 
                     const int dayCountPerWeek = 7;
                     const int weekCountPerMonth = 4;
@@ -77,11 +71,11 @@ namespace Windows.Tabs
                     var divider = weekCountPerMonth + restDaysFrom4Weeks * (float) restDaysFrom4Weeks / dayCountPerWeek;
                     var weekAwg = Math.Round(amountPerMonth / divider, MidpointRounding.AwayFromZero);
                     var weekAvgUsd = Math.Round(weekAwg / UserDataManager.DollarRate, 1, MidpointRounding.AwayFromZero);
-                    TodayAmountOrWeekAvg.text = "Week Avg \n" + weekAwg + "(" + weekAvgUsd + ")";
+                    TodayAmountOrWeekAvg.text = "Week Avg \n<color=#FF5567>" + weekAwg + "(" + weekAvgUsd + ")</color>";
 
                     var weekAmountPerMonthUsd = Math.Round(amountPerMonth / UserDataManager.DollarRate, 1,
                         MidpointRounding.AwayFromZero);
-                    WeekAmountOrMonth.text = "Month\n" + amountPerMonth + "(" + weekAmountPerMonthUsd + ")";
+                    WeekAmountOrMonth.text = "Month\n<color=#FF5567>" + amountPerMonth + "(" + weekAmountPerMonthUsd + ")</color>";
                     Spent.gameObject.SetActive(false);
                 }
         }
@@ -164,7 +158,7 @@ namespace Windows.Tabs
 
         public void OpenGraphic()
         {
-            _graph.Init();
+            WindowsManager.OpenWindow<GraphWindowData>();
         }
     }
 }

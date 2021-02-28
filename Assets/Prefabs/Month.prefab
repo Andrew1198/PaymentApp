@@ -84,6 +84,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 349582470878928908}
+  - component: {fileID: 4536730368389283227}
+  - component: {fileID: 1216989197202181324}
+  - component: {fileID: 692201700427253425}
   m_Layer: 5
   m_Name: Month
   m_TagString: Untagged
@@ -113,6 +116,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -55.5}
   m_SizeDelta: {x: 0, y: 111}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4536730368389283227
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349582470878928911}
+  m_CullTransparentMesh: 0
+--- !u!114 &1216989197202181324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349582470878928911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.20784315, g: 0.32156864, b: 0.7294118, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &692201700427253425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349582470878928911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2542bf96f9804ed5ba3b7943d30cbb22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onPreviousMonthButton: {fileID: 349582471611981158}
+  onNextMonthButton: {fileID: 349582471320448860}
 --- !u!1 &349582471320448862
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +254,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 4547929942798136987}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

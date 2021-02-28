@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Windows.WindowsData;
 using Data;
 using DefaultNamespace;
 using HelperWindows;
@@ -16,7 +18,7 @@ namespace Windows.HelperWindows.SettingWindow
         public TMP_InputField count;
     }
 
-    public class SettingsWindow : MonoBehaviour
+    public class SettingsWindow : WindowBase
     {
         [SerializeField] private TextMeshProUGUI exchangeRates;
         [SerializeField] private TMP_InputField monobankTokenInputField;
@@ -38,18 +40,15 @@ namespace Windows.HelperWindows.SettingWindow
             monobankTokenApproveBttn.onClick.RemoveAllListeners();
         }
 
-        public void Init()
+        public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
-            if (gameObject.activeInHierarchy)
-            {
-                OnClose();
-                return;
-            }
-
-            gameObject.SetActive(true);
+            base.Open(DynamicWindowData);
             if (!string.IsNullOrEmpty(UserDataManager.Instance.UserData.monobankData.token))
+            {
                 monobankTokenInputField.text = UserDataManager.Instance.UserData.monobankData.token;
-            monobankTokenApproveBttn.interactable = true;
+                monobankTokenInputField.interactable = false;
+                monobankTokenApproveBttn.interactable = false;
+            }
             TransactionUtils.UpdateCurrencyRates(() =>
             {
                 var currencyInfos = UserDataManager.Instance.UserData.monobankData.currenciesRate;
@@ -58,7 +57,7 @@ namespace Windows.HelperWindows.SettingWindow
                     if (user1.currencyCodeA == (int) MonoBankManager.CurrencyCode.USD)
                         return -1;
                     return 1;
-                }); // доллар выставляем на пе
+                });
                 var result = string.Empty;
                 foreach (var item in currencyInfos)
                     result += MonoBankManager.GetNameByCurrencyCode(item.currencyCodeA) + " " +
@@ -67,10 +66,10 @@ namespace Windows.HelperWindows.SettingWindow
                 exchangeRates.text = result;
             });
         }
-
-        public void OnClose()
+        
+        public void OpenDeletedTransactionsWindow()
         {
-            gameObject.SetActive(false);
+            WindowsManager.OpenWindow<DeletedTransactionWindowData>();
         }
     }
 }

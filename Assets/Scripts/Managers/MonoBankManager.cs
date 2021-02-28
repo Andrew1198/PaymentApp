@@ -7,6 +7,7 @@ using Data;
 using DefaultNamespace;
 using HelperScripts;
 using NaughtyAttributes;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using Utility = HelperScripts.Utility;
@@ -191,7 +192,41 @@ namespace Managers
             public long time;
             public string description;
             public int mcc;
+            public bool hold;
             public long amount;
+            public int currencyCode;
+            public long commissionRate;
+            public long cashbackAmount;
+            public long balance;
+            public string comment;
+            public string receiptId;
+            public string counterEdrpou;
+            public string counterIban;
         }
+        
+        #if UNITY_EDITOR
+        [MenuItem("MyMenu/Monobank/WriteRecentBankTransactions")]
+        private static void WriteRecentBankTransactions()
+        {
+            var to = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var from = to - 60 * 60 * 24 * 31;
+            var url = ApiEndPoint + $"/personal/statement/0/{from}/{to}";
+            var entity = FindObjectOfType<MonoBankManager>();
+            entity.SendRequest(url, result =>
+                {
+                    using (var sw = new StreamWriter(Application.persistentDataPath + "/BankTransactions.json"))
+                    {
+                        sw.Write(result);
+                    }
+                    Debug.LogError("Done");
+                },
+                header: new KeyValuePair<string, string>("X-Token",
+                    "uOpR4ZpvpBxHnnCcI0OXXjWD2-qwK_owBS6pC1UCdh7Q"),
+                onError: () =>
+                {
+                    Debug.LogError("Error");
+                });
+        }
+        #endif
     }
 }

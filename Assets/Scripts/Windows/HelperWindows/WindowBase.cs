@@ -8,6 +8,8 @@ namespace Windows.HelperWindows
     public class WindowBase : MonoBehaviour
     {
         public State state;
+        
+        public WindowData data; 
         public virtual void Open(Dictionary<string,object>DynamicWindowData = null)
         {
             state = State.Opened;
@@ -18,12 +20,7 @@ namespace Windows.HelperWindows
             state = State.Closed;
             gameObject.SetActive(false);
         }
-
-        public virtual void SetWindowData(WindowData data)
-        {
-            
-        }
-
+        
         public enum State
         {
             Opened,

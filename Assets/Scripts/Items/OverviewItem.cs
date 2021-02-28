@@ -21,7 +21,7 @@ namespace Items
             {
                 categoryName.text = data.CategoryName;
                 slider.value = data.percentageOfAmount;
-                percentCount.text = $"<color=red>{data.percentageOfAmount}%</color=red>";
+                percentCount.text = $"{data.percentageOfAmount}%";
                 var countUsd = Math.Round(data.sum / UserDataManager.DollarRate, 1, MidpointRounding.AwayFromZero);
                 count.text = data.sum + "(" + countUsd + ")";
             });

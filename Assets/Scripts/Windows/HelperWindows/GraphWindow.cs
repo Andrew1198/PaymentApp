@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using HelperScripts;
 using Managers;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
+
 #pragma warning disable 0649
-namespace DefaultNamespace
+namespace Windows.HelperWindows
 {
-    public class Graph : MonoBehaviour
+    public class GraphWindow : WindowBase
     {
         [SerializeField] private RectTransform content;
         [SerializeField] private GameObject dotPrefab;
@@ -19,21 +21,17 @@ namespace DefaultNamespace
         [SerializeField] private TMP_Dropdown currencyDropdown;
         [SerializeField] private TMP_Dropdown timeDropdown;
 
-
-        public void Init()
+        public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
-            gameObject.SetActive(true);
+            base.Open(DynamicWindowData);
             Show(GetPoints());
         }
-
-        private void Show(List<Vector2> points)
+        
+        private void Show(IReadOnlyCollection<Vector2> points)
         {
-            foreach (Transform tr in content)
-                Destroy(tr.gameObject);
-
-            foreach (Transform tr in dividerContent)
-                Destroy(tr.gameObject);
-
+            content.DeleteChildren();
+            dividerContent.DeleteChildren();
+            
             var graphSize = content.rect.size;
             graphSize = new Vector2(graphSize.x * .9f, graphSize.y * .9f);
 
@@ -44,6 +42,7 @@ namespace DefaultNamespace
             var xMin = points.Min(item => item.x);
             var lastDot = Vector2.zero;
             var currentDot = Vector2.zero;
+            
             foreach (var point in points)
             {
                 var gm = Instantiate(dotPrefab, content);

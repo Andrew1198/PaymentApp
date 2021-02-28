@@ -26,7 +26,7 @@ namespace Data
                 ? bankTransactions.Remove((BankTransaction) transaction)
                 : cashTransactions.Remove((CashTransaction) transaction);
             if(result)
-                UserDataManager.Instance.UserData.deletedTransactions.Add(transaction);
+                UserDataManager.Instance.UserData.deletedTransactions.Add(new DeletedTransaction(transaction));
             return result;
         }
     }

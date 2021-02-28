@@ -2,7 +2,9 @@ using System;
 using System.Linq;
 using Windows;
 using Windows.HelperWindows;
+using Data;
 using DefaultNamespace;
+using HelperWindows;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -17,44 +19,26 @@ namespace Items
         [SerializeField] private TextMeshProUGUI comment;
         [SerializeField] private TextMeshProUGUI count;
         [SerializeField] private TextMeshProUGUI typeTransaction;
-        [SerializeField] private ConfirmWindow confirmWindow;
         
-        private TransactionItemData _transactionItemData;
+        
+        protected TransactionBase _transaction;
 
-        public void OnHoldActivate()
+        public void TryToDeleteTransaction()
         {
             WindowsManager.ConfirmWindow(() =>
             {
-                var monthlyTransaction = UserDataManager.CurrentMonthlyTransaction;
-
-                var payment = monthlyTransaction.transactions
-                    .SelectMany(dailyTransaction => dailyTransaction.GetALlTypeTransactions())
-                    .First(transaction => transaction.time == _transactionItemData.Time);
-
-                foreach (var dailyTransaction in monthlyTransaction.transactions)
-                    if (dailyTransaction.RemoveTransaction(payment))
-                        break;
-
+                TransactionUtils.DeleteTransaction(_transaction);
                 TabManager.UpdateOpenedTab();
             });
         }
 
-        public void Init(TransactionItemData transaction)
+        public virtual void Init(TransactionBase transaction)
         {
-            category.text = transaction.Category;
-            comment.text = transaction.Comment;
-            count.text = transaction.Count.ToString();
-            _transactionItemData = transaction;
-            typeTransaction.text = transaction.IsBankTransaction ? "Bank Transaction" : "Cash Transaction";
-        }
-
-        public class TransactionItemData
-        {
-            public string Category;
-            public string Comment;
-            public long Count;
-            public bool IsBankTransaction;
-            public DateTime Time;
+            category.text = transaction.category;
+            comment.text = transaction.description;
+            count.text = transaction.amount.ToString();
+            _transaction = transaction;
+            typeTransaction.text = transaction.type == TransactionType.Bank ? "Bank Transaction" : "Cash Transaction";
         }
     }
 }
