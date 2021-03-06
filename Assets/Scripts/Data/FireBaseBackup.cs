@@ -8,6 +8,6 @@ namespace Data
     {
         public List<Saving> savings = new List<Saving>();
         public CategoryData[] categories = new CategoryData[14];
-        public List<YearlyTransactions> _transactions = new List<YearlyTransactions>();
+        public List<YearlyTransaction> _transactions = new List<YearlyTransaction>();
     }
 }

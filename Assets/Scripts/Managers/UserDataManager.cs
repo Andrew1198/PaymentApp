@@ -14,11 +14,10 @@ namespace Managers
     public class UserDataManager
     {
         public static UserDataManager Instance;
-        public static bool Inited;
         public readonly UserData UserData;
         private DateTime _selectedDate;
 #if UNITY_EDITOR
-        public UserData OldUserData;
+        private readonly UserData OldUserData;
 #endif
 
         private UserDataManager(UserData data)
@@ -47,22 +46,20 @@ namespace Managers
             }
         }
 
-        public static List<YearlyTransactions> YearlyTransactions => Instance.UserData.transactions;
+        public static List<YearlyTransaction> YearlyTransactions => Instance.UserData.transactions;
 
-        public static YearlyTransactions CurrentYearlyTransaction
+        public static YearlyTransaction CurrentYearlyTransaction
         {
             get
             {
                 var yearlyTransaction = Instance.UserData.transactions.FirstOrDefault(transactions =>
                     transactions.year == Instance._selectedDate.Year);
-                if (yearlyTransaction == null)
+                if (yearlyTransaction != null) return yearlyTransaction;
+                Instance.UserData.transactions.Add(new YearlyTransaction
                 {
-                    Instance.UserData.transactions.Add(new YearlyTransactions
-                    {
-                        year = Instance._selectedDate.Year
-                    });
-                    yearlyTransaction = Instance.UserData.transactions.Last();
-                }
+                    year = Instance._selectedDate.Year
+                });
+                yearlyTransaction = Instance.UserData.transactions.Last();
 
                 return yearlyTransaction;
             }
@@ -72,28 +69,36 @@ namespace Managers
         {
             get
             {
-                if (!CurrentYearlyTransaction.transactions.Any(item => item.month == Instance._selectedDate.Month))
-                    CurrentYearlyTransaction.transactions.Add(new MonthlyTransaction
-                    {
-                        month = Instance._selectedDate.Month
-                    });
-                return CurrentYearlyTransaction.transactions.First(item => item.month == Instance._selectedDate.Month);
+                var currentYearlyTransaction =
+                    CurrentYearlyTransaction.transactions.FirstOrDefault(item =>
+                        item.month == Instance._selectedDate.Month);
+                if (currentYearlyTransaction != null) return currentYearlyTransaction;
+                currentYearlyTransaction = new MonthlyTransaction
+                {
+                    month = Instance._selectedDate.Month
+                };
+                CurrentYearlyTransaction.transactions.Add(currentYearlyTransaction);
+
+                return currentYearlyTransaction;
             }
         }
-
+        
 
         public static DailyTransaction CurrentDailyTransaction
         {
             get
             {
-                if (!CurrentMonthlyTransaction.transactions.Any(transaction =>
-                    transaction.day == Instance._selectedDate.Day))
-                    CurrentMonthlyTransaction.transactions.Add(new DailyTransaction
-                    {
-                        day = Instance._selectedDate.Day
-                    });
-                return CurrentMonthlyTransaction.transactions.First(transaction =>
+                var currentMonthlyTransaction = CurrentMonthlyTransaction.transactions.FirstOrDefault(transaction =>
                     transaction.day == Instance._selectedDate.Day);
+                if (currentMonthlyTransaction != null) return currentMonthlyTransaction;
+                
+                currentMonthlyTransaction = new DailyTransaction {
+                    day = Instance._selectedDate.Day
+                };
+
+                CurrentMonthlyTransaction.transactions.Add(currentMonthlyTransaction);
+
+                return currentMonthlyTransaction;
             }
         }
 
@@ -123,19 +128,21 @@ namespace Managers
         {
             Instance = new UserDataManager(data);
             SelectedDate = DateTime.Now;
-            Inited = true;
+            DeleteExpiredArchivedTransactions();
+        }
+
+        private static void DeleteExpiredArchivedTransactions()
+        {
+            var needToDelete = Instance.UserData.archivedTransactions.Where(archivedTransaction =>
+                (DateTime.Now - archivedTransaction.TransactionBase.time).TotalDays >= 40);
+            foreach (var archivedTransaction in needToDelete)
+                Instance.UserData.archivedTransactions.Remove(archivedTransaction);
         }
         
         public static void Save(bool fromCtrl_C = false)
         {
             CurrentMonthlyTransaction.transactions.RemoveAll(transaction => transaction.GetALlTypeTransactions().Count == 0);
-
-            if (!Inited)
-            {
-                Debug.LogError("Coudn't save userData is null");
-                return;
-            }
-
+            
             GoogleFireBaseManager.UpdateUserData();
             var path = Path.Combine(Application.persistentDataPath, SystemInfo.deviceUniqueIdentifier + ".json");
             var json = JsonUtility.ToJson(Instance.UserData);

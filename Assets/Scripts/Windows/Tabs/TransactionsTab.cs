@@ -11,20 +11,19 @@ using UnityEngine.UI;
 #pragma warning disable 0649
 namespace Windows.Tabs
 {
-    public class TransactionTab : Tab
+    public class TransactionsTab : Tab
     {
         [SerializeField] private TextMeshProUGUI Date;
         [SerializeField] private GameObject transactionItemPref;
         [SerializeField] private GameObject daySeparatorPref;
         [SerializeField] private Transform content;
-
-        public override void Open(Dictionary<string, object> DynamicWindowData = null)
+        
+        protected override void OpenTab()
         {
-            base.Open(DynamicWindowData);
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
             Draw();
         }
-        
+
         private void Draw()
         {
             content.DeleteChildren();

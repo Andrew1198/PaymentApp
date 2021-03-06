@@ -12,6 +12,7 @@ namespace Managers
         private void Awake()
         {
             SetUserDataFromLocal();
+            
         }
 
         private void Start()

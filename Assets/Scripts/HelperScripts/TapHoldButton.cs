@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 
 namespace HelperScripts
 {
-    public class HoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class TapHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        [SerializeField] private float requireHold = 1f;
+        [SerializeField] private float requireHoldToActivate = 1f;
         private float _downClickTime;
         private bool _pointerDown;
         [SerializeField] private UnityEvent _event;
@@ -18,7 +18,7 @@ namespace HelperScripts
         private void Update()
         {
             if (_pointerDown)
-                if (Time.time >= _downClickTime + requireHold)
+                if (Time.time >= _downClickTime + requireHoldToActivate)
                 {
                     _event?.Invoke();
                     Reset();

@@ -21,7 +21,7 @@
 
 # Visual Studio cache directory
 .vs/
-
+# Rider
 .idea/
 
 # Gradle cache directory
@@ -55,6 +55,7 @@ sysinfo.txt
 
 # Builds
 *.apk
+*.aab
 *.unitypackage
 
 # Crashlytics generated file
@@ -66,5 +67,3 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-# Default ignored files
-/workspace.xml

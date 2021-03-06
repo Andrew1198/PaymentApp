@@ -17,7 +17,7 @@ namespace Windows.HUDs
         {
             accountButton.onClick.AddListener(TabManager.OpenTab<AccountTabData>);
             categoriesButton.onClick.AddListener(TabManager.OpenTab<CategoriesTabData>);
-            transactionsButton.onClick.AddListener(TabManager.OpenTab<TransactionTabData>);
+            transactionsButton.onClick.AddListener(TabManager.OpenTab<TransactionsTabData>);
             overviewButton.onClick.AddListener(TabManager.OpenTab<OverviewTabData>);
         }
 

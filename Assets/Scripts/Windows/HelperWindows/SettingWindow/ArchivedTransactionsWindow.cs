@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Windows.HelperWindows.SettingWindow
 {
-    public class DeletedTransactionWindow : WindowBase
+    public class ArchivedTransactionsWindow : WindowBase
     {
         [SerializeField] private DeletedTransactionItem deletedTransactionItemPrefab;
         [SerializeField] private Transform content;
@@ -16,12 +16,16 @@ namespace Windows.HelperWindows.SettingWindow
         public override void Open(Dictionary<string, object> DynamicWindowData = null)
         {
             base.Open(DynamicWindowData);
-            
+            MakeDeletedTransactionItems();
+        }
+
+        public void MakeDeletedTransactionItems()
+        {
             content.DeleteChildren();
-            foreach (var deletedTransaction in UserDataManager.Instance.UserData.deletedTransactions)
+            foreach (var deletedTransaction in UserDataManager.Instance.UserData.archivedTransactions)
             {
                 var deletedTransactionItem = Instantiate(deletedTransactionItemPrefab, content);
-                deletedTransactionItem.Init(deletedTransaction.Transaction);
+                deletedTransactionItem.Init(deletedTransaction.TransactionBase);
             }
         }
     }

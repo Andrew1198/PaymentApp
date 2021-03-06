@@ -24,7 +24,7 @@ namespace Windows.HelperWindows.SettingWindow
         [SerializeField] private TMP_InputField monobankTokenInputField;
         [SerializeField] private Button monobankTokenApproveBttn;
 
-        private void Awake()
+        private void Start()
         {
             monobankTokenApproveBttn.onClick.AddListener(() =>
             {
@@ -69,7 +69,7 @@ namespace Windows.HelperWindows.SettingWindow
         
         public void OpenDeletedTransactionsWindow()
         {
-            WindowsManager.OpenWindow<DeletedTransactionWindowData>();
+            WindowsManager.OpenWindow<ArchivedTransactionsWindowData>();
         }
     }
 }

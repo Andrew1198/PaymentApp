@@ -23,7 +23,7 @@ namespace Managers
         
         public void Start()
         {
-            OpenTab<TransactionTabData>();
+            OpenTab<TransactionsTabData>();
         }
         
         public static void OpenTab<T>() where T : TabData, new()

@@ -23,7 +23,7 @@ namespace Items
         
         protected TransactionBase _transaction;
 
-        public void TryToDeleteTransaction()
+        public virtual void OnTapHold()
         {
             WindowsManager.ConfirmWindow(() =>
             {
@@ -38,7 +38,7 @@ namespace Items
             comment.text = transaction.description;
             count.text = transaction.amount.ToString();
             _transaction = transaction;
-            typeTransaction.text = transaction.type == TransactionType.Bank ? "Bank Transaction" : "Cash Transaction";
+            typeTransaction.text = transaction.type == TransactionType.Bank ? "Bank TransactionBase" : "Cash TransactionBase";
         }
     }
 }

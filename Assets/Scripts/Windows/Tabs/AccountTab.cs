@@ -14,10 +14,9 @@ namespace Windows.Tabs
         [SerializeField] private Transform savingContainer;
         [SerializeField] private GameObject savingPrefab;
         [SerializeField] private TextMeshProUGUI wholeAmount;
-
-        public override void Open(Dictionary<string, object> DynamicWindowData = null)
+        
+        protected override void OpenTab()
         {
-            base.Open(DynamicWindowData);
             foreach (Transform wallet in savingContainer) Destroy(wallet.gameObject);
             var sumSavingUsd = 0f;
             foreach (var saving in UserDataManager.Savings)
@@ -30,7 +29,7 @@ namespace Windows.Tabs
             }
             wholeAmount.text = ((int) Math.Round(sumSavingUsd, MidpointRounding.AwayFromZero)).ToString();
         }
-        
+
         private void SetSaving(Saving saving)
         {
             var parent = savingContainer;

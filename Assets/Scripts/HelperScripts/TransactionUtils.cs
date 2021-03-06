@@ -4,6 +4,7 @@ using System.Linq;
 using Data;
 using DefaultNamespace;
 using Managers;
+using UnityEngine;
 
 namespace HelperWindows
 {
@@ -79,10 +80,10 @@ namespace HelperWindows
 
                 foreach (var bankTransaction in bankTransactions)
                 {
-                    if (bankTransaction.amount <= 0 || UserDataManager.Instance.UserData.deletedTransactions.Any(
+                    if (bankTransaction.amount <= 0 || UserDataManager.Instance.UserData.archivedTransactions.Any(
                         transaction =>
                             transaction.type == TransactionType.Bank &&
-                            ((BankTransaction) transaction.Transaction).id == bankTransaction.id
+                            ((BankTransaction) transaction.TransactionBase).id == bankTransaction.id
                     ))
                         continue;
 
@@ -92,7 +93,7 @@ namespace HelperWindows
                         UserDataManager.Instance.UserData.transactions.FirstOrDefault(item => item.year == time.Year);
                     if (yearlyTransaction == null)
                     {
-                        UserDataManager.Instance.UserData.transactions.Add(new YearlyTransactions
+                        UserDataManager.Instance.UserData.transactions.Add(new YearlyTransaction
                         {
                             year = time.Year
                         });
@@ -158,6 +159,53 @@ namespace HelperWindows
                 monthlyTransaction.transactions.First(tr =>
                     tr.day == transaction.time.Day);
             dailyTransaction.RemoveTransaction(transaction); 
+        }
+
+        public static void RestoreTransaction(TransactionBase transaction)
+        {
+            var yearlyTransaction = UserDataManager.YearlyTransactions.FirstOrDefault(tr =>
+                tr.year == transaction.time.Year);
+            if (yearlyTransaction == null)
+            {
+                yearlyTransaction = new YearlyTransaction
+                {
+                    year = transaction.time.Year
+                };
+                UserDataManager.YearlyTransactions.Add(yearlyTransaction);
+            }
+
+            var monthlyTransaction = yearlyTransaction.transactions.FirstOrDefault(tr =>
+                tr.month == transaction.time.Month);
+            if (monthlyTransaction == null)
+            {
+                monthlyTransaction = new MonthlyTransaction
+                {
+                    month = transaction.time.Month
+                };
+                yearlyTransaction.transactions.Add(monthlyTransaction);
+            }
+            var dailyTransaction =
+                monthlyTransaction.transactions.FirstOrDefault(tr =>
+                    tr.day == transaction.time.Day);
+            if (dailyTransaction == null)
+            {
+                dailyTransaction = new DailyTransaction
+                {
+                  day = transaction.time.Day
+                };
+                monthlyTransaction.transactions.Add(dailyTransaction);
+            }
+            switch (transaction.type)
+            {
+                case TransactionType.Bank:
+                    dailyTransaction.bankTransactions.Add(transaction as BankTransaction);
+                    break;
+                case TransactionType.Cash:
+                    dailyTransaction.cashTransactions.Add(transaction as CashTransaction);
+                    break;
+            }
+
+            UserDataManager.Instance.UserData.archivedTransactions.RemoveAll(item => item.TransactionBase == transaction);
         }
 
         public static bool IsThereTransactionInMonth()

@@ -2,9 +2,9 @@
 
 namespace Windows.WindowsData
 {
-    public class DeletedTransactionWindowData : WindowData
+    public class ArchivedTransactionsWindowData : WindowData
     {
-        public DeletedTransactionWindowData()
+        public ArchivedTransactionsWindowData()
         {
             type = WindowType.FullScreen;
             behaviourNamespaceName = "Windows.HelperWindows.SettingWindow";

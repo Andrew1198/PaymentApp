@@ -10,8 +10,8 @@ namespace Data
     {
         public List<Saving> savings = new List<Saving>();
         public CategoryData[] categories = new CategoryData[14];
-        public List<YearlyTransactions> transactions = new List<YearlyTransactions>();
-        public List<DeletedTransaction> deletedTransactions = new List<DeletedTransaction>();
+        public List<YearlyTransaction> transactions = new List<YearlyTransaction>();
+        public List<ArchivedTransaction> archivedTransactions = new List<ArchivedTransaction>();
         public MonobankData monobankData = new MonobankData();
 
         public UserData()

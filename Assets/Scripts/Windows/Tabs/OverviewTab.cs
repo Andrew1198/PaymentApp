@@ -23,16 +23,14 @@ namespace Windows.Tabs
         [SerializeField] private TextMeshProUGUI WeekAmountOrMonth;
         [SerializeField] private TextMeshProUGUI Spent;
         
-        
-        public override void Open(Dictionary<string, object> DynamicWindowData = null)
+        protected override void OpenTab()
         {
-            base.Open(DynamicWindowData);
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
             SetAmounts();
             SetOverviewItems(GetTransactionsPerMonthByMcc(), mccContainer);
             SetOverviewItems(GetBankTransactionsDescriptions(), descriptionContainer);
         }
-        
+
         private void SetAmounts()
         {
             var amountPerMonth = TransactionUtils.AmountPerMonth(true, true);

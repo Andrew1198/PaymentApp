@@ -25,15 +25,14 @@ namespace Windows.Tabs
 
         [SerializeField] private List<CategoryItem> categoryItems = new List<CategoryItem>();
 
-
-        public override void Open(Dictionary<string, object> DynamicWindowData = null)
+        
+        protected override void OpenTab()
         {
-            base.Open(DynamicWindowData);
             Date.text = UserDataManager.SelectedDate.ToString("MMMM yyyy");
             for (var i = 0; i < categoryItems.Count; i++) categoryItems[i].Init(UserDataManager.CurrentCategories[i]);
             SetWholeAmount();
         }
-        
+
         private void SetWholeAmount()
         {
             var amountPerMonth = TransactionUtils.AmountPerMonth(true, false);

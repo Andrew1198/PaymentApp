@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Data
 {
     [Serializable]
-    public class DeletedTransaction
+    public class ArchivedTransaction
     {
         [SerializeField]private BankTransaction _bankTransaction;
         
@@ -12,11 +12,11 @@ namespace Data
 
         public TransactionType type;
 
-        public TransactionBase Transaction => type == TransactionType.Bank
+        public TransactionBase TransactionBase => type == TransactionType.Bank
             ? (TransactionBase) _bankTransaction
             : (TransactionBase) _cashTransaction;
 
-        public DeletedTransaction(TransactionBase transaction)
+        public ArchivedTransaction(TransactionBase transaction)
         {
             switch (transaction.type)
             {

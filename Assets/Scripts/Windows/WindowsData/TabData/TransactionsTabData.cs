@@ -2,9 +2,9 @@
 
 namespace Windows.WindowsData.TabData
 {
-    public class TransactionTabData : TabData
+    public class TransactionsTabData : TabData
     {
-        public TransactionTabData()
+        public TransactionsTabData()
         {
             this.type = WindowType.Tab;
             this.behaviourNamespaceName = "Windows.Tabs";

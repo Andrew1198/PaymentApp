@@ -42,7 +42,7 @@ namespace Managers
                 var windowForInstantiate = Instance.windows.FirstOrDefault(w => w.GetType() == monobehaviorType);
                 if (windowForInstantiate == null)
                 {
-                    Debug.LogError("Window doesn't exist");
+                    Debug.LogError($"Window {typeof(T).Name} doesn't exist");
                     return null;
                 }
                 
